@@ -29,17 +29,23 @@
                 <button id="tabCalcBtn"
                     class="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-blue-600 shadow-sm">
                     <i data-lucide="calculator" class="w-4 h-4"></i>
-                    Auto Calculator
+                    Calculator
                 </button>
                 <button id="tabDupBtn"
                     class="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900">
                     <i data-lucide="copy-check" class="w-4 h-4"></i>
-                    Find Duplicates
+                    Duplicates
                 </button>
                 <button id="tabAsciiBtn"
                     class="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900">
                     <i data-lucide="file-warning" class="w-4 h-4"></i>
-                    Detect Non-ASCII
+                    Non-ASCII
+                </button>
+                <!-- Tombol Tab: Compare -->
+                <button id="tabCompareBtn"
+                    class="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900">
+                    <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                    Compare
                 </button>
             </div>
         </div>
@@ -136,7 +142,7 @@
             </div>
         </div>
 
-        <!-- TAB 3: AUTO DETECT NON-ASCII VIEW (NEW) -->
+        <!-- TAB 3: AUTO DETECT NON-ASCII VIEW -->
         <div id="asciiView" class="space-y-6 hidden">
             <!-- Kolom Input (Atas) -->
             <div class="flex flex-col space-y-2">
@@ -154,19 +160,29 @@
             <div
                 class="bg-indigo-50/50 p-6 rounded-2xl border border-indigo-100/50 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                 <!-- Sisi Kiri: Informasi Karakter Non-ASCII yang Ditemukan -->
-                <div class="flex flex-col gap-3 flex-grow max-w-full">
+                <div class="flex flex-col gap-4 flex-grow max-w-full">
                     <!-- Non-ASCII Count status badge -->
                     <div class="flex items-center gap-1.5 bg-indigo-100/80 px-3 py-1.5 rounded-full self-start">
                         <span class="text-xs font-semibold text-indigo-600">Non-ASCII characters found:</span>
                         <span id="asciiCount" class="font-extrabold text-indigo-800 text-sm">0</span>
                     </div>
 
+                    <!-- List Hasil Deteksi & Unicode -->
                     <div class="space-y-2 w-full">
                         <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block">Detected
                             Non-ASCII & Unicode Values</span>
                         <div id="asciiResultValue"
-                            class="text-sm font-mono text-indigo-800 bg-white/60 p-4 rounded-xl border border-indigo-100 max-h-[150px] overflow-y-auto whitespace-pre-wrap break-all leading-relaxed">
+                            class="text-sm font-mono text-indigo-800 bg-white/60 p-4 rounded-xl border border-indigo-100 max-h-[120px] overflow-y-auto whitespace-pre-wrap break-all leading-relaxed">
                             No non-ASCII characters found.</div>
+                    </div>
+
+                    <!-- Preview Hasil Teks dengan Highlight Karakter Non-ASCII -->
+                    <div class="space-y-2 w-full">
+                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider block">Highlighted Text
+                            Preview</span>
+                        <div id="asciiHighlightPreview"
+                            class="text-sm font-mono text-slate-800 bg-white p-4 rounded-xl border border-indigo-150 max-h-[200px] overflow-y-auto whitespace-pre-wrap break-all leading-relaxed">
+                            No text entered yet.</div>
                     </div>
                 </div>
 
@@ -180,13 +196,56 @@
                         <span id="copyAsciiListText">Copy List Only</span>
                     </button>
 
-                    <!-- Copy Cleaned Teks Tombol (Menyalin teks yang bersih dari non-ASCII) -->
+                    <!-- Copy Cleaned Teks Tombol -->
                     <button id="copyCleanTextBtn"
                         class="w-full md:w-auto flex items-center justify-center gap-2.5 py-3 px-6 bg-slate-600 hover:bg-slate-700 text-white rounded-xl shadow-md hover:shadow-slate-600/20 transition-all font-bold text-md cursor-pointer group disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-slate-600 text-center"
                         title="Copy Cleaned Text (ASCII Only)" disabled>
                         <i data-lucide="file-clean" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
                         <span id="copyCleanText">Copy Cleaned Text</span>
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: AUTO COMPARE VIEW -->
+        <div id="compareView" class="space-y-6 hidden">
+            <!-- Kolom Input (Kiri dan Kanan) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <!-- Textbox Kiri -->
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="compareLeft"
+                            class="text-xs font-bold text-gray-400 uppercase tracking-wider">Original Data
+                            (Left)</label>
+                        <span class="text-xs text-gray-400 italic">Resizeable</span>
+                    </div>
+                    <textarea id="compareLeft"
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 outline-none resize-y text-sm font-mono transition-all leading-relaxed"
+                        placeholder="Paste original text here..."></textarea>
+                </div>
+
+                <!-- Textbox Kanan -->
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="compareRight"
+                            class="text-xs font-bold text-gray-400 uppercase tracking-wider">Modified Data
+                            (Right)</label>
+                        <span class="text-xs text-gray-400 italic">Resizeable</span>
+                    </div>
+                    <textarea id="compareRight"
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-4 focus:ring-orange-500/20 outline-none resize-y text-sm font-mono transition-all leading-relaxed"
+                        placeholder="Paste modified text here..."></textarea>
+                </div>
+            </div>
+
+            <!-- Kolom Hasil (Bawah) -->
+            <div class="bg-orange-50/50 p-6 rounded-2xl border border-orange-100/50">
+                <span class="text-xs font-bold text-orange-600 uppercase tracking-wider block mb-4">Comparison
+                    Result</span>
+
+                <!-- Container Result (Bisa berupa Pesan Match atau Box Readonly Diff) -->
+                <div id="compareResultContainer">
+                    <p class="text-sm text-orange-600/80 italic text-center py-6">Waiting for input on both sides...</p>
                 </div>
             </div>
         </div>
