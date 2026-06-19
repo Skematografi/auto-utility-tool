@@ -27,7 +27,4 @@ Simply open `index.html` in your browser — no installation or setup required.
 ## Live Demo
 
 You can also use the hosted version through GitHub Pages:
-
-```text
 [Auto Utility Tool](https://skematografi.github.io/auto-utility-tool/)
-```
