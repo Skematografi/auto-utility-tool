@@ -7,6 +7,7 @@ A lightweight utility toolkit designed to simplify common tasks and improve prod
 * Auto Calculator by List Data
 * Find Duplicate by List Data
 * Detect Non-ASCII Characters
+* Text Compare
 
 ## Run Locally
 
