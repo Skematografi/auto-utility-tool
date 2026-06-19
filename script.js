@@ -5,9 +5,12 @@ lucide.createIcons();
 const tabCalcBtn = document.getElementById('tabCalcBtn');
 const tabDupBtn = document.getElementById('tabDupBtn');
 const tabAsciiBtn = document.getElementById('tabAsciiBtn');
+const tabCompareBtn = document.getElementById('tabCompareBtn');
+
 const calcView = document.getElementById('calcView');
 const dupView = document.getElementById('dupView');
 const asciiView = document.getElementById('asciiView');
+const compareView = document.getElementById('compareView');
 
 // Elemen Auto Calculator
 const calcInput = document.getElementById('numberInput');
@@ -24,14 +27,20 @@ const dupCountDisplay = document.getElementById('dupCount');
 // Elemen Auto Detect Non-ASCII
 const asciiInput = document.getElementById('asciiInput');
 const asciiResultDisplay = document.getElementById('asciiResultValue');
+const asciiHighlightPreview = document.getElementById('asciiHighlightPreview');
 const copyAsciiListBtn = document.getElementById('copyAsciiListBtn');
 const copyCleanTextBtn = document.getElementById('copyCleanTextBtn');
 const asciiCountDisplay = document.getElementById('asciiCount');
 
+// Elemen Auto Compare
+const compareLeft = document.getElementById('compareLeft');
+const compareRight = document.getElementById('compareRight');
+const compareResultContainer = document.getElementById('compareResultContainer');
+
 // Variabel global state penyimpanan data mentah
 let rawSumValue = 0;
-let rawDuplicateList = []; // Menyimpan teks duplikat murni tanpa counter untuk disalin
-let rawNonAsciiList = []; // Menyimpan daftar karakter non-ASCII unik untuk disalin
+let rawDuplicateList = [];
+let rawNonAsciiList = [];
 
 // ----------------------------------------
 // TAB SWITCHING LOGIC
@@ -39,16 +48,20 @@ let rawNonAsciiList = []; // Menyimpan daftar karakter non-ASCII unik untuk disa
 tabCalcBtn.addEventListener('click', () => switchTab('calc'));
 tabDupBtn.addEventListener('click', () => switchTab('dup'));
 tabAsciiBtn.addEventListener('click', () => switchTab('ascii'));
+tabCompareBtn.addEventListener('click', () => switchTab('compare'));
 
 function switchTab(tab) {
     // Reset classes
-    tabCalcBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900";
-    tabDupBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900";
-    tabAsciiBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900";
+    const defaultTabClass = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900";
+    tabCalcBtn.className = defaultTabClass;
+    tabDupBtn.className = defaultTabClass;
+    tabAsciiBtn.className = defaultTabClass;
+    tabCompareBtn.className = defaultTabClass;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
     asciiView.classList.add('hidden');
+    compareView.classList.add('hidden');
 
     if (tab === 'calc') {
         tabCalcBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-blue-600 shadow-sm";
@@ -59,6 +72,10 @@ function switchTab(tab) {
     } else if (tab === 'ascii') {
         tabAsciiBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-indigo-600 shadow-sm";
         asciiView.classList.remove('hidden');
+    } else if (tab === 'compare') {
+        // Tema Orange khusus untuk Compare Tab
+        tabCompareBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-orange-600 shadow-sm";
+        compareView.classList.remove('hidden');
     }
     lucide.createIcons();
 }
@@ -67,7 +84,6 @@ function switchTab(tab) {
 // TAB 1: AUTO CALCULATOR LOGIC
 // ----------------------------------------
 calcInput.addEventListener('input', function () {
-    // Filter: Hanya izinkan angka, titik, minus, dan enter
     const sanitizedValue = this.value.replace(/[^\d.\-\n]/g, '');
     if (this.value !== sanitizedValue) {
         this.value = sanitizedValue;
@@ -100,18 +116,14 @@ function calculateSum() {
     calcCountDisplay.textContent = count;
 }
 
-// Fitur Copy Kalkulator
 calcCopyBtn.addEventListener('click', function () {
     handleClipboardCopy(rawSumValue.toString(), calcCopyBtn, 'Copy Result');
 });
 
-
 // ----------------------------------------
 // TAB 2: FIND DUPLICATES LOGIC
 // ----------------------------------------
-dupInput.addEventListener('input', function () {
-    findDuplicates();
-});
+dupInput.addEventListener('input', findDuplicates);
 
 function findDuplicates() {
     const text = dupInput.value;
@@ -123,20 +135,12 @@ function findDuplicates() {
         return;
     }
 
-    // Memisahkan baris, menghilangkan whitespace di awal/akhir, dan membuang baris kosong
-    const items = text.split('\n')
-        .map(item => item.trim())
-        .filter(item => item !== "");
-
-    // Hitung frekuensi tiap elemen
+    const items = text.split('\n').map(item => item.trim()).filter(item => item !== "");
     const frequencies = {};
-    items.forEach(item => {
-        frequencies[item] = (frequencies[item] || 0) + 1;
-    });
+    items.forEach(item => { frequencies[item] = (frequencies[item] || 0) + 1; });
 
-    // Cari item yang frekuensinya lebih dari 1
     const duplicates = [];
-    rawDuplicateList = []; // Reset list salinan murni
+    rawDuplicateList = [];
 
     for (const item in frequencies) {
         if (frequencies[item] > 1) {
@@ -145,7 +149,6 @@ function findDuplicates() {
         }
     }
 
-    // Update UI
     if (duplicates.length > 0) {
         dupResultDisplay.textContent = duplicates.join('\n');
         dupCountDisplay.textContent = duplicates.length;
@@ -158,25 +161,21 @@ function findDuplicates() {
     }
 }
 
-// Fitur Copy Duplikat (Hanya list datanya saja tanpa (count))
 dupCopyBtn.addEventListener('click', function () {
     if (rawDuplicateList.length === 0) return;
-    const textToCopy = rawDuplicateList.join('\n');
-    handleClipboardCopy(textToCopy, dupCopyBtn, 'Copy List Only', 'bg-emerald-600', 'hover:bg-emerald-700', 'bg-green-500', 'hover:bg-green-600');
+    handleClipboardCopy(rawDuplicateList.join('\n'), dupCopyBtn, 'Copy List Only', 'bg-emerald-600', 'hover:bg-emerald-700', 'bg-green-500', 'hover:bg-green-600');
 });
-
 
 // ----------------------------------------
 // TAB 3: AUTO DETECT NON-ASCII LOGIC
 // ----------------------------------------
-asciiInput.addEventListener('input', function () {
-    detectNonAscii();
-});
+asciiInput.addEventListener('input', detectNonAscii);
 
 function detectNonAscii() {
     const text = asciiInput.value;
     if (!text) {
         asciiResultDisplay.textContent = "No non-ASCII characters found.";
+        asciiHighlightPreview.innerHTML = "No text entered yet.";
         asciiCountDisplay.textContent = "0";
         copyAsciiListBtn.disabled = true;
         copyCleanTextBtn.disabled = true;
@@ -184,9 +183,27 @@ function detectNonAscii() {
         return;
     }
 
+    const escapeHtml = (str) => {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+
+    // Menghasilkan visual preview teks dengan penandaan/highlight warna
+    let highlightedHtml = '';
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const code = char.charCodeAt(0);
+        if (code > 127) {
+            const hexCode = code.toString(16).toUpperCase().padStart(4, '0');
+            // Bungkus karakter non-ASCII dengan class background orange menyala dan penunjuk kode Unicode
+            highlightedHtml += `<span class="bg-amber-200 text-red-700 font-bold px-0.5 rounded cursor-help" title="Unicode: U+${hexCode}">${escapeHtml(char)}</span>`;
+        } else {
+            highlightedHtml += escapeHtml(char);
+        }
+    }
+    asciiHighlightPreview.innerHTML = highlightedHtml;
+
     // Cari semua karakter non-ASCII (Unicode value > 127)
     const nonAsciiMatches = text.match(/[^\x00-\x7F]/g) || [];
-
     if (nonAsciiMatches.length === 0) {
         asciiResultDisplay.textContent = "No non-ASCII characters found. Your text is clean!";
         asciiCountDisplay.textContent = "0";
@@ -198,46 +215,126 @@ function detectNonAscii() {
 
     // Analisis karakter unik dan hitung frekuensinya
     const frequencies = {};
-    nonAsciiMatches.forEach(char => {
-        frequencies[char] = (frequencies[char] || 0) + 1;
-    });
+    nonAsciiMatches.forEach(char => { frequencies[char] = (frequencies[char] || 0) + 1; });
 
     const uniqueList = [];
     rawNonAsciiList = [];
 
     for (const char in frequencies) {
-        // Konversi karakter ke format representasi Unicode (Hex)
         const hexCode = char.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0');
-        const unicodeLabel = `U+${hexCode}`;
-
-        uniqueList.push(`"${char}" (${unicodeLabel}) — ${frequencies[char]}x`);
+        uniqueList.push(`"${char}" (U+${hexCode}) — ${frequencies[char]}x`);
         rawNonAsciiList.push(char);
     }
 
-    // Tampilkan list dan detail statistik
     asciiResultDisplay.textContent = uniqueList.join('\n');
     asciiCountDisplay.textContent = nonAsciiMatches.length;
-
-    // Aktifkan tombol copy jika ada hasil
     copyAsciiListBtn.disabled = false;
     copyCleanTextBtn.disabled = false;
 }
 
-// Salin Karakter Non-ASCII unik yang ditemukan
 copyAsciiListBtn.addEventListener('click', function () {
     if (rawNonAsciiList.length === 0) return;
-    const textToCopy = rawNonAsciiList.join('');
-    handleClipboardCopy(textToCopy, copyAsciiListBtn, 'Copy List Only', 'bg-indigo-600', 'hover:bg-indigo-700', 'bg-green-500', 'hover:bg-green-600');
+    handleClipboardCopy(rawNonAsciiList.join(''), copyAsciiListBtn, 'Copy List Only', 'bg-indigo-600', 'hover:bg-indigo-700', 'bg-green-500', 'hover:bg-green-600');
 });
 
-// Salin Teks Asli yang telah dibersihkan dari Non-ASCII (Hanya menyisakan ASCII standard)
 copyCleanTextBtn.addEventListener('click', function () {
-    const originalText = asciiInput.value;
-    // Bersihkan semua karakter selain range standard ASCII (\x00 - \x7F)
-    const cleanedText = originalText.replace(/[^\x00-\x7F]/g, '');
+    const cleanedText = asciiInput.value.replace(/[^\x00-\x7F]/g, '');
     handleClipboardCopy(cleanedText, copyCleanTextBtn, 'Copy Cleaned Text', 'bg-slate-600', 'hover:bg-slate-700', 'bg-green-500', 'hover:bg-green-600');
 });
 
+// ----------------------------------------
+// TAB 4: AUTO COMPARE LOGIC
+// ----------------------------------------
+compareLeft.addEventListener('input', handleCompare);
+compareRight.addEventListener('input', handleCompare);
+
+function handleCompare() {
+    const text1 = compareLeft.value;
+    const text2 = compareRight.value;
+
+    // Proses HANYI JIKA kedua sisi telah terisi teks
+    if (!text1 || !text2) {
+        compareResultContainer.innerHTML = '<p class="text-sm text-orange-600/80 italic text-center py-6">Waiting for input on both sides...</p>';
+        return;
+    }
+
+    // Split data per baris (kalimat/list)
+    const lines1 = text1.split('\n');
+    const lines2 = text2.split('\n');
+
+    const escapeHtml = (str) => {
+        if (str === undefined || str === null) return '';
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
+
+    let leftHtml = '';
+    let rightHtml = '';
+    let hasMismatch = false;
+
+    // Buat frequency map untuk mengecek "keberadaan" data tanpa peduli urutan baris
+    const freq2 = {};
+    lines2.forEach(l => freq2[l] = (freq2[l] || 0) + 1);
+
+    for (let i = 0; i < lines1.length; i++) {
+        const val = lines1[i];
+        if (freq2[val] > 0) {
+            freq2[val]--;
+            leftHtml += escapeHtml(val) + '\n';
+        } else {
+            const content = val !== undefined ? (escapeHtml(val) || ' ') : ' ';
+            leftHtml += `<span class="bg-orange-200 text-orange-900 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
+            hasMismatch = true;
+        }
+    }
+
+    // Sisi kanan terhadap data kiri
+    const freq1 = {};
+    lines1.forEach(l => freq1[l] = (freq1[l] || 0) + 1);
+
+    for (let i = 0; i < lines2.length; i++) {
+        const val = lines2[i];
+        if (freq1[val] > 0) {
+            freq1[val]--;
+            rightHtml += escapeHtml(val) + '\n';
+        } else {
+            const content = val !== undefined ? (escapeHtml(val) || ' ') : ' ';
+            rightHtml += `<span class="bg-orange-200 text-orange-900 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
+            hasMismatch = true;
+        }
+    }
+
+    // Jika data match 100%
+    if (!hasMismatch) {
+        compareResultContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-8 text-green-600 bg-green-50 rounded-xl border border-green-200">
+                        <i data-lucide="check-circle-2" class="w-12 h-12 mb-3"></i>
+                        <span class="text-xl font-black uppercase tracking-widest">Data Match</span>
+                    </div>
+                `;
+        lucide.createIcons();
+        return;
+    }
+
+    // Render hasil ke 2 box yang identik seperti layout input
+    compareResultContainer.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div class="flex flex-col space-y-2">
+                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wider">Result (Left)</span>
+                        <div 
+                            contenteditable="false"
+                            class="w-full min-h-[200px] max-h-[500px] p-4 border-2 border-orange-200 rounded-xl bg-white resize-y overflow-auto text-sm font-mono whitespace-pre leading-relaxed"
+                        >${leftHtml}</div>
+                    </div>
+                    <div class="flex flex-col space-y-2">
+                        <span class="text-xs font-bold text-orange-500 uppercase tracking-wider">Result (Right)</span>
+                        <div 
+                            contenteditable="false"
+                            class="w-full min-h-[200px] max-h-[500px] p-4 border-2 border-orange-200 rounded-xl bg-white resize-y overflow-auto text-sm font-mono whitespace-pre leading-relaxed"
+                        >${rightHtml}</div>
+                    </div>
+                </div>
+            `;
+}
 
 // ----------------------------------------
 // HELPER: UNIVERSAL CLIPBOARD COPY
@@ -257,15 +354,12 @@ function handleClipboardCopy(text, buttonElement, originalText, defaultBg = 'bg-
     try {
         const successful = document.execCommand('copy');
         if (successful) {
-            // Feedback Visual
             buttonElement.innerHTML = `<i data-lucide="check" class="w-5 h-5"></i><span>Copied!</span>`;
             buttonElement.classList.remove(defaultBg, defaultHover);
             buttonElement.classList.add(activeBg, activeHover);
             lucide.createIcons();
 
             setTimeout(() => {
-                let iconName = 'copy';
-                // Sesuaikan ikon yang tepat untuk tombol "Copy Cleaned Text"
                 if (buttonElement.id === 'copyCleanTextBtn') {
                     buttonElement.innerHTML = `<i data-lucide="file-check" class="w-4 h-4 group-hover:scale-110 transition-transform"></i><span>${originalText}</span>`;
                 } else {
