@@ -8,6 +8,7 @@ A lightweight utility toolkit designed to simplify common tasks and improve prod
 * Find Duplicate by List Data
 * Detect Non-ASCII Characters
 * Text Compare
+* SQL Generator (Delete & Update) from Excel / CSV
 
 ## Run Locally
 
