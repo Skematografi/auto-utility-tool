@@ -1,16 +1,18 @@
 # DataDev Utilities
 
-A lightweight, browser-based toolkit that bundles several everyday utilities for developers and data analysts into one clean, responsive interface — no installation, no backend, everything runs client-side.
+A lightweight, browser-based toolkit that bundles several everyday utilities for developers and data analysts into one **terminal-inspired**, fully responsive interface — no installation, no backend, everything runs client-side.
+
+The UI is styled as a dark terminal window (monospace font, prompt-style labels, blinking cursor) and adapts cleanly from mobile to desktop.
 
 ## Features
 
 The app is organized into tabs, each a self-contained tool:
 
-* **Calculator** — Sum a list of numbers (one per line) with live totals, item count, and one-click copy.
-* **Duplicates** — Detect duplicate entries in a list and show how many times each appears.
-* **Non-ASCII** — Detect and highlight non-ASCII / hidden Unicode characters, list their code points, and copy a cleaned (ASCII-only) version of the text.
-* **Compare** — Compare two blocks of text line-by-line and highlight the differences between them.
-* **SQL Generator** — Generate SQL from an uploaded Excel / CSV file:
+* **`calc`** (Calculator) — Sum a list of numbers (one per line) with live totals, item count, and one-click copy.
+* **`dupes`** (Duplicates) — Detect duplicate entries in a list and show how many times each appears.
+* **`ascii`** (Non-ASCII) — Detect and highlight non-ASCII / hidden Unicode characters, list their code points, and copy a cleaned (ASCII-only) version of the text.
+* **`diff`** (Compare) — Compare two blocks of text line-by-line and highlight the differences between them.
+* **`sql`** (SQL Generator) — Generate SQL from an uploaded Excel / CSV file:
   * Upload `.xlsx`, `.xls`, or `.csv` and preview the detected columns.
   * **Delete** — build `DELETE ... WHERE col IN (...)` with automatic per-column de-duplication, from one or more conditions.
   * **Update** — build `UPDATE ... SET ... WHERE ...`, grouping rows with identical `SET` values into a single `IN (...)` statement where possible.
@@ -21,6 +23,7 @@ The app is organized into tabs, each a self-contained tool:
 
 * Plain **HTML + JavaScript** (no build step)
 * [Tailwind CSS](https://tailwindcss.com/) (via CDN) for styling
+* [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for the terminal-style monospace typography
 * [Lucide](https://lucide.dev/) for icons
 * [SheetJS](https://sheetjs.com/) for reading Excel / CSV files
 
