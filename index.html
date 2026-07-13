@@ -31,6 +31,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- SheetJS untuk membaca file Excel / CSV -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- JSZip untuk membungkus hasil split menjadi file ZIP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <style>
         /* Kursor terminal berkedip */
@@ -100,7 +102,7 @@
             </div>
 
             <!-- Tab Navigation: grid agar SEMUA tab selalu terlihat -->
-            <div class="grid grid-cols-3 sm:grid-cols-5 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
+            <div class="grid grid-cols-3 sm:grid-cols-6 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
@@ -125,6 +127,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="database" class="w-4 h-4 shrink-0"></i>
                     sql
+                </button>
+                <button id="tabSplitBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="scissors" class="w-4 h-4 shrink-0"></i>
+                    split
                 </button>
             </div>
 
@@ -435,6 +442,74 @@
                 </div>
             </div>
 
+            <!-- TAB 6: SPLIT FILE VIEW -->
+            <div id="splitView" class="space-y-6 hidden">
+
+                <!-- 1. Area Upload File Excel / CSV -->
+                <div class="flex flex-col space-y-2">
+                    <label class="text-xs font-semibold text-zinc-500"><span class="text-emerald-500">$</span>
+                        source_file (excel / csv)</label>
+                    <label for="splitFileInput"
+                        class="flex flex-col items-center justify-center gap-2 w-full py-8 px-4 border-2 border-dashed border-zinc-700 rounded-md bg-black/40 hover:bg-black/60 hover:border-emerald-500/60 cursor-pointer transition-all text-center">
+                        <div
+                            class="flex items-center justify-center w-11 h-11 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mb-1">
+                            <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-emerald-400">click to upload or drop your file
+                            here</span>
+                        <span class="text-xs text-zinc-600">supported: .xlsx, .xls, .csv</span>
+                        <input id="splitFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden">
+                    </label>
+
+                    <!-- Preview kolom terdeteksi -->
+                    <div id="splitFileInfo" class="hidden bg-black/40 p-4 rounded-md border border-zinc-800 space-y-2">
+                        <div
+                            class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start w-fit">
+                            <i data-lucide="table-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                            <span class="text-xs font-semibold text-emerald-500">detected:</span>
+                            <span id="splitFileSummary" class="font-extrabold text-emerald-300 text-xs">-</span>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> columns</span>
+                            <div id="splitColumnList"
+                                class="text-xs text-zinc-300 bg-black/60 p-3 rounded-md border border-zinc-800 max-h-[140px] overflow-y-auto whitespace-pre-wrap break-all leading-relaxed thin-scroll">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Opsi Split -->
+                <div class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800">
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="splitColumnName" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">#</span> group_by_column (optional)</label>
+                        <input id="splitColumnName" type="text" placeholder="e.g. productID"
+                            class="w-full p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                        <span class="text-xs text-zinc-600">Rows with the same value in this column stay in the same
+                            file. Leave empty to split purely by row count.</span>
+                    </div>
+
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="splitMaxRows" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> max_rows_per_file</label>
+                        <input id="splitMaxRows" type="number" min="1" value="1000" placeholder="e.g. 1000"
+                            class="w-full p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                        <span class="text-xs text-zinc-600">Each output file will contain at most this many data
+                            rows.</span>
+                    </div>
+
+                    <button id="generateSplitBtn"
+                        class="w-full flex items-center justify-center gap-2.5 py-3.5 px-8 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-lg shadow-emerald-900/40 transition-all font-bold text-base sm:text-lg cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600">
+                        <i data-lucide="folder-archive" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span>split &amp; download zip</span>
+                    </button>
+                </div>
+
+                <!-- 3. Status -->
+                <div id="splitStatus" class="hidden text-sm font-semibold px-4 py-3 rounded-md"></div>
+            </div>
+
         </div>
     </div>
 
@@ -447,6 +522,7 @@
     <script src="js/nonAscii.js"></script>
     <script src="js/compare.js"></script>
     <script src="js/sqlGenerator.js"></script>
+    <script src="js/splitFile.js"></script>
 </body>
 
 </html>

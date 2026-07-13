@@ -9,18 +9,21 @@ const tabDupBtn = document.getElementById('tabDupBtn');
 const tabAsciiBtn = document.getElementById('tabAsciiBtn');
 const tabCompareBtn = document.getElementById('tabCompareBtn');
 const tabSqlBtn = document.getElementById('tabSqlBtn');
+const tabSplitBtn = document.getElementById('tabSplitBtn');
 
 const calcView = document.getElementById('calcView');
 const dupView = document.getElementById('dupView');
 const asciiView = document.getElementById('asciiView');
 const compareView = document.getElementById('compareView');
 const sqlView = document.getElementById('sqlView');
+const splitView = document.getElementById('splitView');
 
 tabCalcBtn.addEventListener('click', () => switchTab('calc'));
 tabDupBtn.addEventListener('click', () => switchTab('dup'));
 tabAsciiBtn.addEventListener('click', () => switchTab('ascii'));
 tabCompareBtn.addEventListener('click', () => switchTab('compare'));
 tabSqlBtn.addEventListener('click', () => switchTab('sql'));
+tabSplitBtn.addEventListener('click', () => switchTab('split'));
 
 // Kelas dasar tab (konsisten dengan grid tab bergaya terminal di index.html)
 const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
@@ -34,12 +37,14 @@ function switchTab(tab) {
     tabAsciiBtn.className = TAB_INACTIVE;
     tabCompareBtn.className = TAB_INACTIVE;
     tabSqlBtn.className = TAB_INACTIVE;
+    tabSplitBtn.className = TAB_INACTIVE;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
     asciiView.classList.add('hidden');
     compareView.classList.add('hidden');
     sqlView.classList.add('hidden');
+    splitView.classList.add('hidden');
 
     if (tab === 'calc') {
         tabCalcBtn.className = TAB_ACTIVE;
@@ -56,6 +61,9 @@ function switchTab(tab) {
     } else if (tab === 'sql') {
         tabSqlBtn.className = TAB_ACTIVE;
         sqlView.classList.remove('hidden');
+    } else if (tab === 'split') {
+        tabSplitBtn.className = TAB_ACTIVE;
+        splitView.classList.remove('hidden');
     }
     lucide.createIcons();
 }

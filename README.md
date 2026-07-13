@@ -18,6 +18,10 @@ The app is organized into tabs, each a self-contained tool:
   * **Update** — build `UPDATE ... SET ... WHERE ...`, grouping rows with identical `SET` values into a single `IN (...)` statement where possible.
   * Smart quoting: numbers stay unquoted; strings containing a single quote are wrapped in double quotes (and vice versa).
   * The result is previewed and downloaded directly as a `.sql` file.
+* **`split`** (Split File) — Split an uploaded Excel / CSV into multiple files, downloaded together as a `.zip`:
+  * Set the max rows per file — the number of output files is calculated automatically.
+  * Optionally pick a column so rows sharing the same value stay in the same file; leave it empty to split purely by row count.
+  * Each output file keeps the header row and matches the uploaded format (`.csv` → CSV, Excel → `.xlsx`).
 
 ## Tech Stack
 
@@ -25,7 +29,8 @@ The app is organized into tabs, each a self-contained tool:
 * [Tailwind CSS](https://tailwindcss.com/) (via CDN) for styling
 * [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for the terminal-style monospace typography
 * [Lucide](https://lucide.dev/) for icons
-* [SheetJS](https://sheetjs.com/) for reading Excel / CSV files
+* [SheetJS](https://sheetjs.com/) for reading & writing Excel / CSV files
+* [JSZip](https://stuk.github.io/jszip/) for packaging split files into a ZIP
 
 ## Project Structure
 
@@ -39,7 +44,8 @@ auto-utility-tool/
     ├── duplicates.js    # Duplicates tab
     ├── nonAscii.js      # Non-ASCII tab
     ├── compare.js       # Compare tab
-    └── sqlGenerator.js  # SQL Generator tab
+    ├── sqlGenerator.js  # SQL Generator tab
+    └── splitFile.js     # Split File tab
 ```
 
 Each tab's logic lives in its own file for easier maintenance.
