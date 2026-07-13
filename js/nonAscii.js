@@ -36,8 +36,8 @@ function detectNonAscii() {
         const code = char.charCodeAt(0);
         if (code > 127) {
             const hexCode = code.toString(16).toUpperCase().padStart(4, '0');
-            // Bungkus karakter non-ASCII dengan highlight amber + teks rose sebagai penanda atensi + kode Unicode
-            highlightedHtml += `<span class="bg-amber-200 text-rose-700 font-bold px-0.5 rounded cursor-help" title="Unicode: U+${hexCode}">${escapeHtml(char)}</span>`;
+            // Bungkus karakter non-ASCII dengan highlight merah (glow) sebagai penanda atensi + kode Unicode
+            highlightedHtml += `<span class="bg-red-500/25 text-red-300 font-bold px-0.5 rounded cursor-help" title="Unicode: U+${hexCode}">${escapeHtml(char)}</span>`;
         } else {
             highlightedHtml += escapeHtml(char);
         }
@@ -76,10 +76,10 @@ function detectNonAscii() {
 
 copyAsciiListBtn.addEventListener('click', function () {
     if (rawNonAsciiList.length === 0) return;
-    handleClipboardCopy(rawNonAsciiList.join(''), copyAsciiListBtn, 'Copy List Only', 'bg-indigo-600', 'hover:bg-indigo-700', 'bg-emerald-500', 'hover:bg-emerald-600');
+    handleClipboardCopy(rawNonAsciiList.join(''), copyAsciiListBtn, 'copy list', 'bg-emerald-600', 'hover:bg-emerald-500', 'bg-amber-400', 'hover:bg-amber-300');
 });
 
 copyCleanTextBtn.addEventListener('click', function () {
     const cleanedText = asciiInput.value.replace(/[^\x00-\x7F]/g, '');
-    handleClipboardCopy(cleanedText, copyCleanTextBtn, 'Copy Cleaned Text', 'bg-slate-700', 'hover:bg-slate-800', 'bg-emerald-500', 'hover:bg-emerald-600');
+    handleClipboardCopy(cleanedText, copyCleanTextBtn, 'copy cleaned', 'bg-sky-500', 'hover:bg-sky-400', 'bg-amber-400', 'hover:bg-amber-300');
 });

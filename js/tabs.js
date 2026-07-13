@@ -22,10 +22,10 @@ tabAsciiBtn.addEventListener('click', () => switchTab('ascii'));
 tabCompareBtn.addEventListener('click', () => switchTab('compare'));
 tabSqlBtn.addEventListener('click', () => switchTab('sql'));
 
-// Kelas dasar tab (konsisten dengan grid tab di index.html)
-const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap";
-const TAB_INACTIVE = `${TAB_BASE} text-slate-500 hover:text-slate-900`;
-const TAB_ACTIVE = `${TAB_BASE} bg-white text-indigo-600 shadow-sm`;
+// Kelas dasar tab (konsisten dengan grid tab bergaya terminal di index.html)
+const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
+const TAB_INACTIVE = `${TAB_BASE} text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50`;
+const TAB_ACTIVE = `${TAB_BASE} bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40`;
 
 function switchTab(tab) {
     // Reset semua tab ke keadaan tidak aktif

@@ -2,7 +2,7 @@
 // HELPER: UNIVERSAL CLIPBOARD COPY
 // Dipakai bersama oleh beberapa tab (Calculator, Duplicates, Non-ASCII).
 // ----------------------------------------
-function handleClipboardCopy(text, buttonElement, originalText, defaultBg = 'bg-indigo-600', defaultHover = 'hover:bg-indigo-700', activeBg = 'bg-emerald-500', activeHover = 'hover:bg-emerald-600') {
+function handleClipboardCopy(text, buttonElement, originalText, defaultBg = 'bg-emerald-600', defaultHover = 'hover:bg-emerald-500', activeBg = 'bg-amber-400', activeHover = 'hover:bg-amber-300') {
     const textArea = document.createElement("textarea");
     textArea.value = text;
     textArea.style.position = "fixed";

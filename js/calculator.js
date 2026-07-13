@@ -43,5 +43,5 @@ function calculateSum() {
 }
 
 calcCopyBtn.addEventListener('click', function () {
-    handleClipboardCopy(rawSumValue.toString(), calcCopyBtn, 'Copy Result');
+    handleClipboardCopy(rawSumValue.toString(), calcCopyBtn, 'copy result');
 });

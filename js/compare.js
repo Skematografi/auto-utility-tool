@@ -14,7 +14,7 @@ function handleCompare() {
 
     // Proses HANYI JIKA kedua sisi telah terisi teks
     if (!text1 || !text2) {
-        compareResultContainer.innerHTML = '<p class="text-sm text-slate-400 italic text-center py-6">Waiting for input on both sides...</p>';
+        compareResultContainer.innerHTML = '<p class="text-sm text-zinc-600 italic text-center py-6">Waiting for input on both sides...</p>';
         return;
     }
 
@@ -42,7 +42,7 @@ function handleCompare() {
             leftHtml += escapeHtml(val) + '\n';
         } else {
             const content = val !== undefined ? (escapeHtml(val) || ' ') : ' ';
-            leftHtml += `<span class="bg-amber-200 text-amber-900 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
+            leftHtml += `<span class="bg-amber-500/25 text-amber-200 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
             hasMismatch = true;
         }
     }
@@ -58,7 +58,7 @@ function handleCompare() {
             rightHtml += escapeHtml(val) + '\n';
         } else {
             const content = val !== undefined ? (escapeHtml(val) || ' ') : ' ';
-            rightHtml += `<span class="bg-amber-200 text-amber-900 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
+            rightHtml += `<span class="bg-amber-500/25 text-amber-200 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
             hasMismatch = true;
         }
     }
@@ -66,7 +66,7 @@ function handleCompare() {
     // Jika data match 100%
     if (!hasMismatch) {
         compareResultContainer.innerHTML = `
-                    <div class="flex flex-col items-center justify-center py-8 text-emerald-600 bg-emerald-50 rounded-xl border border-emerald-200">
+                    <div class="flex flex-col items-center justify-center py-8 text-emerald-400 bg-emerald-500/10 rounded-md border border-emerald-500/30">
                         <i data-lucide="check-circle-2" class="w-12 h-12 mb-3"></i>
                         <span class="text-xl font-black uppercase tracking-widest">Data Match</span>
                     </div>
@@ -79,17 +79,17 @@ function handleCompare() {
     compareResultContainer.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div class="flex flex-col space-y-2">
-                        <span class="text-xs font-bold text-indigo-500 uppercase tracking-wider">Result (Left)</span>
+                        <span class="text-xs font-bold text-zinc-500">> result (left)</span>
                         <div
                             contenteditable="false"
-                            class="w-full min-h-[200px] max-h-[500px] p-4 border-2 border-indigo-100 rounded-xl bg-white resize-y overflow-auto text-sm font-mono whitespace-pre leading-relaxed thin-scroll"
+                            class="w-full min-h-[200px] max-h-[500px] p-4 border border-zinc-800 rounded-md bg-black/60 resize-y overflow-auto text-sm text-zinc-200 whitespace-pre leading-relaxed thin-scroll"
                         >${leftHtml}</div>
                     </div>
                     <div class="flex flex-col space-y-2">
-                        <span class="text-xs font-bold text-indigo-500 uppercase tracking-wider">Result (Right)</span>
+                        <span class="text-xs font-bold text-zinc-500">> result (right)</span>
                         <div
                             contenteditable="false"
-                            class="w-full min-h-[200px] max-h-[500px] p-4 border-2 border-indigo-100 rounded-xl bg-white resize-y overflow-auto text-sm font-mono whitespace-pre leading-relaxed thin-scroll"
+                            class="w-full min-h-[200px] max-h-[500px] p-4 border border-zinc-800 rounded-md bg-black/60 resize-y overflow-auto text-sm text-zinc-200 whitespace-pre leading-relaxed thin-scroll"
                         >${rightHtml}</div>
                     </div>
                 </div>
