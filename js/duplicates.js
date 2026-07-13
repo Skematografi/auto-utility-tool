@@ -49,5 +49,5 @@ function findDuplicates() {
 
 dupCopyBtn.addEventListener('click', function () {
     if (rawDuplicateList.length === 0) return;
-    handleClipboardCopy(rawDuplicateList.join('\n'), dupCopyBtn, 'Copy List Only', 'bg-emerald-600', 'hover:bg-emerald-700', 'bg-green-500', 'hover:bg-green-600');
+    handleClipboardCopy(rawDuplicateList.join('\n'), dupCopyBtn, 'Copy List Only', 'bg-indigo-600', 'hover:bg-indigo-700', 'bg-emerald-500', 'hover:bg-emerald-600');
 });

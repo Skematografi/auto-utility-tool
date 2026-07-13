@@ -88,8 +88,8 @@ sqlModeDeleteBtn.addEventListener('click', () => switchSqlMode('delete'));
 sqlModeUpdateBtn.addEventListener('click', () => switchSqlMode('update'));
 
 function switchSqlMode(mode) {
-    const activeClass = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-purple-600 shadow-sm";
-    const inactiveClass = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900";
+    const activeClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer bg-white text-indigo-600 shadow-sm";
+    const inactiveClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all cursor-pointer text-slate-500 hover:text-slate-900";
 
     if (mode === 'delete') {
         sqlModeDeleteBtn.className = activeClass;
@@ -111,11 +111,11 @@ function createConditionRow(container, placeholder) {
     row.className = 'flex items-center gap-2 condition-row';
     row.innerHTML = `
         <input type="number" min="1" placeholder="Idx"
-            class="cond-index w-20 p-2.5 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 outline-none text-sm font-mono transition-all">
+            class="cond-index w-16 sm:w-20 shrink-0 p-2.5 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 outline-none text-sm font-mono transition-all bg-white">
         <input type="text" placeholder="${placeholder}"
-            class="cond-name flex-grow p-2.5 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 outline-none text-sm font-mono transition-all">
+            class="cond-name flex-grow min-w-0 p-2.5 border-2 border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/15 outline-none text-sm font-mono transition-all bg-white">
         <button type="button" title="Remove"
-            class="cond-remove flex items-center justify-center w-10 h-10 shrink-0 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all cursor-pointer">
+            class="cond-remove flex items-center justify-center w-10 h-10 shrink-0 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all cursor-pointer">
             <i data-lucide="x" class="w-4 h-4"></i>
         </button>
     `;
@@ -319,10 +319,10 @@ function validateFileLoaded() {
 
 function showSqlStatus(message, type) {
     sqlStatus.textContent = message;
-    sqlStatus.className = 'text-sm font-semibold px-4 py-3 rounded-xl ' + (
+    sqlStatus.className = 'text-sm font-semibold px-4 py-3 rounded-xl flex items-center gap-2 ' + (
         type === 'error'
-            ? 'bg-red-50 text-red-700 border border-red-200'
-            : 'bg-green-50 text-green-700 border border-green-200'
+            ? 'bg-rose-50 text-rose-700 border border-rose-200'
+            : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
     );
     sqlStatus.classList.remove('hidden');
 }

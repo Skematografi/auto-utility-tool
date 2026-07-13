@@ -22,14 +22,18 @@ tabAsciiBtn.addEventListener('click', () => switchTab('ascii'));
 tabCompareBtn.addEventListener('click', () => switchTab('compare'));
 tabSqlBtn.addEventListener('click', () => switchTab('sql'));
 
+// Kelas dasar tab (konsisten dengan grid tab di index.html)
+const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap";
+const TAB_INACTIVE = `${TAB_BASE} text-slate-500 hover:text-slate-900`;
+const TAB_ACTIVE = `${TAB_BASE} bg-white text-indigo-600 shadow-sm`;
+
 function switchTab(tab) {
-    // Reset classes
-    const defaultTabClass = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer text-gray-500 hover:text-gray-900";
-    tabCalcBtn.className = defaultTabClass;
-    tabDupBtn.className = defaultTabClass;
-    tabAsciiBtn.className = defaultTabClass;
-    tabCompareBtn.className = defaultTabClass;
-    tabSqlBtn.className = defaultTabClass;
+    // Reset semua tab ke keadaan tidak aktif
+    tabCalcBtn.className = TAB_INACTIVE;
+    tabDupBtn.className = TAB_INACTIVE;
+    tabAsciiBtn.className = TAB_INACTIVE;
+    tabCompareBtn.className = TAB_INACTIVE;
+    tabSqlBtn.className = TAB_INACTIVE;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
@@ -38,21 +42,19 @@ function switchTab(tab) {
     sqlView.classList.add('hidden');
 
     if (tab === 'calc') {
-        tabCalcBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-blue-600 shadow-sm";
+        tabCalcBtn.className = TAB_ACTIVE;
         calcView.classList.remove('hidden');
     } else if (tab === 'dup') {
-        tabDupBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-emerald-600 shadow-sm";
+        tabDupBtn.className = TAB_ACTIVE;
         dupView.classList.remove('hidden');
     } else if (tab === 'ascii') {
-        tabAsciiBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-indigo-600 shadow-sm";
+        tabAsciiBtn.className = TAB_ACTIVE;
         asciiView.classList.remove('hidden');
     } else if (tab === 'compare') {
-        // Tema Orange khusus untuk Compare Tab
-        tabCompareBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-orange-600 shadow-sm";
+        tabCompareBtn.className = TAB_ACTIVE;
         compareView.classList.remove('hidden');
     } else if (tab === 'sql') {
-        // Tema Purple khusus untuk SQL Generator Tab
-        tabSqlBtn.className = "flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer bg-white text-purple-600 shadow-sm";
+        tabSqlBtn.className = TAB_ACTIVE;
         sqlView.classList.remove('hidden');
     }
     lucide.createIcons();
