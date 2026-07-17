@@ -22,6 +22,11 @@ The app is organized into tabs, each a self-contained tool:
   * Set the max rows per file — the number of output files is calculated automatically.
   * Optionally pick a column so rows sharing the same value stay in the same file; leave it empty to split purely by row count.
   * Each output file keeps the header row and matches the uploaded format (`.csv` → CSV, Excel → `.xlsx`).
+* **`in()`** (WHERE IN Generator) — Paste a list (one item per line) and get values ready to drop into a SQL `WHERE col IN (...)` clause:
+  * Auto-detects the list type: if every line is numeric (integer or decimal, e.g. `500.0000`) you get **two** outputs (unquoted numbers and quoted strings); otherwise only the quoted string output is shown.
+  * Decimal values are tidied without changing their value (`500.0000` → `500`, `3.5000` → `3.5`) so the unquoted output matches integer columns for faster queries.
+  * Single quotes inside string values are escaped (`'` → `''`) so the output runs safely in SQL; double quotes need no escaping.
+  * Output lines wrap at 200 characters, breaking to a new line after a comma.
 
 ## Tech Stack
 
@@ -45,7 +50,8 @@ auto-utility-tool/
     ├── nonAscii.js      # Non-ASCII tab
     ├── compare.js       # Compare tab
     ├── sqlGenerator.js  # SQL Generator tab
-    └── splitFile.js     # Split File tab
+    ├── splitFile.js     # Split File tab
+    └── whereIn.js       # WHERE IN Generator tab
 ```
 
 Each tab's logic lives in its own file for easier maintenance.
