@@ -27,6 +27,11 @@ The app is organized into tabs, each a self-contained tool:
   * Decimal values are tidied without changing their value (`500.0000` → `500`, `3.5000` → `3.5`) so the unquoted output matches integer columns for faster queries.
   * Single quotes inside string values are escaped (`'` → `''`) so the output runs safely in SQL; double quotes need no escaping.
   * Output lines wrap at 200 characters, breaking to a new line after a comma.
+* **`chars`** (Character Count) — Paste any text and get live counts plus database storage estimates:
+  * Total characters (counted per Unicode code point, so emoji count as 1), lines, words, sentences, paragraphs, and spaces.
+  * **`size_utf8`** — actual UTF-8 byte size, matching storage in MySQL `utf8mb4` (VARCHAR / TEXT) and PostgreSQL.
+  * **`size_utf16`** — 2 bytes per character, matching SQL Server `NVARCHAR`.
+  * Sizes are shown human-readable (B / KB / MB / GB) with the exact byte count below; per-row overhead is not included.
 
 ## Tech Stack
 
@@ -51,7 +56,8 @@ auto-utility-tool/
     ├── compare.js       # Compare tab
     ├── sqlGenerator.js  # SQL Generator tab
     ├── splitFile.js     # Split File tab
-    └── whereIn.js       # WHERE IN Generator tab
+    ├── whereIn.js       # WHERE IN Generator tab
+    └── charCount.js     # Character Count tab
 ```
 
 Each tab's logic lives in its own file for easier maintenance.
