@@ -1,0 +1,65 @@
+# DataDev Utilities — Always-On Guardrails
+# These rules apply to EVERY session in this repo.
+# Full context: CLAUDE.md (auto-loaded) and .claude/skills/datadev-utilities/SKILL.md.
+
+## Architecture (5 rules)
+
+A1. This is a STATIC, CLIENT-SIDE app: plain HTML + vanilla JS. NEVER add a build step,
+    npm/package.json, a framework (React/Vue/etc.), a bundler, or any backend/server code.
+    It must keep working opened directly (file:// or GitHub Pages).
+
+A2. ALL markup lives in index.html — one `<div id="<name>View" class="... hidden">` per tab.
+    ALL logic lives in js/ — exactly one file per tab, plus shared helpers
+    (js/clipboard.js, js/tabs.js). A tab's JS only touches its own tab's DOM ids.
+
+A3. Third-party libraries ONLY via CDN `<script>` tags in index.html, and only when
+    genuinely needed. Current deps: Tailwind CDN, Lucide, SheetJS (xlsx), JSZip.
+
+A4. Every new tab MUST be wired in ALL of these places or it silently breaks:
+    (a) tab button in the tab grid (and bump the grid's `grid-cols-*` counts),
+    (b) view div in index.html, (c) js/tabs.js — consts, listener, reset lines,
+    switchTab branch, (d) its own js/<feature>.js, (e) `<script>` include at the
+    bottom of index.html, (f) README.md Features + Project Structure.
+
+A5. Preview via .claude/launch.json server `static` (python -m http.server, port 4599) —
+    never spawn ad-hoc dev servers another way.
+
+## UI Conventions (5 rules)
+
+U1. Terminal theme: dark zinc palette, emerald as primary accent, sky as secondary,
+    amber only for the transient "Copied!" state. Monospace everywhere (JetBrains Mono).
+
+U2. Labels use prompt prefixes: `$` for user inputs, `#` for outputs/options.
+    UI text is lowercase English (terminal style); code comments are Indonesian.
+
+U3. Text-based tools recompute live on the `input` event — no submit/generate button
+    unless the operation is heavy (file processing, downloads).
+
+U4. Every copy button goes through handleClipboardCopy() in js/clipboard.js —
+    never reimplement clipboard logic per tab.
+
+U5. After injecting new elements containing `data-lucide` icons, call
+    lucide.createIcons() or the icons render as empty.
+
+## Output Safety (3 rules)
+
+S1. Generated SQL must be directly runnable: escape single quotes by DOUBLING (`''`),
+    never with a backslash; numeric values stay unquoted; string values wrapped in
+    single quotes.
+
+S2. Never lose precision on numeric data: normalize numbers with string manipulation,
+    not parseFloat/Number, so long IDs and big integers survive intact.
+
+S3. Trim lines and drop empties when parsing pasted lists — but never dedupe or
+    reorder user data unless the feature explicitly says so.
+
+## Forbidden Anti-patterns
+
+- Adding package.json / node_modules / a bundler / a framework
+- Any server-side code or external API calls for core features
+- Duplicating clipboard logic instead of using handleClipboardCopy()
+- Adding a tab without updating js/tabs.js and the tab grid column count
+- Escaping SQL quotes with backslash instead of doubling
+- parseFloat/Number on values that may be long IDs
+- Forgetting lucide.createIcons() after DOM injection
+- Shipping a feature change without updating README.md
