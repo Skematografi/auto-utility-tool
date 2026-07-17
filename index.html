@@ -102,7 +102,7 @@
             </div>
 
             <!-- Tab Navigation: grid agar SEMUA tab selalu terlihat -->
-            <div class="grid grid-cols-3 sm:grid-cols-6 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
+            <div class="grid grid-cols-4 sm:grid-cols-7 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
@@ -132,6 +132,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="scissors" class="w-4 h-4 shrink-0"></i>
                     split
+                </button>
+                <button id="tabWhereInBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="brackets" class="w-4 h-4 shrink-0"></i>
+                    in()
                 </button>
             </div>
 
@@ -510,6 +515,68 @@
                 <div id="splitStatus" class="hidden text-sm font-semibold px-4 py-3 rounded-md"></div>
             </div>
 
+            <!-- TAB 7: WHERE IN GENERATOR VIEW -->
+            <div id="whereInView" class="space-y-6 hidden">
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="whereInInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> list_data</label>
+                        <span class="text-xs text-zinc-600 italic">resizeable</span>
+                    </div>
+                    <textarea id="whereInInput"
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-base sm:text-lg text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste your list here (one item per line)..."></textarea>
+                </div>
+
+                <div class="bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800 space-y-5">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <div
+                            class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                            <span class="text-xs font-semibold text-emerald-500">items:</span>
+                            <span id="whereInCount" class="font-extrabold text-emerald-300 text-sm">0</span>
+                        </div>
+                        <div
+                            class="flex items-center gap-1.5 bg-sky-500/10 border border-sky-500/20 px-3 py-1.5 rounded-full">
+                            <span class="text-xs font-semibold text-sky-500">detected:</span>
+                            <span id="whereInType" class="font-extrabold text-sky-300 text-sm">-</span>
+                        </div>
+                    </div>
+
+                    <p id="whereInEmpty" class="text-sm text-zinc-600 italic">Paste a list above to generate values
+                        ready for <span class="text-zinc-400">WHERE col IN (...)</span>.</p>
+
+                    <!-- Output: integer (hanya muncul jika semua baris integer) -->
+                    <div id="whereInIntWrap" class="space-y-2 hidden">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                                output_number</span>
+                            <button id="copyWhereInIntBtn"
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>copy number</span>
+                            </button>
+                        </div>
+                        <textarea id="whereInIntResult" readonly
+                            class="w-full min-h-[100px] max-h-[240px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                    </div>
+
+                    <!-- Output: string (selalu tersedia) -->
+                    <div id="whereInStrWrap" class="space-y-2 hidden">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                                output_string</span>
+                            <button id="copyWhereInStrBtn"
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>copy string</span>
+                            </button>
+                        </div>
+                        <textarea id="whereInStrResult" readonly
+                            class="w-full min-h-[100px] max-h-[240px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -523,6 +590,7 @@
     <script src="js/compare.js"></script>
     <script src="js/sqlGenerator.js"></script>
     <script src="js/splitFile.js"></script>
+    <script src="js/whereIn.js"></script>
 </body>
 
 </html>
