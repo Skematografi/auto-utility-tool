@@ -11,6 +11,7 @@ const tabCompareBtn = document.getElementById('tabCompareBtn');
 const tabSqlBtn = document.getElementById('tabSqlBtn');
 const tabSplitBtn = document.getElementById('tabSplitBtn');
 const tabWhereInBtn = document.getElementById('tabWhereInBtn');
+const tabCharCountBtn = document.getElementById('tabCharCountBtn');
 
 const calcView = document.getElementById('calcView');
 const dupView = document.getElementById('dupView');
@@ -19,6 +20,7 @@ const compareView = document.getElementById('compareView');
 const sqlView = document.getElementById('sqlView');
 const splitView = document.getElementById('splitView');
 const whereInView = document.getElementById('whereInView');
+const charCountView = document.getElementById('charCountView');
 
 tabCalcBtn.addEventListener('click', () => switchTab('calc'));
 tabDupBtn.addEventListener('click', () => switchTab('dup'));
@@ -27,6 +29,7 @@ tabCompareBtn.addEventListener('click', () => switchTab('compare'));
 tabSqlBtn.addEventListener('click', () => switchTab('sql'));
 tabSplitBtn.addEventListener('click', () => switchTab('split'));
 tabWhereInBtn.addEventListener('click', () => switchTab('wherein'));
+tabCharCountBtn.addEventListener('click', () => switchTab('charcount'));
 
 // Kelas dasar tab (konsisten dengan grid tab bergaya terminal di index.html)
 const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
@@ -42,6 +45,7 @@ function switchTab(tab) {
     tabSqlBtn.className = TAB_INACTIVE;
     tabSplitBtn.className = TAB_INACTIVE;
     tabWhereInBtn.className = TAB_INACTIVE;
+    tabCharCountBtn.className = TAB_INACTIVE;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
@@ -50,6 +54,7 @@ function switchTab(tab) {
     sqlView.classList.add('hidden');
     splitView.classList.add('hidden');
     whereInView.classList.add('hidden');
+    charCountView.classList.add('hidden');
 
     if (tab === 'calc') {
         tabCalcBtn.className = TAB_ACTIVE;
@@ -72,6 +77,9 @@ function switchTab(tab) {
     } else if (tab === 'wherein') {
         tabWhereInBtn.className = TAB_ACTIVE;
         whereInView.classList.remove('hidden');
+    } else if (tab === 'charcount') {
+        tabCharCountBtn.className = TAB_ACTIVE;
+        charCountView.classList.remove('hidden');
     }
     lucide.createIcons();
 }

@@ -102,7 +102,7 @@
             </div>
 
             <!-- Tab Navigation: grid agar SEMUA tab selalu terlihat -->
-            <div class="grid grid-cols-4 sm:grid-cols-7 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
+            <div class="grid grid-cols-4 sm:grid-cols-8 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
@@ -137,6 +137,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="brackets" class="w-4 h-4 shrink-0"></i>
                     in()
+                </button>
+                <button id="tabCharCountBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="ruler" class="w-4 h-4 shrink-0"></i>
+                    chars
                 </button>
             </div>
 
@@ -577,6 +582,84 @@
                 </div>
             </div>
 
+            <!-- TAB 8: CHARACTER COUNT VIEW -->
+            <div id="charCountView" class="space-y-6 hidden">
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="charCountInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> source_text</label>
+                        <span class="text-xs text-zinc-600 italic">resizeable</span>
+                    </div>
+                    <textarea id="charCountInput"
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-base sm:text-lg text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste text to count characters & estimate storage size..."></textarea>
+                </div>
+
+                <div class="bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800 space-y-5">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> total_chars</span>
+                            <span id="charCountTotal"
+                                class="text-2xl md:text-3xl font-black text-emerald-400 tracking-tight break-all block">0</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> total_lines</span>
+                            <span id="charCountLines"
+                                class="text-2xl md:text-3xl font-black text-emerald-400 tracking-tight break-all block">0</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> words</span>
+                            <span id="charCountWords"
+                                class="text-2xl md:text-3xl font-black text-emerald-400 tracking-tight break-all block">0</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> sentences</span>
+                            <span id="charCountSentences"
+                                class="text-2xl md:text-3xl font-black text-emerald-400 tracking-tight break-all block">0</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> paragraphs</span>
+                            <span id="charCountParagraphs"
+                                class="text-2xl md:text-3xl font-black text-emerald-400 tracking-tight break-all block">0</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-emerald-500">#</span> spaces</span>
+                            <span id="charCountSpaces"
+                                class="text-2xl md:text-3xl font-black text-emerald-400 tracking-tight break-all block">0</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-sky-500">#</span> size_utf8</span>
+                            <span id="charCountUtf8"
+                                class="text-2xl md:text-3xl font-black text-sky-400 tracking-tight break-all block">0 B</span>
+                            <span id="charCountUtf8Bytes" class="text-xs text-zinc-600 block">0 bytes</span>
+                        </div>
+                        <div class="bg-black/60 border border-zinc-800 rounded-md p-4 space-y-1">
+                            <span class="text-xs font-bold text-zinc-500 block"><span
+                                    class="text-sky-500">#</span> size_utf16</span>
+                            <span id="charCountUtf16"
+                                class="text-2xl md:text-3xl font-black text-sky-400 tracking-tight break-all block">0 B</span>
+                            <span id="charCountUtf16Bytes" class="text-xs text-zinc-600 block">0 bytes</span>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-zinc-600 leading-relaxed">
+                        <span class="text-emerald-500">size_utf8</span> = storage estimate for
+                        MySQL <span class="text-zinc-400">utf8mb4</span> (VARCHAR / TEXT) &amp; PostgreSQL —
+                        actual bytes of the text in UTF-8.
+                        <span class="text-emerald-500">size_utf16</span> = estimate for SQL Server
+                        <span class="text-zinc-400">NVARCHAR</span> (2 bytes per character).
+                        Row/length overhead per record is not included.
+                    </p>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -591,6 +674,7 @@
     <script src="js/sqlGenerator.js"></script>
     <script src="js/splitFile.js"></script>
     <script src="js/whereIn.js"></script>
+    <script src="js/charCount.js"></script>
 </body>
 
 </html>
