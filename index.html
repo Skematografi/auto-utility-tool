@@ -102,7 +102,7 @@
             </div>
 
             <!-- Tab Navigation: grid agar SEMUA tab selalu terlihat -->
-            <div class="grid grid-cols-4 sm:grid-cols-8 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
+            <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
@@ -142,6 +142,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="ruler" class="w-4 h-4 shrink-0"></i>
                     chars
+                </button>
+                <button id="tabRestoreBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="database-backup" class="w-4 h-4 shrink-0"></i>
+                    restore
                 </button>
             </div>
 
@@ -660,6 +665,100 @@
                 </div>
             </div>
 
+            <!-- TAB 9: JSON → SQL RESTORE VIEW -->
+            <div id="restoreView" class="space-y-6 hidden">
+
+                <!-- 1. Input JSON (upload file atau paste) -->
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="restoreJsonInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> json_input</label>
+                        <span class="text-xs text-zinc-600 italic">upload .json or paste below</span>
+                    </div>
+
+                    <!-- Upload .json (opsional) -->
+                    <label for="restoreJsonFile"
+                        class="flex items-center justify-center gap-2 w-full py-3 px-4 border-2 border-dashed border-zinc-700 rounded-md bg-black/40 hover:bg-black/60 hover:border-emerald-500/60 cursor-pointer transition-all text-center">
+                        <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-400"></i>
+                        <span class="text-xs font-semibold text-emerald-400">click to upload a .json file</span>
+                        <input id="restoreJsonFile" type="file" accept=".json,application/json" class="hidden">
+                    </label>
+
+                    <textarea id="restoreJsonInput"
+                        class="w-full min-h-[200px] md:min-h-[260px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste JSON here (a single object, or an array of objects)..."></textarea>
+                </div>
+
+                <!-- 2. Konfigurasi tabel -->
+                <div class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800">
+                    <!-- Head table -->
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="restoreHeadTable" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> head_table</label>
+                        <input id="restoreHeadTable" type="text" placeholder="e.g. tr_memorialjournalhead"
+                            class="w-full p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                        <span class="text-xs text-zinc-600">All root fields that are NOT arrays go into this
+                            table.</span>
+                    </div>
+
+                    <!-- Detail tables (key -> table), multiple -->
+                    <div class="flex flex-col space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-semibold text-zinc-500"><span class="text-emerald-500">#</span>
+                                detail_tables (json_key → table)</label>
+                            <button id="restoreAddDetailBtn"
+                                class="flex items-center gap-1 text-xs font-bold text-emerald-400 hover:text-emerald-300 cursor-pointer">
+                                <i data-lucide="plus-circle" class="w-4 h-4"></i> add
+                            </button>
+                        </div>
+                        <div id="restoreDetailList" class="space-y-2"></div>
+                    </div>
+
+                    <!-- Opsi -->
+                    <div class="flex flex-col gap-2 pt-1">
+                        <label class="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer select-none">
+                            <input id="restoreInclCols" type="checkbox" class="accent-emerald-500 w-4 h-4">
+                            include column names in output
+                        </label>
+                        <label class="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer select-none">
+                            <input id="restoreNullifyId" type="checkbox" checked class="accent-emerald-500 w-4 h-4">
+                            set identity "ID" column to null (for restore)
+                        </label>
+                    </div>
+
+                    <button id="restoreGenerateBtn"
+                        class="w-full flex items-center justify-center gap-2.5 py-3.5 px-8 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-lg shadow-emerald-900/40 transition-all font-bold text-base sm:text-lg cursor-pointer group">
+                        <i data-lucide="wand-sparkles" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span>generate sql</span>
+                    </button>
+                </div>
+
+                <!-- 3. Status -->
+                <div id="restoreStatus" class="hidden text-sm font-semibold px-4 py-3 rounded-md"></div>
+
+                <!-- 4. Output -->
+                <div id="restoreOutputWrap" class="hidden flex flex-col space-y-2">
+                    <div class="flex justify-between items-center gap-2 flex-wrap">
+                        <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                            generated_sql</span>
+                        <div class="flex gap-2">
+                            <button id="restoreCopyBtn"
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>copy sql</span>
+                            </button>
+                            <button id="restoreDownloadBtn"
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                <i data-lucide="download" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>download .sql</span>
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="restoreOutput" readonly
+                        class="w-full min-h-[180px] max-h-[400px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -675,6 +774,7 @@
     <script src="js/splitFile.js"></script>
     <script src="js/whereIn.js"></script>
     <script src="js/charCount.js"></script>
+    <script src="js/jsonToSql.js"></script>
 </body>
 
 </html>

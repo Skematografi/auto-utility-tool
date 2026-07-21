@@ -32,6 +32,12 @@ The app is organized into tabs, each a self-contained tool:
   * **`size_utf8`** — actual UTF-8 byte size, matching storage in MySQL `utf8mb4` (VARCHAR / TEXT) and PostgreSQL.
   * **`size_utf16`** — 2 bytes per character, matching SQL Server `NVARCHAR`.
   * Sizes are shown human-readable (B / KB / MB / GB) with the exact byte count below; per-row overhead is not included.
+* **`restore`** (JSON → SQL) — Paste JSON (a single object or an array of records) and generate `INSERT ... SELECT` statements to restore the data:
+  * **Head** — all root fields that are not arrays go into one head table (you provide its name).
+  * **Detail** — map one or more array keys (e.g. `Details`) to their own tables; each array element becomes a `select ... union all` row.
+  * Dates are normalized (`...T00:00:00...` → `YYYY-MM-DD`, otherwise `YYYY-MM-DD HH:MM:SS`); `null` stays `null`; single quotes are escaped (`'` → `''`).
+  * Two output styles: with column names it emits `INSERT INTO t (cols) VALUES (...), (...)` (columns camelCase, any `...ID` stays capital, e.g. `branchID`); without, it emits `INSERT INTO t SELECT ... UNION ALL SELECT ...`. Optionally null-out the identity `ID` column for a clean restore.
+  * Output can be copied or downloaded as a `.sql` file.
 
 ## Tech Stack
 
@@ -57,7 +63,8 @@ auto-utility-tool/
     ├── sqlGenerator.js  # SQL Generator tab
     ├── splitFile.js     # Split File tab
     ├── whereIn.js       # WHERE IN Generator tab
-    └── charCount.js     # Character Count tab
+    ├── charCount.js     # Character Count tab
+    └── jsonToSql.js     # JSON → SQL restore tab
 ```
 
 Each tab's logic lives in its own file for easier maintenance.
