@@ -23,21 +23,32 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Inject GA_MEASUREMENT_ID
+        env:
+          GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
         run: |
-          GA_ID="${{ secrets.GA_MEASUREMENT_ID }}"
+          echo "Step 1: Read GA_MEASUREMENT_ID from secrets"
+          GA_ID="${GA_MEASUREMENT_ID}"
           
+          echo "Step 2: Validate GA_MEASUREMENT_ID"
           if [ -z "$GA_ID" ] || [ "$GA_ID" == "" ]; then
-            echo "⚠️ GA_MEASUREMENT_ID secret not found!"
+            echo "⚠️ WARNING: GA_MEASUREMENT_ID secret not found or empty!"
             GA_ID="G_PLACEHOLDER"
+          else
+            echo "✓ GA_MEASUREMENT_ID found (first 10 chars): ${GA_ID:0:10}..."
           fi
           
+          echo "Step 3: Generate js/env.js"
           cat > js/env.js << EOF
+          /**
+           * Environment Variables
+           * Auto-generated during GitHub Actions build
+           */
           window.ENV = {
             GA_MEASUREMENT_ID: '${GA_ID}',
           };
           EOF
           
-          echo "✓ js/env.js generated successfully"
+          echo "Step 4: Verify generated file"
           cat js/env.js
 
       - name: Setup Pages
