@@ -1,19 +1,13 @@
-/**
- * Google Analytics Integration
- * Loads GA script and initializes tracking with GA_MEASUREMENT_ID from env
- */
+// Google Analytics Integration
+
+// GA4 Measurement ID
+const GA_MEASUREMENT_ID = 'G-WZL19J1FSP';
 
 (function initAnalytics() {
-  // Get GA_MEASUREMENT_ID from window.ENV (injected by build process)
-  const GA_MEASUREMENT_ID = window.ENV?.GA_MEASUREMENT_ID;
-
   const host = location.hostname;
   const isLocal = host === 'localhost' || host === '127.0.0.1' || location.protocol === 'file:';
-
-  const isConfigured = /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID || '');
-
-  if (isLocal || !isConfigured) {
-    console.info('Google Analytics: disabled.');
+  if (isLocal) {
+    console.info('Google Analytics: disabled on local run.');
     return;
   }
 
