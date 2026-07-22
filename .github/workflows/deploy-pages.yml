@@ -1,0 +1,61 @@
+name: Deploy to GitHub Pages with Analytics
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inject environment variables
+        env:
+          GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+        run: |
+          # Create env.js with actual GA_MEASUREMENT_ID
+          cat > js/env.js << 'EOF'
+          /**
+           * Environment Variables
+           * Generated during build process - auto-injected GA_MEASUREMENT_ID
+           */
+          window.ENV = {
+            GA_MEASUREMENT_ID: '${{ env.GA_MEASUREMENT_ID || 'G_PLACEHOLDER' }}',
+          };
+          EOF
+          
+          echo "✓ Environment variables injected"
+          echo "GA_MEASUREMENT_ID: ${{ env.GA_MEASUREMENT_ID != '' && 'configured' || 'not configured (analytics disabled)' }}"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

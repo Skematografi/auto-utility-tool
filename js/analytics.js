@@ -7,9 +7,13 @@
   // Get GA_MEASUREMENT_ID from window.ENV (injected by build process)
   const GA_MEASUREMENT_ID = window.ENV?.GA_MEASUREMENT_ID;
 
-  // Only initialize if measurement ID is available
-  if (!GA_MEASUREMENT_ID) {
-    console.warn('Google Analytics: GA_MEASUREMENT_ID not found in environment');
+  const host = location.hostname;
+  const isLocal = host === 'localhost' || host === '127.0.0.1' || location.protocol === 'file:';
+
+  const isConfigured = /^G-[A-Z0-9]+$/.test(GA_MEASUREMENT_ID || '');
+
+  if (isLocal || !isConfigured) {
+    console.info('Google Analytics: disabled.');
     return;
   }
 
