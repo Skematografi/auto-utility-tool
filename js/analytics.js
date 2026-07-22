@@ -36,8 +36,6 @@
 
   // Expose gtag globally for custom events
   window.gtag = gtag;
-
-  console.log(`Google Analytics initialized with ID: ${GA_MEASUREMENT_ID}`);
 })();
 
 /**

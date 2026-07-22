@@ -22,23 +22,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject environment variables
-        env:
-          GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+      - name: Inject GA_MEASUREMENT_ID
         run: |
-          # Create env.js with actual GA_MEASUREMENT_ID
-          cat > js/env.js << 'EOF'
-          /**
-           * Environment Variables
-           * Generated during build process - auto-injected GA_MEASUREMENT_ID
-           */
+          GA_ID="${{ secrets.GA_MEASUREMENT_ID }}"
+          
+          if [ -z "$GA_ID" ] || [ "$GA_ID" == "" ]; then
+            echo "⚠️ GA_MEASUREMENT_ID secret not found!"
+            GA_ID="G_PLACEHOLDER"
+          fi
+          
+          cat > js/env.js << EOF
           window.ENV = {
-            GA_MEASUREMENT_ID: '${{ env.GA_MEASUREMENT_ID || 'G_PLACEHOLDER' }}',
+            GA_MEASUREMENT_ID: '${GA_ID}',
           };
           EOF
           
-          echo "✓ Environment variables injected"
-          echo "GA_MEASUREMENT_ID: ${{ env.GA_MEASUREMENT_ID != '' && 'configured' || 'not configured (analytics disabled)' }}"
+          echo "✓ js/env.js generated successfully"
+          cat js/env.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
