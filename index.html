@@ -363,7 +363,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Mode Toggle: Delete / Update -->
+                <!-- 2. Mode Toggle: Delete / Update / Template -->
                 <div class="flex bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1 w-full sm:w-fit">
                     <button id="sqlModeDeleteBtn"
                         class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
@@ -374,6 +374,11 @@
                         class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                         <i data-lucide="pencil" class="w-4 h-4"></i>
                         update
+                    </button>
+                    <button id="sqlModeTemplateBtn"
+                        class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                        <i data-lucide="code-2" class="w-4 h-4"></i>
+                        template
                     </button>
                 </div>
 
@@ -443,6 +448,31 @@
                         class="w-full flex items-center justify-center gap-2.5 py-3.5 px-8 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-lg shadow-emerald-900/40 transition-all font-bold text-base sm:text-lg cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600">
                         <i data-lucide="download" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                         <span>generate &amp; download sql update</span>
+                    </button>
+                </div>
+
+                <!-- 2c. PANEL TEMPLATE -->
+                <div id="sqlTemplatePanel"
+                    class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800 hidden">
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="sqlTemplateInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> sql_template</label>
+                        <textarea id="sqlTemplateInput"
+                            class="w-full min-h-[160px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                            placeholder="update ms_product a
+join ms_productdetail b on a.productID = b.productID
+set b.barcodeNumber = {barcodeNumber}
+where a.productName = {productName};"></textarea>
+                        <span class="text-xs text-zinc-600">Use <span class="text-emerald-400">{ColumnName}</span> or
+                            <span class="text-emerald-400">{1}</span> (column index) as placeholders — the value is
+                            auto-quoted per type. The template runs once per data row. Don't wrap placeholders in
+                            quotes.</span>
+                    </div>
+
+                    <button id="generateTemplateBtn"
+                        class="w-full flex items-center justify-center gap-2.5 py-3.5 px-8 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-lg shadow-emerald-900/40 transition-all font-bold text-base sm:text-lg cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600">
+                        <i data-lucide="download" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span>generate &amp; download sql template</span>
                     </button>
                 </div>
 

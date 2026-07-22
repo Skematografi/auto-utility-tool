@@ -16,6 +16,7 @@ The app is organized into tabs, each a self-contained tool:
   * Upload `.xlsx`, `.xls`, or `.csv` and preview the detected columns.
   * **Delete** — build `DELETE ... WHERE col IN (...)` with automatic per-column de-duplication, from one or more conditions.
   * **Update** — build `UPDATE ... SET ... WHERE ...`, grouping rows with identical `SET` values into a single `IN (...)` statement where possible.
+  * **Template** — write any SQL with `{ColumnName}` / `{1}` placeholders and it is filled once per row — for complex cases the structured modes can't express (e.g. updating a detail table via a join).
   * Smart quoting: numbers stay unquoted; strings containing a single quote are wrapped in double quotes (and vice versa).
   * The result is previewed and downloaded directly as a `.sql` file.
 * **`split`** (Split File) — Split an uploaded Excel / CSV into multiple files, downloaded together as a `.zip`:

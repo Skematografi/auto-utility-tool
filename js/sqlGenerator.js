@@ -11,8 +11,14 @@ const sqlColumnList = document.getElementById('sqlColumnList');
 // Elemen Mode Toggle
 const sqlModeDeleteBtn = document.getElementById('sqlModeDeleteBtn');
 const sqlModeUpdateBtn = document.getElementById('sqlModeUpdateBtn');
+const sqlModeTemplateBtn = document.getElementById('sqlModeTemplateBtn');
 const sqlDeletePanel = document.getElementById('sqlDeletePanel');
 const sqlUpdatePanel = document.getElementById('sqlUpdatePanel');
+const sqlTemplatePanel = document.getElementById('sqlTemplatePanel');
+
+// Elemen Panel Template
+const sqlTemplateInput = document.getElementById('sqlTemplateInput');
+const generateTemplateBtn = document.getElementById('generateTemplateBtn');
 
 // Elemen Panel Delete
 const deleteTableName = document.getElementById('deleteTableName');
@@ -83,24 +89,32 @@ function renderColumnPreview() {
     lucide.createIcons();
 }
 
-// --- Mode Toggle Delete / Update ---
+// --- Mode Toggle Delete / Update / Template ---
 sqlModeDeleteBtn.addEventListener('click', () => switchSqlMode('delete'));
 sqlModeUpdateBtn.addEventListener('click', () => switchSqlMode('update'));
+sqlModeTemplateBtn.addEventListener('click', () => switchSqlMode('template'));
 
 function switchSqlMode(mode) {
     const activeClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40";
     const inactiveClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50";
 
-    if (mode === 'delete') {
-        sqlModeDeleteBtn.className = activeClass;
-        sqlModeUpdateBtn.className = inactiveClass;
-        sqlDeletePanel.classList.remove('hidden');
-        sqlUpdatePanel.classList.add('hidden');
-    } else {
+    // Reset semua tombol & panel
+    sqlModeDeleteBtn.className = inactiveClass;
+    sqlModeUpdateBtn.className = inactiveClass;
+    sqlModeTemplateBtn.className = inactiveClass;
+    sqlDeletePanel.classList.add('hidden');
+    sqlUpdatePanel.classList.add('hidden');
+    sqlTemplatePanel.classList.add('hidden');
+
+    if (mode === 'update') {
         sqlModeUpdateBtn.className = activeClass;
-        sqlModeDeleteBtn.className = inactiveClass;
         sqlUpdatePanel.classList.remove('hidden');
-        sqlDeletePanel.classList.add('hidden');
+    } else if (mode === 'template') {
+        sqlModeTemplateBtn.className = activeClass;
+        sqlTemplatePanel.classList.remove('hidden');
+    } else {
+        sqlModeDeleteBtn.className = activeClass;
+        sqlDeletePanel.classList.remove('hidden');
     }
     lucide.createIcons();
 }
@@ -306,6 +320,73 @@ generateUpdateBtn.addEventListener('click', function () {
     sqlPreviewWrap.classList.remove('hidden');
     downloadSqlFile(sql, `update_${table}.sql`);
     showSqlStatus(`SQL Update generated (${statements.length} statement(s)) and downloaded successfully.`, 'success');
+});
+
+// --- Generate SQL dari TEMPLATE ---
+// Placeholder {ColumnName} atau {index} diisi nilai per baris (auto-quote sesuai tipe).
+// Berguna untuk SQL kompleks (mis. update tabel detail via join) yang tidak muat
+// pada pola delete/update terstruktur.
+generateTemplateBtn.addEventListener('click', function () {
+    if (!validateFileLoaded()) return;
+
+    const template = sqlTemplateInput.value.trim();
+    if (!template) {
+        showSqlStatus('Please enter an SQL template.', 'error');
+        return;
+    }
+
+    const tokenRe = /\{([^{}]+)\}/g;
+
+    // Kumpulkan token unik & petakan ke index kolom (1-based). Nama = case-insensitive.
+    const tokens = new Set();
+    let match;
+    while ((match = tokenRe.exec(template)) !== null) {
+        tokens.add(match[1].trim());
+    }
+    if (tokens.size === 0) {
+        showSqlStatus('No placeholders found. Use {ColumnName} or {1} in the template.', 'error');
+        return;
+    }
+
+    const tokenToIndex = {};
+    for (const tok of tokens) {
+        let index;
+        if (/^\d+$/.test(tok)) {
+            index = parseInt(tok, 10);
+        } else {
+            const found = sqlData.headers.findIndex(h => h.toLowerCase() === tok.toLowerCase());
+            index = found === -1 ? -1 : found + 1;
+        }
+        if (index < 1 || index > sqlData.headers.length) {
+            showSqlStatus(`Placeholder {${tok}} does not match any column.`, 'error');
+            return;
+        }
+        tokenToIndex[tok] = index;
+    }
+
+    // Isi template per baris; buang hasil yang identik agar tidak dobel.
+    const seen = new Set();
+    const statements = [];
+    sqlData.rows.forEach(row => {
+        const stmt = template.replace(tokenRe, (whole, tok) =>
+            formatSqlValue(getCell(row, tokenToIndex[tok.trim()]))
+        );
+        if (!seen.has(stmt)) {
+            seen.add(stmt);
+            statements.push(stmt);
+        }
+    });
+
+    if (statements.length === 0) {
+        showSqlStatus('No rows to generate.', 'error');
+        return;
+    }
+
+    const sql = statements.join('\n');
+    sqlPreview.value = sql;
+    sqlPreviewWrap.classList.remove('hidden');
+    downloadSqlFile(sql, 'template.sql');
+    showSqlStatus(`SQL Template generated (${statements.length} statement(s)) and downloaded successfully.`, 'success');
 });
 
 // --- Helper: validasi & status & download ---
