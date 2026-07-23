@@ -212,10 +212,22 @@
                 <div
                     class="bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800 flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                     <div class="flex flex-col gap-3 flex-grow max-w-full">
-                        <div
-                            class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start">
-                            <span class="text-xs font-semibold text-emerald-500">duplicates:</span>
-                            <span id="dupCount" class="font-extrabold text-emerald-300 text-sm">0</span>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <div
+                                class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-emerald-500">dupes:</span>
+                                <span id="dupCount" class="font-extrabold text-emerald-300 text-sm">0</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1.5 bg-sky-500/10 border border-sky-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-sky-500">unique:</span>
+                                <span id="dupUniqueCount" class="font-extrabold text-sky-300 text-sm">0</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1.5 bg-violet-500/10 border border-violet-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-violet-400">non-dupes:</span>
+                                <span id="dupSingleCount" class="font-extrabold text-violet-300 text-sm">0</span>
+                            </div>
                         </div>
 
                         <div class="space-y-2 w-full">
@@ -227,12 +239,24 @@
                         </div>
                     </div>
 
-                    <div class="w-full md:w-auto self-end md:self-center">
-                        <button id="copyDupBtn"
-                            class="w-full md:w-auto flex items-center justify-center gap-2.5 py-3.5 px-8 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-lg shadow-emerald-900/40 transition-all font-bold text-lg cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600"
-                            title="Copy Duplicate List Only" disabled>
-                            <i data-lucide="copy" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                            <span id="copyDupText">copy list</span>
+                    <div class="w-full md:w-auto flex flex-col gap-2 self-end md:self-center shrink-0">
+                        <button id="copyDupBtn" title="Copy only the values that are duplicated (distinct)"
+                            class="w-full flex items-center justify-center gap-2 py-3 px-6 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-sm cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600"
+                            disabled>
+                            <i data-lucide="copy" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            <span>copy dupes</span>
+                        </button>
+                        <button id="copyDupUniqueBtn" title="Copy all values de-duplicated (1 per value)"
+                            class="w-full flex items-center justify-center gap-2 py-3 px-6 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-sm cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-sky-500"
+                            disabled>
+                            <i data-lucide="copy" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            <span>copy unique</span>
+                        </button>
+                        <button id="copyDupSingleBtn" title="Copy only the values that have no duplicate"
+                            class="w-full flex items-center justify-center gap-2 py-3 px-6 bg-violet-500 hover:bg-violet-400 text-zinc-950 rounded-md shadow-md shadow-violet-900/40 transition-all font-bold text-sm cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-violet-500"
+                            disabled>
+                            <i data-lucide="copy" class="w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            <span>copy non-dupes</span>
                         </button>
                     </div>
                 </div>
