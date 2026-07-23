@@ -571,6 +571,18 @@ where a.productName = {productName};"></textarea>
                         placeholder="# paste your list here (one item per line)..."></textarea>
                 </div>
 
+                <!-- Query template (opsional) -->
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="whereInTemplate" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">#</span> query_template (optional)</label>
+                        <span class="text-xs text-zinc-600 italic">use <span class="text-emerald-400">{values}</span></span>
+                    </div>
+                    <textarea id="whereInTemplate"
+                        class="w-full min-h-[80px] p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="select * from ms_product where productCode in ({values});"></textarea>
+                </div>
+
                 <div class="bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800 space-y-5">
                     <div class="flex items-center gap-2 flex-wrap">
                         <div
@@ -583,6 +595,11 @@ where a.productName = {productName};"></textarea>
                             <span class="text-xs font-semibold text-sky-500">detected:</span>
                             <span id="whereInType" class="font-extrabold text-sky-300 text-sm">-</span>
                         </div>
+                        <div id="whereInChunkBadge"
+                            class="hidden items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-3 py-1.5 rounded-full">
+                            <span class="text-xs font-semibold text-amber-500">chunks:</span>
+                            <span id="whereInChunks" class="font-extrabold text-amber-300 text-sm">0</span>
+                        </div>
                     </div>
 
                     <p id="whereInEmpty" class="text-sm text-zinc-600 italic">Paste a list above to generate values
@@ -590,14 +607,21 @@ where a.productName = {productName};"></textarea>
 
                     <!-- Output: integer (hanya muncul jika semua baris integer) -->
                     <div id="whereInIntWrap" class="space-y-2 hidden">
-                        <div class="flex justify-between items-center gap-2">
+                        <div class="flex justify-between items-center gap-2 flex-wrap">
                             <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
                                 output_number</span>
-                            <button id="copyWhereInIntBtn"
-                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group">
-                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
-                                <span>copy number</span>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button id="copyWhereInIntBtn" title="Copy as a single list"
+                                    class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                    <span>copy</span>
+                                </button>
+                                <button id="copyWhereInIntChunkBtn" title="Copy split into chunks of 500 per IN"
+                                    class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                    <i data-lucide="layers" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                    <span>copy chunked</span>
+                                </button>
+                            </div>
                         </div>
                         <textarea id="whereInIntResult" readonly
                             class="w-full min-h-[100px] max-h-[240px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
@@ -605,14 +629,21 @@ where a.productName = {productName};"></textarea>
 
                     <!-- Output: string (selalu tersedia) -->
                     <div id="whereInStrWrap" class="space-y-2 hidden">
-                        <div class="flex justify-between items-center gap-2">
+                        <div class="flex justify-between items-center gap-2 flex-wrap">
                             <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
                                 output_string</span>
-                            <button id="copyWhereInStrBtn"
-                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-xs cursor-pointer group">
-                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
-                                <span>copy string</span>
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button id="copyWhereInStrBtn" title="Copy as a single list"
+                                    class="flex items-center justify-center gap-2 py-1.5 px-4 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                    <span>copy</span>
+                                </button>
+                                <button id="copyWhereInStrChunkBtn" title="Copy split into chunks of 500 per IN"
+                                    class="flex items-center justify-center gap-2 py-1.5 px-4 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-xs cursor-pointer group">
+                                    <i data-lucide="layers" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                    <span>copy chunked</span>
+                                </button>
+                            </div>
                         </div>
                         <textarea id="whereInStrResult" readonly
                             class="w-full min-h-[100px] max-h-[240px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
