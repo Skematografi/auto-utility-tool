@@ -10,7 +10,8 @@ const calcCountDisplay = document.getElementById('dataCount');
 let rawSumValue = 0;
 
 calcInput.addEventListener('input', function () {
-    const sanitizedValue = this.value.replace(/[^\d.\-\n]/g, '');
+    // Izinkan koma agar format ribuan/desimal ala Indonesia bisa dipaste
+    const sanitizedValue = this.value.replace(/[^\d.,\-\n]/g, '');
     if (this.value !== sanitizedValue) {
         this.value = sanitizedValue;
     }
@@ -23,13 +24,23 @@ function formatToIndonesian(num) {
     return parts.join(',');
 }
 
+// Normalisasi satu baris angka ke format JS (titik = desimal).
+// - Tanpa koma: dipakai apa adanya (120, 120.55) -> titik tetap desimal.
+// - Ada koma: koma = desimal, titik = pemisah ribuan.
+//   contoh: "100,120" -> "100.120" ; "100.120,55" -> "100120.55"
+function normalizeNumberToken(line) {
+    const s = line.trim();
+    if (s.indexOf(',') === -1) return s;
+    return s.replace(/\./g, '').replace(/,/g, '.');
+}
+
 function calculateSum() {
     const lines = calcInput.value.split('\n');
     let sum = 0;
     let count = 0;
 
     for (let line of lines) {
-        const num = parseFloat(line);
+        const num = parseFloat(normalizeNumberToken(line));
         if (!isNaN(num)) {
             sum += num;
             count++;
