@@ -10,7 +10,7 @@ The app is organized into tabs, each a self-contained tool:
 
 * **`calc`** (Calculator) — Sum a list of numbers (one per line) with live totals, item count, and one-click copy. Accepts Indonesian/European number formats: a comma is treated as the decimal separator and dots as thousands separators when a comma is present (e.g. `100,120` → `100.120`, `100.120,55` → `100120.55`); plain dot-decimals like `120.55` are unchanged.
 * **`dupes`** (Duplicates) — Detect duplicate entries in a list and show how many times each appears, with three copy options: **copy dupes** (only the duplicated values), **copy unique** (every value de-duplicated, one each), and **copy non-dupes** (only values that appear exactly once).
-* **`ascii`** (Non-ASCII) — Detect and highlight non-ASCII / hidden Unicode characters, list their code points, and copy a cleaned (ASCII-only) version of the text.
+* **`ascii`** (Non-ASCII) — Detect and highlight non-ASCII / hidden Unicode characters, list their code points, and copy a cleaned (ASCII-only) version of the text. Also accepts an Excel/CSV upload and scans it **by row** — reporting only the rows/cells that actually contain non-ASCII characters (with their location and code points), or a "file is clean" message when there are none.
 * **`diff`** (Compare) — Compare two blocks of text line-by-line and highlight the differences between them.
 * **`sql`** (SQL Generator) — Generate SQL from an uploaded Excel / CSV file:
   * Upload `.xlsx`, `.xls`, or `.csv` and preview the detected columns.
