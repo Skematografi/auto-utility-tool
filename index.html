@@ -4,7 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataDev Utilities</title>
+    <title>DataDev Utilities — Client-side toolkit for developers &amp; data analysts</title>
+
+    <!-- Primary meta -->
+    <meta name="description"
+        content="Browser-based toolkit for devs &amp; data analysts: generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side, no data leaves your browser." />
+    <meta name="keywords"
+        content="SQL generator, Excel to SQL, CSV, duplicates, non-ASCII, text compare, split file, developer tools, data analyst, WHERE IN" />
+    <meta name="author" content="DataDev Utilities" />
+    <meta name="theme-color" content="#09090b" />
+    <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
+
+    <!-- Favicon (SVG bertema terminal) -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg?v=1.0.0" />
+    <link rel="apple-touch-icon" href="favicon.svg?v=1.0.0" />
+
+    <!-- Open Graph (Facebook, LinkedIn, Product Hunt, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DataDev Utilities" />
+    <meta property="og:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
+    <meta property="og:description"
+        content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more. Everything runs in your browser — no backend, no data upload." />
+    <meta property="og:url" content="https://skematografi.github.io/auto-utility-tool/" />
+    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DataDev Utilities — terminal-styled developer &amp; data toolkit" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
+    <meta name="twitter:description"
+        content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
+    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/og-image.png" />
 
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +46,7 @@
         rel="stylesheet">
         
     <!-- Google Analytics -->
-    <script src="js/analytics.js"></script>
+    <script src="js/analytics.js?v=1.0.0"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -93,15 +126,24 @@
         <!-- Body -->
         <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
 
-            <!-- Intro prompt -->
-            <div class="text-sm space-y-1">
+            <!-- Hero + baris privasi -->
+            <div class="text-sm space-y-1.5">
                 <p>
                     <span class="text-emerald-400">➜</span>
                     <span class="text-sky-400">~</span>
                     <span class="text-zinc-200">./datadev --help</span>
                 </p>
-                <p class="text-zinc-500 pl-5">Multi-functional tools for developers &amp; data analysts<span
-                        class="cursor text-emerald-400">▊</span></p>
+                <p class="text-zinc-300 pl-5 text-base sm:text-lg font-semibold">
+                    A fast toolkit for developers &amp; data analysts<span
+                        class="cursor text-emerald-400">▊</span>
+                </p>
+                <p class="text-zinc-500 pl-5">Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare,
+                    split files &amp; more.</p>
+                <p class="pl-5 flex items-center gap-1.5 text-emerald-400/90">
+                    <i data-lucide="shield-check" class="w-4 h-4 shrink-0"></i>
+                    <span><span class="text-zinc-500"># </span>100% client-side — your data never leaves your
+                        browser.</span>
+                </p>
             </div>
 
             <!-- Tab Navigation: grid agar SEMUA tab selalu terlihat -->
@@ -880,21 +922,44 @@ where a.productName = {productName};"></textarea>
             </div>
 
         </div>
+
+        <!-- Footer status bar -->
+        <div
+            class="flex items-center justify-between gap-2 px-4 py-2.5 bg-zinc-800/60 border-t border-zinc-700/60 text-xs text-zinc-500 flex-wrap">
+            <span class="flex items-center gap-1.5">
+                <i data-lucide="git-branch" class="w-3.5 h-3.5"></i>
+                <span id="appVersion">…</span>
+            </span>
+            <span class="flex items-center gap-3">
+                <span class="hidden sm:flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500/70"></i> client-side
+                </span>
+                <a href="https://github.com/Skematografi/auto-utility-tool" target="_blank" rel="noopener"
+                    title="View source on GitHub" aria-label="View source on GitHub"
+                    class="flex items-center hover:text-emerald-400 transition-colors">
+                    <svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                    </svg>
+                </a>
+            </span>
+        </div>
     </div>
 
     <!-- Shared helper & navigasi -->
-    <script src="js/clipboard.js"></script>
-    <script src="js/tabs.js"></script>
+    <!-- Naikkan ?v= saat rilis baru agar browser mengambil versi terbaru (cache-busting) -->
+    <script src="js/clipboard.js?v=1.0.0"></script>
+    <script src="js/version.js?v=1.0.0"></script>
+    <script src="js/tabs.js?v=1.0.0"></script>
     <!-- Logic per tab (dipisah sesuai fungsinya) -->
-    <script src="js/calculator.js"></script>
-    <script src="js/duplicates.js"></script>
-    <script src="js/nonAscii.js"></script>
-    <script src="js/compare.js"></script>
-    <script src="js/sqlGenerator.js"></script>
-    <script src="js/splitFile.js"></script>
-    <script src="js/whereIn.js"></script>
-    <script src="js/charCount.js"></script>
-    <script src="js/jsonToSql.js"></script>
+    <script src="js/calculator.js?v=1.0.0"></script>
+    <script src="js/duplicates.js?v=1.0.0"></script>
+    <script src="js/nonAscii.js?v=1.0.0"></script>
+    <script src="js/compare.js?v=1.0.0"></script>
+    <script src="js/sqlGenerator.js?v=1.0.0"></script>
+    <script src="js/splitFile.js?v=1.0.0"></script>
+    <script src="js/whereIn.js?v=1.0.0"></script>
+    <script src="js/charCount.js?v=1.0.0"></script>
+    <script src="js/jsonToSql.js?v=1.0.0"></script>
 </body>
 
 </html>
