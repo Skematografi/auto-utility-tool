@@ -156,14 +156,14 @@ function readConditions(container) {
     return result;
 }
 
-deleteAddWhereBtn.addEventListener('click', () => createConditionRow(deleteWhereList, 'db column name (e.g. productCode)'));
-updateAddSetBtn.addEventListener('click', () => createConditionRow(updateSetList, 'db column to SET (e.g. productCode)'));
-updateAddWhereBtn.addEventListener('click', () => createConditionRow(updateWhereList, 'db column name (e.g. productID)'));
+deleteAddWhereBtn.addEventListener('click', () => createConditionRow(deleteWhereList, 'db column name (e.g. product_code)'));
+updateAddSetBtn.addEventListener('click', () => createConditionRow(updateSetList, 'db column to SET (e.g. product_code)'));
+updateAddWhereBtn.addEventListener('click', () => createConditionRow(updateWhereList, 'db column name (e.g. productId)'));
 
 // Inisialisasi minimal 1 baris kondisi di tiap list
-createConditionRow(deleteWhereList, 'db column name (e.g. productCode)');
-createConditionRow(updateSetList, 'db column to SET (e.g. productCode)');
-createConditionRow(updateWhereList, 'db column name (e.g. productID)');
+createConditionRow(deleteWhereList, 'db column name (e.g. product_code)');
+createConditionRow(updateSetList, 'db column to SET (e.g. product_code)');
+createConditionRow(updateWhereList, 'db column name (e.g. productId)');
 
 // --- Helper format nilai SQL ---
 function isNumericValue(val) {

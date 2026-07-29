@@ -33,7 +33,7 @@ function createRestoreDetailRow(keyVal, tableVal) {
     row.innerHTML = `
         <input type="text" placeholder="json key (e.g. Details)"
             class="rd-key w-1/3 shrink-0 p-2.5 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
-        <input type="text" placeholder="table name (e.g. tr_memorialjournaldetail)"
+        <input type="text" placeholder="table name (e.g. product_details)"
             class="rd-table flex-grow min-w-0 p-2.5 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
         <button type="button" title="Remove"
             class="rd-remove flex items-center justify-center w-10 h-10 shrink-0 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-all cursor-pointer">

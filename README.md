@@ -4,7 +4,7 @@ A lightweight, browser-based toolkit that bundles several everyday utilities for
 
 ## About the Project
 
-<img width="100%" alt="JSON Crack editor" src="./asset/editor.webp">
+<img width="100%" alt="DataDev Utilities editor" src="./assets/images/editor.webp">
 
 ## Features
 
@@ -29,7 +29,7 @@ The app is organized into tabs, each a self-contained tool:
   * Auto-detects the list type: if every line is numeric (integer or decimal, e.g. `500.0000`) you get **two** outputs (unquoted numbers and quoted strings); otherwise only the quoted string output is shown.
   * Decimal values are tidied without changing their value (`500.0000` → `500`, `3.5000` → `3.5`) so the unquoted output matches integer columns for faster queries.
   * Single quotes inside string values are escaped (`'` → `''`) so the output runs safely in SQL; double quotes need no escaping.
-  * Optional query template: write any SQL with a `{values}` placeholder (e.g. `... WHERE productID IN ({values});`) to get complete statements instead of a bare list.
+  * Optional query template: write any SQL with a `{values}` placeholder (e.g. `... WHERE productId IN ({values});`) to get complete statements instead of a bare list.
   * Two copy buttons per output — **copy** (all values as one list/statement) and **copy chunked** (split into groups of at most 500 values per `IN`; with a template each chunk becomes its own statement, otherwise each is labelled with a `-- chunk n/N` header).
   * When the list exceeds 1000 items the chunked version is shown in the output box by default.
   * Output lines wrap at 200 characters, breaking to a new line after a comma.
