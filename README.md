@@ -2,7 +2,9 @@
 
 A lightweight, browser-based toolkit that bundles several everyday utilities for developers and data analysts into one **terminal-inspired**, fully responsive interface — no installation, no backend, everything runs client-side.
 
-The UI is styled as a dark terminal window (monospace font, prompt-style labels, blinking cursor) and adapts cleanly from mobile to desktop.
+## About the Project
+
+<img width="100%" alt="JSON Crack editor" src="./asset/editor.webp">
 
 ## Features
 
@@ -43,36 +45,6 @@ The app is organized into tabs, each a self-contained tool:
   * Two output styles: with column names it emits `INSERT INTO t (cols) VALUES (...), (...)` (columns camelCase, any `...ID` stays capital, e.g. `branchID`); without, it emits `INSERT INTO t SELECT ... UNION ALL SELECT ...`. Optionally null-out the identity `ID` column for a clean restore.
   * Output can be copied or downloaded as a `.sql` file.
 
-## Tech Stack
-
-* Plain **HTML + JavaScript** (no build step)
-* [Tailwind CSS](https://tailwindcss.com/) (via CDN) for styling
-* [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for the terminal-style monospace typography
-* [Lucide](https://lucide.dev/) for icons
-* [SheetJS](https://sheetjs.com/) for reading & writing Excel / CSV files
-* [JSZip](https://stuk.github.io/jszip/) for packaging split files into a ZIP
-
-## Project Structure
-
-```text
-auto-utility-tool/
-├── index.html          # Markup for all tabs
-└── js/
-    ├── clipboard.js     # Shared copy-to-clipboard helper
-    ├── tabs.js          # Tab navigation
-    ├── calculator.js    # Calculator tab
-    ├── duplicates.js    # Duplicates tab
-    ├── nonAscii.js      # Non-ASCII tab
-    ├── compare.js       # Compare tab
-    ├── sqlGenerator.js  # SQL Generator tab
-    ├── splitFile.js     # Split File tab
-    ├── whereIn.js       # WHERE IN Generator tab
-    ├── charCount.js     # Character Count tab
-    └── jsonToSql.js     # JSON → SQL restore tab
-```
-
-Each tab's logic lives in its own file for easier maintenance.
-
 ## Run Locally
 
 Clone this repository:
@@ -82,8 +54,3 @@ git clone https://github.com/Skematografi/auto-utility-tool.git
 ```
 
 Then simply open `index.html` in your browser — no installation or setup required.
-
-## Live Demo
-
-You can also use the hosted version through GitHub Pages:
-[DataDev Utilities](https://skematografi.github.io/auto-utility-tool/)
