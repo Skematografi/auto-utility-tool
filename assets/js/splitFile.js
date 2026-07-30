@@ -2,22 +2,22 @@
 // TAB 6: SPLIT FILE LOGIC
 // ----------------------------------------
 
-// Elemen Upload & Info File
+// File upload & info elements
 const splitFileInput = document.getElementById('splitFileInput');
 const splitFileInfo = document.getElementById('splitFileInfo');
 const splitFileSummary = document.getElementById('splitFileSummary');
 const splitColumnList = document.getElementById('splitColumnList');
 
-// Elemen Opsi
+// Option elements
 const splitColumnName = document.getElementById('splitColumnName');
 const splitMaxRows = document.getElementById('splitMaxRows');
 const generateSplitBtn = document.getElementById('generateSplitBtn');
 const splitStatus = document.getElementById('splitStatus');
 
-// State data hasil parsing file (independen dari tab lain)
+// Parsed file data state (independent from other tabs)
 let splitData = { headers: [], rows: [], ext: 'csv', baseName: 'data' };
 
-// --- Membaca file Excel / CSV ---
+// --- Read Excel / CSV file ---
 splitFileInput.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -40,7 +40,7 @@ splitFileInput.addEventListener('change', function (e) {
                 row.some(cell => cell !== undefined && cell !== null && String(cell).trim() !== '')
             );
 
-            // Simpan ekstensi & nama dasar file untuk penamaan output
+            // Store the file extension & base name for output naming
             const dot = file.name.lastIndexOf('.');
             splitData.ext = dot >= 0 ? file.name.slice(dot + 1).toLowerCase() : 'csv';
             splitData.baseName = dot >= 0 ? file.name.slice(0, dot) : file.name;
@@ -83,7 +83,7 @@ generateSplitBtn.addEventListener('click', function () {
         return;
     }
 
-    // Kolom pengelompokan (opsional) — cocokkan nama kolom (case-insensitive)
+    // Grouping column (optional) — match the column name (case-insensitive)
     const colName = splitColumnName.value.trim();
     let colIndex = -1;
     if (colName) {
@@ -94,12 +94,12 @@ generateSplitBtn.addEventListener('click', function () {
         }
     }
 
-    // Bangun kumpulan baris untuk tiap file — tiap file maksimal `maxRows` baris.
-    // Jumlah file dihitung otomatis.
+    // Build the set of rows for each file — each file holds at most `maxRows` rows.
+    // The number of files is computed automatically.
     let buckets = [];
     if (colIndex >= 0) {
-        // Kelompokkan baris per nilai kolom, LALU tiap kelompok dipecah sendiri
-        // menjadi potongan maksimal `maxRows`. Satu file tidak pernah mencampur kategori.
+        // Group rows by column value, THEN split each group on its own
+        // into chunks of at most `maxRows`. A single file never mixes categories.
         const groups = new Map();
         splitData.rows.forEach(row => {
             const key = String(row[colIndex] !== undefined && row[colIndex] !== null ? row[colIndex] : '');
@@ -113,7 +113,7 @@ generateSplitBtn.addEventListener('click', function () {
             }
         }
     } else {
-        // Split berurutan: potong tiap `maxRows` baris
+        // Sequential split: cut every `maxRows` rows
         for (let i = 0; i < splitData.rows.length; i += maxRows) {
             buckets.push(splitData.rows.slice(i, i + maxRows));
         }
@@ -124,11 +124,11 @@ generateSplitBtn.addEventListener('click', function () {
         return;
     }
 
-    // Format output mengikuti file yang diupload (csv -> csv, lainnya -> xlsx)
+    // Output format follows the uploaded file (csv -> csv, otherwise -> xlsx)
     const outExt = splitData.ext === 'csv' ? 'csv' : 'xlsx';
     const zip = new JSZip();
 
-    // Segmen nama kolom (opsional) untuk penamaan file: [filename]_[columnName]_batch_[n]
+    // Column-name segment (optional) for file naming: [filename]_[columnName]_batch_[n]
     const colSegment = colName ? `_${sanitizeName(colName)}` : '';
 
     buckets.forEach((rows, i) => {
@@ -158,7 +158,7 @@ generateSplitBtn.addEventListener('click', function () {
     });
 });
 
-// --- Helper: status & download ---
+// --- Helpers: status & download ---
 function showSplitStatus(message, type) {
     splitStatus.textContent = message;
     splitStatus.className = 'text-sm font-semibold px-4 py-3 rounded-md flex items-center gap-2 ' + (
@@ -169,7 +169,7 @@ function showSplitStatus(message, type) {
     splitStatus.classList.remove('hidden');
 }
 
-// Bersihkan karakter yang tidak valid untuk nama file
+// Strip characters that are invalid in a file name
 function sanitizeName(name) {
     return name.trim().replace(/[\\/:*?"<>|]+/g, '_');
 }

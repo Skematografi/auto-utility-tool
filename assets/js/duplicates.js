@@ -7,14 +7,14 @@ const dupCountDisplay = document.getElementById('dupCount');
 const dupUniqueCountDisplay = document.getElementById('dupUniqueCount');
 const dupSingleCountDisplay = document.getElementById('dupSingleCount');
 
-const dupCopyBtn = document.getElementById('copyDupBtn');            // hanya nilai yang duplikat (distinct)
-const dupCopyUniqueBtn = document.getElementById('copyDupUniqueBtn'); // semua nilai, 1 per nilai
-const dupCopySingleBtn = document.getElementById('copyDupSingleBtn'); // hanya nilai tanpa duplikat
+const dupCopyBtn = document.getElementById('copyDupBtn');            // duplicate values only (distinct)
+const dupCopyUniqueBtn = document.getElementById('copyDupUniqueBtn'); // all values, 1 per value
+const dupCopySingleBtn = document.getElementById('copyDupSingleBtn'); // values without duplicates only
 
-// Variabel state penyimpanan hasil
-let dupDuplicateList = []; // nilai yang muncul > 1x (distinct)
-let dupUniqueList = [];     // semua nilai distinct (1 per nilai)
-let dupSingleList = [];     // nilai yang muncul tepat 1x
+// State variables holding the results
+let dupDuplicateList = []; // values that appear > 1x (distinct)
+let dupUniqueList = [];     // all distinct values (1 per value)
+let dupSingleList = [];     // values that appear exactly once
 
 dupInput.addEventListener('input', findDuplicates);
 
@@ -24,7 +24,7 @@ function findDuplicates() {
         .map(item => item.trim())
         .filter(item => item !== '');
 
-    // Hitung frekuensi sambil menjaga urutan kemunculan pertama
+    // Count frequency while preserving first-seen order
     const order = [];
     const freq = {};
     items.forEach(item => {
@@ -44,14 +44,14 @@ function findDuplicates() {
     dupUniqueCountDisplay.textContent = dupUniqueList.length;
     dupSingleCountDisplay.textContent = dupSingleList.length;
 
-    // Tampilan daftar duplikat + jumlah kemunculan
+    // Display the duplicate list + occurrence count
     if (dupDuplicateList.length > 0) {
         dupResultDisplay.textContent = dupDuplicateList.map(v => `${v} (${freq[v]}x)`).join('\n');
     } else {
         dupResultDisplay.textContent = 'No duplicate items found yet.';
     }
 
-    // Aktif/nonaktifkan tombol sesuai ketersediaan data
+    // Enable/disable buttons based on data availability
     dupCopyBtn.disabled = dupDuplicateList.length === 0;
     dupCopyUniqueBtn.disabled = dupUniqueList.length === 0;
     dupCopySingleBtn.disabled = dupSingleList.length === 0;

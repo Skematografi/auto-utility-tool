@@ -15,7 +15,7 @@
     <meta name="theme-color" content="#09090b" />
     <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
 
-    <!-- Favicon (SVG bertema terminal) -->
+    <!-- Favicon (terminal-themed SVG) -->
     <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.0.0" />
     <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.0.0" />
 
@@ -65,9 +65,9 @@
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- SheetJS untuk membaca file Excel / CSV -->
+    <!-- SheetJS for reading Excel / CSV files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- JSZip untuk membungkus hasil split menjadi file ZIP -->
+    <!-- JSZip for packaging split output into a ZIP file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/styles.css?v=1.0.0">
@@ -76,10 +76,10 @@
 <body
     class="min-h-screen flex items-start sm:items-center justify-center p-3 sm:p-6 md:p-10 font-mono text-zinc-300 antialiased">
 
-    <!-- Latar bintang parallax -->
+    <!-- Parallax star background -->
     <canvas id="bg"></canvas>
 
-    <!-- Jendela Terminal -->
+    <!-- Terminal window -->
     <div
         class="relative z-10 w-full max-w-4xl rounded-xl overflow-hidden ring-1 ring-zinc-700/60 bg-zinc-900 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85),0_0_40px_-12px_rgba(16,185,129,0.12)]">
 
@@ -91,7 +91,7 @@
         <!-- Body -->
         <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
 
-            <!-- Hero + baris privasi -->
+            <!-- Hero + privacy line -->
             <div class="text-sm space-y-1.5">
                 <p class="text-zinc-300 pl-5 text-base sm:text-lg font-semibold">
                     A fast toolkit for developers &amp; data analysts
@@ -106,7 +106,7 @@
                 </p>
             </div>
 
-            <!-- Tab Navigation: grid agar SEMUA tab selalu terlihat -->
+            <!-- Tab Navigation: grid so ALL tabs stay visible -->
             <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
@@ -273,7 +273,7 @@
                         <span class="text-xs text-zinc-600 italic">paste text or upload a file</span>
                     </div>
 
-                    <!-- Upload .csv/.xlsx untuk scan per baris (opsional) -->
+                    <!-- Upload .csv/.xlsx to scan per row (optional) -->
                     <label for="asciiFileInput"
                         class="flex items-center justify-center gap-2 w-full py-3 px-4 border-2 border-dashed border-zinc-700 rounded-md bg-black/40 hover:bg-black/60 hover:border-emerald-500/60 cursor-pointer transition-all text-center">
                         <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-400"></i>
@@ -287,7 +287,7 @@
                         placeholder="# paste text to scan for non-ASCII characters..."></textarea>
                 </div>
 
-                <!-- Hasil scan file: hanya baris yang mengandung non-ASCII -->
+                <!-- File scan result: only rows containing non-ASCII -->
                 <div id="asciiFileResultWrap"
                     class="hidden bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800 space-y-3">
                     <div class="flex items-center justify-between gap-2 flex-wrap">
@@ -390,7 +390,7 @@
             <!-- TAB 5: SQL GENERATOR VIEW -->
             <div id="sqlView" class="space-y-6 hidden">
 
-                <!-- 1. Area Upload File Excel / CSV -->
+                <!-- 1. Excel / CSV file upload area -->
                 <div class="flex flex-col space-y-2">
                     <label class="text-xs font-semibold text-zinc-500"><span class="text-emerald-500">$</span>
                         source_file (excel / csv)</label>
@@ -406,7 +406,7 @@
                         <input id="sqlFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden">
                     </label>
 
-                    <!-- Preview kolom terdeteksi -->
+                    <!-- Preview of detected columns -->
                     <div id="sqlFileInfo" class="hidden bg-black/40 p-4 rounded-md border border-zinc-800 space-y-2">
                         <div
                             class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start w-fit">
@@ -537,7 +537,7 @@ where a.product_name = {product_name};"></textarea>
                     </button>
                 </div>
 
-                <!-- 3. Status message + Preview hasil generate -->
+                <!-- 3. Status message + preview of generated output -->
                 <div id="sqlStatus" class="hidden text-sm font-semibold px-4 py-3 rounded-md"></div>
 
                 <div id="sqlPreviewWrap" class="hidden flex flex-col space-y-2">
@@ -551,7 +551,7 @@ where a.product_name = {product_name};"></textarea>
             <!-- TAB 6: SPLIT FILE VIEW -->
             <div id="splitView" class="space-y-6 hidden">
 
-                <!-- 1. Area Upload File Excel / CSV -->
+                <!-- 1. Excel / CSV file upload area -->
                 <div class="flex flex-col space-y-2">
                     <label class="text-xs font-semibold text-zinc-500"><span class="text-emerald-500">$</span>
                         source_file (excel / csv)</label>
@@ -567,7 +567,7 @@ where a.product_name = {product_name};"></textarea>
                         <input id="splitFileInput" type="file" accept=".xlsx,.xls,.csv" class="hidden">
                     </label>
 
-                    <!-- Preview kolom terdeteksi -->
+                    <!-- Preview of detected columns -->
                     <div id="splitFileInfo" class="hidden bg-black/40 p-4 rounded-md border border-zinc-800 space-y-2">
                         <div
                             class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start w-fit">
@@ -585,7 +585,7 @@ where a.product_name = {product_name};"></textarea>
                     </div>
                 </div>
 
-                <!-- 2. Opsi Split -->
+                <!-- 2. Split options -->
                 <div class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800">
                     <div class="flex flex-col space-y-1.5">
                         <label for="splitColumnName" class="text-xs font-semibold text-zinc-500"><span
@@ -629,7 +629,7 @@ where a.product_name = {product_name};"></textarea>
                         placeholder="# paste your list here (one item per line)..."></textarea>
                 </div>
 
-                <!-- Query template (opsional) -->
+                <!-- Query template (optional) -->
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="whereInTemplate" class="text-xs font-semibold text-zinc-500"><span
@@ -663,7 +663,7 @@ where a.product_name = {product_name};"></textarea>
                     <p id="whereInEmpty" class="text-sm text-zinc-600 italic">Paste a list above to generate values
                         ready for <span class="text-zinc-400">WHERE col IN (...)</span>.</p>
 
-                    <!-- Output: integer (hanya muncul jika semua baris integer) -->
+                    <!-- Output: integer (shown only when all rows are integers) -->
                     <div id="whereInIntWrap" class="space-y-2 hidden">
                         <div class="flex justify-between items-center gap-2 flex-wrap">
                             <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
@@ -685,7 +685,7 @@ where a.product_name = {product_name};"></textarea>
                             class="w-full min-h-[100px] max-h-[240px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
                     </div>
 
-                    <!-- Output: string (selalu tersedia) -->
+                    <!-- Output: string (always available) -->
                     <div id="whereInStrWrap" class="space-y-2 hidden">
                         <div class="flex justify-between items-center gap-2 flex-wrap">
                             <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
@@ -790,7 +790,7 @@ where a.product_name = {product_name};"></textarea>
             <!-- TAB 9: JSON → SQL RESTORE VIEW -->
             <div id="restoreView" class="space-y-6 hidden">
 
-                <!-- 1. Input JSON (upload file atau paste) -->
+                <!-- 1. JSON input (upload a file or paste) -->
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="restoreJsonInput" class="text-xs font-semibold text-zinc-500"><span
@@ -798,7 +798,7 @@ where a.product_name = {product_name};"></textarea>
                         <span class="text-xs text-zinc-600 italic">upload .json or paste below</span>
                     </div>
 
-                    <!-- Upload .json (opsional) -->
+                    <!-- Upload .json (optional) -->
                     <label for="restoreJsonFile"
                         class="flex items-center justify-center gap-2 w-full py-3 px-4 border-2 border-dashed border-zinc-700 rounded-md bg-black/40 hover:bg-black/60 hover:border-emerald-500/60 cursor-pointer transition-all text-center">
                         <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-400"></i>
@@ -811,7 +811,7 @@ where a.product_name = {product_name};"></textarea>
                         placeholder="# paste JSON here (a single object, or an array of objects)..."></textarea>
                 </div>
 
-                <!-- 2. Konfigurasi tabel -->
+                <!-- 2. Table configuration -->
                 <div class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800">
                     <!-- Head table -->
                     <div class="flex flex-col space-y-1.5">
@@ -836,7 +836,7 @@ where a.product_name = {product_name};"></textarea>
                         <div id="restoreDetailList" class="space-y-2"></div>
                     </div>
 
-                    <!-- Opsi -->
+                    <!-- Options -->
                     <div class="flex flex-col gap-2 pt-1">
                         <label class="flex items-center gap-2 text-xs text-zinc-400 cursor-pointer select-none">
                             <input id="restoreInclCols" type="checkbox" class="accent-emerald-500 w-4 h-4">
@@ -909,13 +909,13 @@ where a.product_name = {product_name};"></textarea>
         </div>
     </div>
 
-    <!-- Shared helper & navigasi -->
-    <!-- Naikkan ?v= saat rilis baru agar browser mengambil versi terbaru (cache-busting) -->
+    <!-- Shared helper & navigation -->
+    <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
     <script src="assets/js/clipboard.js?v=1.0.0"></script>
     <script src="assets/js/version.js?v=1.0.0"></script>
     <script src="assets/js/parallax.js?v=1.0.0"></script>
     <script src="assets/js/tabs.js?v=1.0.0"></script>
-    <!-- Logic per tab (dipisah sesuai fungsinya) -->
+    <!-- Per-tab logic (split by function) -->
     <script src="assets/js/calculator.js?v=1.0.0"></script>
     <script src="assets/js/duplicates.js?v=1.0.0"></script>
     <script src="assets/js/nonAscii.js?v=1.0.0"></script>

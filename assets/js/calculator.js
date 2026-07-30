@@ -6,11 +6,11 @@ const calcResultDisplay = document.getElementById('resultValue');
 const calcCopyBtn = document.getElementById('copyBtn');
 const calcCountDisplay = document.getElementById('dataCount');
 
-// Variabel state penyimpanan nilai mentah
+// State variable holding the raw value
 let rawSumValue = 0;
 
 calcInput.addEventListener('input', function () {
-    // Izinkan koma agar format ribuan/desimal ala Indonesia bisa dipaste
+    // Allow commas so Indonesian-style thousand/decimal formats can be pasted
     const sanitizedValue = this.value.replace(/[^\d.,\-\n]/g, '');
     if (this.value !== sanitizedValue) {
         this.value = sanitizedValue;
@@ -24,10 +24,10 @@ function formatToIndonesian(num) {
     return parts.join(',');
 }
 
-// Normalisasi satu baris angka ke format JS (titik = desimal).
-// - Tanpa koma: dipakai apa adanya (120, 120.55) -> titik tetap desimal.
-// - Ada koma: koma = desimal, titik = pemisah ribuan.
-//   contoh: "100,120" -> "100.120" ; "100.120,55" -> "100120.55"
+// Normalize a single number line to JS format (dot = decimal).
+// - No comma: used as-is (120, 120.55) -> dot stays as the decimal.
+// - Has comma: comma = decimal, dot = thousands separator.
+//   example: "100,120" -> "100.120" ; "100.120,55" -> "100120.55"
 function normalizeNumberToken(line) {
     const s = line.trim();
     if (s.indexOf(',') === -1) return s;

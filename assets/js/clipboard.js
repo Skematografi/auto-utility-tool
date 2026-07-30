@@ -1,6 +1,6 @@
 // ----------------------------------------
 // HELPER: UNIVERSAL CLIPBOARD COPY
-// Dipakai bersama oleh beberapa tab (Calculator, Duplicates, Non-ASCII).
+// Shared by several tabs (Calculator, Duplicates, Non-ASCII).
 // ----------------------------------------
 function handleClipboardCopy(text, buttonElement, originalText, defaultBg = 'bg-emerald-600', defaultHover = 'hover:bg-emerald-500', activeBg = 'bg-amber-400', activeHover = 'hover:bg-amber-300') {
     const textArea = document.createElement("textarea");

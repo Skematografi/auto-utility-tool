@@ -1,7 +1,7 @@
 // ----------------------------------------
 // TAB 8: CHARACTER COUNT LOGIC
-// Hitung total karakter + estimasi ukuran penyimpanan di database:
-// UTF-8 (MySQL utf8mb4 / PostgreSQL) dan UTF-16 (SQL Server NVARCHAR)
+// Count total characters + estimate database storage size:
+// UTF-8 (MySQL utf8mb4 / PostgreSQL) and UTF-16 (SQL Server NVARCHAR)
 // ----------------------------------------
 const charCountInput = document.getElementById('charCountInput');
 const charCountTotal = document.getElementById('charCountTotal');
@@ -19,7 +19,7 @@ const charCountEncoder = new TextEncoder();
 
 charCountInput.addEventListener('input', updateCharCount);
 
-// Format bytes menjadi satuan yang mudah dibaca (basis 1024)
+// Format bytes into a human-readable unit (base 1024)
 function formatCharCountSize(bytes) {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
@@ -44,20 +44,20 @@ function updateCharCount() {
         return;
     }
 
-    // Hitung per code point (emoji / karakter di luar BMP tetap dihitung 1)
+    // Count per code point (emoji / characters outside the BMP still count as 1)
     const totalChars = Array.from(text).length;
     const totalLines = text.split('\n').length;
 
-    // Kata: dipisah whitespace apa pun; kalimat: dipisah . ! ? ;
-    // paragraf: blok teks yang dipisah baris kosong; spasi: karakter ' ' saja
+    // Words: split on any whitespace; sentences: split on . ! ?
+    // paragraphs: text blocks separated by blank lines; spaces: the ' ' character only
     const totalWords = text.split(/\s+/).filter(w => w !== '').length;
     const totalSentences = text.split(/[.!?]+/).filter(s => s.trim() !== '').length;
     const totalParagraphs = text.split(/\n\s*\n/).filter(p => p.trim() !== '').length;
     const totalSpaces = (text.match(/ /g) || []).length;
 
-    // UTF-8: byte asli teks — sama dengan storage MySQL utf8mb4 / PostgreSQL
+    // UTF-8: raw text bytes — matches MySQL utf8mb4 / PostgreSQL storage
     const utf8Bytes = charCountEncoder.encode(text).length;
-    // UTF-16: 2 byte per code unit — estimasi SQL Server NVARCHAR
+    // UTF-16: 2 bytes per code unit — estimate for SQL Server NVARCHAR
     const utf16Bytes = text.length * 2;
 
     charCountTotal.textContent = totalChars.toLocaleString('en-US');

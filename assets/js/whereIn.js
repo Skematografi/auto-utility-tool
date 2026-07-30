@@ -1,7 +1,7 @@
 // ----------------------------------------
 // TAB 7: WHERE IN GENERATOR LOGIC
-// Ubah list (satu item per baris) menjadi nilai siap pakai
-// untuk klausa SQL: WHERE col IN (...)
+// Convert a list (one item per line) into ready-to-use values
+// for an SQL clause: WHERE col IN (...)
 // ----------------------------------------
 const whereInInput = document.getElementById('whereInInput');
 const whereInTemplate = document.getElementById('whereInTemplate');
@@ -22,13 +22,13 @@ const whereInStrResult = document.getElementById('whereInStrResult');
 const copyWhereInStrBtn = document.getElementById('copyWhereInStrBtn');
 const copyWhereInStrChunkBtn = document.getElementById('copyWhereInStrChunkBtn');
 
-// Batas maksimal karakter per baris output sebelum pindah ke baris baru
+// Maximum characters per output line before wrapping to a new line
 const WHERE_IN_MAX_LINE = 200;
-// Chunking: tampilkan versi ter-chunk saat item lebih dari 1000; maksimal 500 nilai per IN
+// Chunking: show the chunked version when items exceed 1000; max 500 values per IN
 const WHERE_IN_CHUNK_THRESHOLD = 1000;
 const WHERE_IN_CHUNK_SIZE = 500;
 
-// Simpan hasil kedua versi (utuh & ter-chunk) untuk masing-masing tombol copy
+// Store both versions (full & chunked) for their respective copy buttons
 let whereInIntFull = '';
 let whereInIntChunked = '';
 let whereInStrFull = '';
@@ -37,7 +37,7 @@ let whereInStrChunked = '';
 whereInInput.addEventListener('input', generateWhereIn);
 whereInTemplate.addEventListener('input', generateWhereIn);
 
-// Gabungkan token dengan koma, pindah baris ketika panjang baris melebihi batas
+// Join tokens with commas, wrapping to a new line when the line length exceeds the limit
 function wrapWhereInTokens(tokens) {
     const lines = [];
     let current = '';
@@ -56,7 +56,7 @@ function wrapWhereInTokens(tokens) {
     return lines.join('\n');
 }
 
-// Pecah token jadi grup maksimal WHERE_IN_CHUNK_SIZE nilai
+// Split tokens into groups of at most WHERE_IN_CHUNK_SIZE values
 function splitIntoChunks(tokens) {
     const chunks = [];
     for (let i = 0; i < tokens.length; i += WHERE_IN_CHUNK_SIZE) {
@@ -65,10 +65,10 @@ function splitIntoChunks(tokens) {
     return chunks;
 }
 
-// Bangun output dari token: menerapkan template (opsional).
-// - doChunk=false -> semua nilai dalam satu blok/statement.
-// - doChunk=true  -> dipecah maks 500 nilai; dengan template tiap chunk jadi satu
-//   statement, tanpa template tiap chunk diberi header komentar bila lebih dari satu.
+// Build output from tokens, applying a template (optional).
+// - doChunk=false -> all values in a single block/statement.
+// - doChunk=true  -> split into max 500 values; with a template each chunk becomes one
+//   statement, without a template each chunk gets a comment header when there is more than one.
 function buildWhereIn(tokens, template, doChunk) {
     const chunks = doChunk ? splitIntoChunks(tokens) : [tokens];
     const tpl = template.trim();
@@ -97,7 +97,7 @@ function generateWhereIn() {
 
     whereInCount.textContent = items.length;
 
-    // Jumlah chunk yang akan dihasilkan tombol "copy chunked" (maks 500/IN)
+    // Number of chunks the "copy chunked" button will produce (max 500/IN)
     const chunkCount = Math.ceil(items.length / WHERE_IN_CHUNK_SIZE);
     if (items.length > 0 && chunkCount > 1) {
         whereInChunks.textContent = chunkCount;
@@ -122,15 +122,15 @@ function generateWhereIn() {
     whereInEmpty.classList.add('hidden');
 
     const template = whereInTemplate.value;
-    // Versi ter-chunk ditampilkan di textarea saat item melebihi ambang
+    // The chunked version is shown in the textarea when items exceed the threshold
     const showChunked = items.length > WHERE_IN_CHUNK_THRESHOLD;
 
-    // Numerik: digit (boleh tanda minus), boleh desimal (500.0000, 3.5)
+    // Numeric: digits (optional minus sign), optional decimals (500.0000, 3.5)
     const isNumericList = items.every(item => /^-?\d+(\.\d+)?$/.test(item));
     const isIntegerList = isNumericList && items.every(item => /^-?\d+$/.test(item));
 
-    // Versi string selalu dibuat: bungkus kutip satu,
-    // kutip satu di dalam data digandakan ('') agar valid dijalankan di SQL
+    // The string version is always built: wrap in single quotes,
+    // single quotes inside the data are doubled ('') so it is valid to run in SQL
     const stringTokens = items.map(item => `'${item.replace(/'/g, "''")}'`);
     whereInStrFull = buildWhereIn(stringTokens, template, false);
     whereInStrChunked = buildWhereIn(stringTokens, template, true);
@@ -151,8 +151,8 @@ function generateWhereIn() {
     }
 }
 
-// Rapikan angka desimal tanpa mengubah nilai: 500.0000 -> 500, 3.5000 -> 3.5
-// Manipulasi string murni agar angka besar tidak kehilangan presisi (bukan parseFloat)
+// Tidy up decimal numbers without changing the value: 500.0000 -> 500, 3.5000 -> 3.5
+// Pure string manipulation so large numbers do not lose precision (not parseFloat)
 function normalizeNumericToken(item) {
     if (!item.includes('.')) return item;
     return item.replace(/0+$/, '').replace(/\.$/, '');

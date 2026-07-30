@@ -12,13 +12,13 @@ function handleCompare() {
     const text1 = compareLeft.value;
     const text2 = compareRight.value;
 
-    // Proses HANYI JIKA kedua sisi telah terisi teks
+    // Process ONLY IF both sides have text
     if (!text1 || !text2) {
         compareResultContainer.innerHTML = '<p class="text-sm text-zinc-600 italic text-center py-6">Waiting for input on both sides...</p>';
         return;
     }
 
-    // Split data per baris (kalimat/list)
+    // Split the data by line (sentence/list)
     const lines1 = text1.split('\n');
     const lines2 = text2.split('\n');
 
@@ -31,7 +31,7 @@ function handleCompare() {
     let rightHtml = '';
     let hasMismatch = false;
 
-    // Buat frequency map untuk mengecek "keberadaan" data tanpa peduli urutan baris
+    // Build a frequency map to check data "presence" regardless of line order
     const freq2 = {};
     lines2.forEach(l => freq2[l] = (freq2[l] || 0) + 1);
 
@@ -47,7 +47,7 @@ function handleCompare() {
         }
     }
 
-    // Sisi kanan terhadap data kiri
+    // Right side against the left data
     const freq1 = {};
     lines1.forEach(l => freq1[l] = (freq1[l] || 0) + 1);
 
@@ -63,7 +63,7 @@ function handleCompare() {
         }
     }
 
-    // Jika data match 100%
+    // If the data matches 100%
     if (!hasMismatch) {
         compareResultContainer.innerHTML = `
                     <div class="flex flex-col items-center justify-center py-8 text-emerald-400 bg-emerald-500/10 rounded-md border border-emerald-500/30">
@@ -75,7 +75,7 @@ function handleCompare() {
         return;
     }
 
-    // Render hasil ke 2 box yang identik seperti layout input
+    // Render the result into 2 boxes identical to the input layout
     compareResultContainer.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div class="flex flex-col space-y-2">

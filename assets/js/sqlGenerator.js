@@ -2,13 +2,13 @@
 // TAB 5: SQL GENERATOR LOGIC
 // ----------------------------------------
 
-// Elemen Upload & Info File
+// File upload & info elements
 const sqlFileInput = document.getElementById('sqlFileInput');
 const sqlFileInfo = document.getElementById('sqlFileInfo');
 const sqlFileSummary = document.getElementById('sqlFileSummary');
 const sqlColumnList = document.getElementById('sqlColumnList');
 
-// Elemen Mode Toggle
+// Mode toggle elements
 const sqlModeDeleteBtn = document.getElementById('sqlModeDeleteBtn');
 const sqlModeUpdateBtn = document.getElementById('sqlModeUpdateBtn');
 const sqlModeTemplateBtn = document.getElementById('sqlModeTemplateBtn');
@@ -16,17 +16,17 @@ const sqlDeletePanel = document.getElementById('sqlDeletePanel');
 const sqlUpdatePanel = document.getElementById('sqlUpdatePanel');
 const sqlTemplatePanel = document.getElementById('sqlTemplatePanel');
 
-// Elemen Panel Template
+// Template panel elements
 const sqlTemplateInput = document.getElementById('sqlTemplateInput');
 const generateTemplateBtn = document.getElementById('generateTemplateBtn');
 
-// Elemen Panel Delete
+// Delete panel elements
 const deleteTableName = document.getElementById('deleteTableName');
 const deleteWhereList = document.getElementById('deleteWhereList');
 const deleteAddWhereBtn = document.getElementById('deleteAddWhereBtn');
 const generateDeleteBtn = document.getElementById('generateDeleteBtn');
 
-// Elemen Panel Update
+// Update panel elements
 const updateTableName = document.getElementById('updateTableName');
 const updateSetList = document.getElementById('updateSetList');
 const updateWhereList = document.getElementById('updateWhereList');
@@ -34,15 +34,15 @@ const updateAddSetBtn = document.getElementById('updateAddSetBtn');
 const updateAddWhereBtn = document.getElementById('updateAddWhereBtn');
 const generateUpdateBtn = document.getElementById('generateUpdateBtn');
 
-// Elemen Status & Preview
+// Status & preview elements
 const sqlStatus = document.getElementById('sqlStatus');
 const sqlPreviewWrap = document.getElementById('sqlPreviewWrap');
 const sqlPreview = document.getElementById('sqlPreview');
 
-// State data hasil parsing file
+// Parsed file data state
 let sqlData = { headers: [], rows: [] };
 
-// --- Membaca file Excel / CSV ---
+// --- Read Excel / CSV file ---
 sqlFileInput.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -52,7 +52,7 @@ sqlFileInput.addEventListener('change', function (e) {
         try {
             const workbook = XLSX.read(evt.target.result, { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-            // header:1 -> array of arrays; defval agar sel kosong tidak dilewati
+            // header:1 -> array of arrays; defval keeps empty cells from being skipped
             const aoa = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '', raw: false });
 
             if (!aoa.length) {
@@ -63,7 +63,7 @@ sqlFileInput.addEventListener('change', function (e) {
             }
 
             sqlData.headers = aoa[0].map(h => (h === undefined || h === null) ? '' : String(h));
-            // Buang baris yang benar-benar kosong seluruhnya
+            // Drop rows that are completely empty
             sqlData.rows = aoa.slice(1).filter(row =>
                 row.some(cell => cell !== undefined && cell !== null && String(cell).trim() !== '')
             );
@@ -98,7 +98,7 @@ function switchSqlMode(mode) {
     const activeClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40";
     const inactiveClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50";
 
-    // Reset semua tombol & panel
+    // Reset all buttons & panels
     sqlModeDeleteBtn.className = inactiveClass;
     sqlModeUpdateBtn.className = inactiveClass;
     sqlModeTemplateBtn.className = inactiveClass;
@@ -119,7 +119,7 @@ function switchSqlMode(mode) {
     lucide.createIcons();
 }
 
-// --- Baris kondisi dinamis (index kolom + nama kolom SQL) ---
+// --- Dynamic condition row (column index + SQL column name) ---
 function createConditionRow(container, placeholder) {
     const row = document.createElement('div');
     row.className = 'flex items-center gap-2 condition-row';
@@ -134,7 +134,7 @@ function createConditionRow(container, placeholder) {
         </button>
     `;
     row.querySelector('.cond-remove').addEventListener('click', function () {
-        // Selalu sisakan minimal 1 baris
+        // Always keep at least 1 row
         if (container.querySelectorAll('.condition-row').length > 1) {
             row.remove();
         }
@@ -143,7 +143,7 @@ function createConditionRow(container, placeholder) {
     lucide.createIcons();
 }
 
-// Membaca kondisi dari sebuah container -> [{ index, name }]
+// Read conditions from a container -> [{ index, name }]
 function readConditions(container) {
     const result = [];
     container.querySelectorAll('.condition-row').forEach(row => {
@@ -160,23 +160,23 @@ deleteAddWhereBtn.addEventListener('click', () => createConditionRow(deleteWhere
 updateAddSetBtn.addEventListener('click', () => createConditionRow(updateSetList, 'db column to SET (e.g. product_code)'));
 updateAddWhereBtn.addEventListener('click', () => createConditionRow(updateWhereList, 'db column name (e.g. productId)'));
 
-// Inisialisasi minimal 1 baris kondisi di tiap list
+// Initialize at least 1 condition row in each list
 createConditionRow(deleteWhereList, 'db column name (e.g. product_code)');
 createConditionRow(updateSetList, 'db column to SET (e.g. product_code)');
 createConditionRow(updateWhereList, 'db column name (e.g. productId)');
 
-// --- Helper format nilai SQL ---
+// --- SQL value formatting helper ---
 function isNumericValue(val) {
     const s = String(val).trim();
     if (s === '') return false;
     return /^-?\d+(\.\d+)?$/.test(s);
 }
 
-// Aturan kutip:
-// - default string dibungkus kutip 1
-// - jika nilai mengandung kutip 1 (dan tidak ada kutip 2) -> bungkus kutip 2
-// - jika nilai mengandung kutip 2 (dan tidak ada kutip 1) -> bungkus kutip 1
-// - jika keduanya ada -> escape kutip 1 dengan menggandakannya, bungkus kutip 1
+// Quoting rules:
+// - by default strings are wrapped in single quotes
+// - if the value contains a single quote (and no double quote) -> wrap in double quotes
+// - if the value contains a double quote (and no single quote) -> wrap in single quotes
+// - if both are present -> escape single quotes by doubling them, wrap in single quotes
 function formatSqlValue(val) {
     if (val === undefined || val === null || String(val).trim() === '') {
         return 'NULL';
@@ -198,7 +198,7 @@ function formatSqlValue(val) {
     return "'" + s + "'";
 }
 
-// Ambil nilai sel berdasarkan index kolom (1-based)
+// Get a cell value by column index (1-based)
 function getCell(row, index) {
     return row[index - 1];
 }
@@ -225,7 +225,7 @@ generateDeleteBtn.addEventListener('click', function () {
 
     const clauses = [];
     for (const cond of conditions) {
-        // Kumpulkan nilai kolom, buang yang kosong, lalu dedup per kolom
+        // Collect column values, drop empties, then dedupe per column
         const values = sqlData.rows
             .map(r => getCell(r, cond.index))
             .filter(v => !isEmptyCell(v))
@@ -273,9 +273,9 @@ generateUpdateBtn.addEventListener('click', function () {
         return;
     }
 
-    // Kelompokkan baris berdasarkan kombinasi nilai SET yang identik.
-    // Baris dengan SET sama namun WHERE berbeda bisa digabung memakai IN,
-    // sedangkan SET berbeda menghasilkan statement terpisah (=).
+    // Group rows by identical SET value combinations.
+    // Rows with the same SET but different WHERE can be merged using IN,
+    // while different SET values produce separate statements (=).
     const groups = new Map();
     sqlData.rows.forEach(row => {
         const setParts = setConds.map(c => `${c.name} = ${formatSqlValue(getCell(row, c.index))}`);
@@ -302,7 +302,7 @@ generateUpdateBtn.addEventListener('click', function () {
                 statements.push(`update ${table} set ${setClause} where ${c.name} in (${formatted.join(', ')});`);
             }
         } else {
-            // Beberapa kolom WHERE: IN tidak bisa dipakai bersih, jadi buat statement per baris (=)
+            // Multiple WHERE columns: IN cannot be used cleanly, so build one statement per row (=)
             rows.forEach(row => {
                 const whereParts = whereConds.map(c => `${c.name} = ${formatSqlValue(getCell(row, c.index))}`);
                 statements.push(`update ${table} set ${setClause} where ${whereParts.join(' and ')};`);
@@ -322,10 +322,10 @@ generateUpdateBtn.addEventListener('click', function () {
     showSqlStatus(`SQL Update generated (${statements.length} statement(s)) and downloaded successfully.`, 'success');
 });
 
-// --- Generate SQL dari TEMPLATE ---
-// Placeholder {ColumnName} atau {index} diisi nilai per baris (auto-quote sesuai tipe).
-// Berguna untuk SQL kompleks (mis. update tabel detail via join) yang tidak muat
-// pada pola delete/update terstruktur.
+// --- Generate SQL from a TEMPLATE ---
+// Placeholders {ColumnName} or {index} are filled with per-row values (auto-quoted by type).
+// Useful for complex SQL (e.g. updating a detail table via join) that does not fit
+// the structured delete/update patterns.
 generateTemplateBtn.addEventListener('click', function () {
     if (!validateFileLoaded()) return;
 
@@ -337,7 +337,7 @@ generateTemplateBtn.addEventListener('click', function () {
 
     const tokenRe = /\{([^{}]+)\}/g;
 
-    // Kumpulkan token unik & petakan ke index kolom (1-based). Nama = case-insensitive.
+    // Collect unique tokens & map them to column index (1-based). Names are case-insensitive.
     const tokens = new Set();
     let match;
     while ((match = tokenRe.exec(template)) !== null) {
@@ -364,7 +364,7 @@ generateTemplateBtn.addEventListener('click', function () {
         tokenToIndex[tok] = index;
     }
 
-    // Isi template per baris; buang hasil yang identik agar tidak dobel.
+    // Fill the template per row; drop identical results to avoid duplicates.
     const seen = new Set();
     const statements = [];
     sqlData.rows.forEach(row => {
@@ -389,7 +389,7 @@ generateTemplateBtn.addEventListener('click', function () {
     showSqlStatus(`SQL Template generated (${statements.length} statement(s)) and downloaded successfully.`, 'success');
 });
 
-// --- Helper: validasi & status & download ---
+// --- Helpers: validation, status & download ---
 function validateFileLoaded() {
     if (!sqlData.rows.length) {
         showSqlStatus('Please upload an Excel/CSV file with data first.', 'error');

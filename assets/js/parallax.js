@@ -1,8 +1,8 @@
 // ----------------------------------------
 // BACKGROUND PARALLAX (deep-space starfield)
-// 3 lapisan kedalaman: far (kecil, redup, pelan) → near (besar, terang, cepat).
-// Guard: hormati prefers-reduced-motion (jadi statis), pause saat tab tidak aktif,
-// dan bisa dimatikan lewat toggle di footer (preferensi disimpan di localStorage).
+// 3 depth layers: far (small, dim, slow) → near (large, bright, fast).
+// Guard: respect prefers-reduced-motion (render static), pause when the tab is inactive,
+// and can be turned off via the footer toggle (preference stored in localStorage).
 // ----------------------------------------
 (function initParallax() {
     const canvas = document.getElementById('bg');
@@ -13,7 +13,7 @@
     const PREF_KEY = 'datadev_bg';
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Lapisan kedalaman (share = proporsi jumlah, speed = px/detik)
+    // Depth layers (share = proportion of the count, speed = px/second)
     const LAYERS = [
         { r: [0.4, 0.8], speed: 4, share: 0.58, alpha: [0.20, 0.45], em: 0.05, halo: false },
         { r: [0.8, 1.3], speed: 9, share: 0.30, alpha: [0.35, 0.65], em: 0.10, halo: false },
@@ -69,10 +69,10 @@
     function frame(t) {
         if (!lastT) lastT = t;
         let dt = (t - lastT) / 1000; lastT = t;
-        if (dt > 0.05) dt = 0.05; // cegah lompatan setelah pause
+        if (dt > 0.05) dt = 0.05; // prevent a jump after a pause
         clear();
         for (const s of stars) {
-            s.y -= s.speed * dt;          // bergerak ke atas (kesan terbang maju)
+            s.y -= s.speed * dt;          // move upward (sense of flying forward)
             if (s.y < -3) { s.y = innerHeight + 3; s.x = Math.random() * innerWidth; }
             drawStar(s, t, true);
         }
@@ -110,7 +110,7 @@
     if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
             enabled = !enabled;
-            try { localStorage.setItem(PREF_KEY, enabled ? 'on' : 'off'); } catch (e) { /* abaikan */ }
+            try { localStorage.setItem(PREF_KEY, enabled ? 'on' : 'off'); } catch (e) { /* ignore */ }
             updateToggle();
             apply();
         });

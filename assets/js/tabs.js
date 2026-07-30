@@ -1,8 +1,8 @@
-// Inisialisasi Icons saat pertama kali dimuat
+// Initialize icons on first load
 lucide.createIcons();
 
 // ----------------------------------------
-// TAB SWITCHING LOGIC (navigasi antar tab)
+// TAB SWITCHING LOGIC (navigation between tabs)
 // ----------------------------------------
 const tabCalcBtn = document.getElementById('tabCalcBtn');
 const tabDupBtn = document.getElementById('tabDupBtn');
@@ -34,13 +34,13 @@ tabWhereInBtn.addEventListener('click', () => switchTab('wherein'));
 tabCharCountBtn.addEventListener('click', () => switchTab('charcount'));
 tabRestoreBtn.addEventListener('click', () => switchTab('restore'));
 
-// Kelas dasar tab (konsisten dengan grid tab bergaya terminal di index.html)
+// Base tab class (consistent with the terminal-style tab grid in index.html)
 const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
 const TAB_INACTIVE = `${TAB_BASE} text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50`;
 const TAB_ACTIVE = `${TAB_BASE} bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40`;
 
 function switchTab(tab) {
-    // Reset semua tab ke keadaan tidak aktif
+    // Reset all tabs to the inactive state
     tabCalcBtn.className = TAB_INACTIVE;
     tabDupBtn.className = TAB_INACTIVE;
     tabAsciiBtn.className = TAB_INACTIVE;

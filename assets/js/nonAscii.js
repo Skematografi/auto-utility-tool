@@ -8,7 +8,7 @@ const copyAsciiListBtn = document.getElementById('copyAsciiListBtn');
 const copyCleanTextBtn = document.getElementById('copyCleanTextBtn');
 const asciiCountDisplay = document.getElementById('asciiCount');
 
-// Variabel state penyimpanan data mentah
+// State variable holding the raw data
 let rawNonAsciiList = [];
 
 asciiInput.addEventListener('input', detectNonAscii);
@@ -29,14 +29,14 @@ function detectNonAscii() {
         return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     };
 
-    // Menghasilkan visual preview teks dengan penandaan/highlight warna
+    // Build a visual text preview with color highlighting
     let highlightedHtml = '';
     for (let i = 0; i < text.length; i++) {
         const char = text[i];
         const code = char.charCodeAt(0);
         if (code > 127) {
             const hexCode = code.toString(16).toUpperCase().padStart(4, '0');
-            // Bungkus karakter non-ASCII dengan highlight merah (glow) sebagai penanda atensi + kode Unicode
+            // Wrap the non-ASCII character in a red highlight (glow) as an attention marker + Unicode code
             highlightedHtml += `<span class="bg-red-500/25 text-red-300 font-bold px-0.5 rounded cursor-help" title="Unicode: U+${hexCode}">${escapeHtml(char)}</span>`;
         } else {
             highlightedHtml += escapeHtml(char);
@@ -44,7 +44,7 @@ function detectNonAscii() {
     }
     asciiHighlightPreview.innerHTML = highlightedHtml;
 
-    // Cari semua karakter non-ASCII (Unicode value > 127)
+    // Find all non-ASCII characters (Unicode value > 127)
     const nonAsciiMatches = text.match(/[^\x00-\x7F]/g) || [];
     if (nonAsciiMatches.length === 0) {
         asciiResultDisplay.textContent = "No non-ASCII characters found. Your text is clean!";
@@ -55,7 +55,7 @@ function detectNonAscii() {
         return;
     }
 
-    // Analisis karakter unik dan hitung frekuensinya
+    // Analyze unique characters and count their frequency
     const frequencies = {};
     nonAsciiMatches.forEach(char => { frequencies[char] = (frequencies[char] || 0) + 1; });
 
@@ -85,7 +85,7 @@ copyCleanTextBtn.addEventListener('click', function () {
 });
 
 // ----------------------------------------
-// Scan file Excel/CSV: laporkan HANYA baris yang mengandung non-ASCII
+// Scan an Excel/CSV file: report ONLY rows that contain non-ASCII
 // ----------------------------------------
 const asciiFileInput = document.getElementById('asciiFileInput');
 const asciiFileResultWrap = document.getElementById('asciiFileResultWrap');
@@ -112,7 +112,7 @@ asciiFileInput.addEventListener('change', function (e) {
         }
     };
     reader.readAsArrayBuffer(file);
-    // Reset agar file yang sama bisa diupload ulang
+    // Reset so the same file can be uploaded again
     e.target.value = '';
 });
 
@@ -132,7 +132,7 @@ function scanAsciiFile(aoa, fileName) {
     let cellCount = 0;
 
     rows.forEach((row, r) => {
-        const excelRow = r + 2; // +1 untuk header, +1 karena baris Excel 1-based
+        const excelRow = r + 2; // +1 for the header, +1 because Excel rows are 1-based
         (row || []).forEach((cell, c) => {
             const value = (cell === undefined || cell === null) ? '' : String(cell);
             const matches = value.match(/[^\x00-\x7F]/g);
@@ -150,7 +150,7 @@ function scanAsciiFile(aoa, fileName) {
     });
 
     if (lines.length === 0) {
-        // File bersih: tidak ada output baris, cukup pesan bersih
+        // Clean file: no row output, just a clean message
         asciiFileReport = '';
         asciiFileResultDisplay.textContent = `"${fileName}" is clean — no non-ASCII characters found.`;
         setAsciiSummary(`clean: ${rows.length} rows scanned`, 'clean');

@@ -1,12 +1,12 @@
 // ----------------------------------------
 // TAB 9: JSON -> SQL RESTORE LOGIC
-// Ubah JSON (satu object atau array of object) menjadi statement
-// `insert into <table> select ... union all select ...;`
-// - Head : semua field root yang BUKAN array.
-// - Detail: key array/object yang ditentukan user (multiple), tiap elemen jadi 1 select.
+// Convert JSON (a single object or an array of objects) into
+// `insert into <table> select ... union all select ...;` statements.
+// - Head : all root fields that are NOT arrays.
+// - Detail: user-specified array/object keys (multiple); each element becomes 1 select.
 // ----------------------------------------
 
-// Elemen input & konfigurasi
+// Input & configuration elements
 const restoreJsonInput = document.getElementById('restoreJsonInput');
 const restoreJsonFile = document.getElementById('restoreJsonFile');
 const restoreHeadTable = document.getElementById('restoreHeadTable');
@@ -16,17 +16,17 @@ const restoreInclCols = document.getElementById('restoreInclCols');
 const restoreNullifyId = document.getElementById('restoreNullifyId');
 const restoreGenerateBtn = document.getElementById('restoreGenerateBtn');
 
-// Elemen status & output
+// Status & output elements
 const restoreStatus = document.getElementById('restoreStatus');
 const restoreOutputWrap = document.getElementById('restoreOutputWrap');
 const restoreOutput = document.getElementById('restoreOutput');
 const restoreCopyBtn = document.getElementById('restoreCopyBtn');
 const restoreDownloadBtn = document.getElementById('restoreDownloadBtn');
 
-// SQL hasil generate terakhir (untuk copy/download)
+// Last generated SQL (for copy/download)
 let restoreGeneratedSql = '';
 
-// --- Baris detail dinamis (json key + nama tabel) ---
+// --- Dynamic detail row (json key + table name) ---
 function createRestoreDetailRow(keyVal, tableVal) {
     const row = document.createElement('div');
     row.className = 'flex items-center gap-2 restore-detail-row';
@@ -47,7 +47,7 @@ function createRestoreDetailRow(keyVal, tableVal) {
     lucide.createIcons();
 }
 
-// --- Upload file .json -> isi ke textarea (paste tetap bisa) ---
+// --- Upload a .json file -> fill the textarea (pasting still works) ---
 restoreJsonFile.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -60,16 +60,16 @@ restoreJsonFile.addEventListener('change', function (e) {
         showRestoreStatus('Failed to read the file.', 'error');
     };
     reader.readAsText(file);
-    // Reset agar file yang sama bisa diupload ulang
+    // Reset so the same file can be uploaded again
     e.target.value = '';
 });
 
 restoreAddDetailBtn.addEventListener('click', () => createRestoreDetailRow('', ''));
 
-// Baris detail awal (contoh umum: Details)
+// Initial detail row (common example: Details)
 createRestoreDetailRow('Details', '');
 
-// Baca daftar detail -> [{ key, table }]
+// Read the detail list -> [{ key, table }]
 function readRestoreDetails() {
     const result = [];
     restoreDetailList.querySelectorAll('.restore-detail-row').forEach(row => {
@@ -84,22 +84,22 @@ function readRestoreDetails() {
 
 // --- Helper format ---
 
-// Nama kolom selalu camelCase, kecuali "ID" selalu kapital (branchID, currencyID)
+// Column names are always camelCase, except "ID" which is always uppercase (branchID, currencyID)
 function toRestoreColumnName(key) {
     if (/^id$/i.test(key)) return 'ID';
     let name = key.charAt(0).toLowerCase() + key.slice(1);
-    // "...Id" -> "...ID" (jika input pakai Id, bukan ID)
+    // "...Id" -> "...ID" (in case the input uses Id instead of ID)
     name = name.replace(/Id(?=[A-Z0-9]|$)/g, 'ID');
     return name;
 }
 
-// Format angka apa adanya, hindari notasi ilmiah untuk ukuran wajar
+// Format the number as-is, avoiding scientific notation for reasonable sizes
 function formatRestoreNumber(n) {
     return String(n);
 }
 
-// Deteksi & format string tanggal ISO. Return null jika bukan tanggal.
-// "...T00:00:00..." -> 'YYYY-MM-DD' ; selain itu -> 'YYYY-MM-DD HH:MM:SS'
+// Detect & format an ISO date string. Returns null if it is not a date.
+// "...T00:00:00..." -> 'YYYY-MM-DD' ; otherwise -> 'YYYY-MM-DD HH:MM:SS'
 function formatRestoreDate(s) {
     const m = /^(\d{4}-\d{2}-\d{2})(?:[T ](\d{2}:\d{2}:\d{2})(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})?)?$/.exec(s);
     if (!m) return null;
@@ -107,9 +107,9 @@ function formatRestoreDate(s) {
     return m[1] + ' ' + m[2];
 }
 
-// Ubah sebuah nilai JSON menjadi literal SQL
+// Convert a JSON value into an SQL literal
 function toRestoreSqlValue(key, val, nullifyId) {
-    // Kolom identity "ID" di-null-kan untuk keperluan restore
+    // The "ID" identity column is nulled out for restore purposes
     if (nullifyId && /^id$/i.test(key)) return 'null';
     if (val === null || val === undefined) return 'null';
     if (typeof val === 'number') return formatRestoreNumber(val);
@@ -119,11 +119,11 @@ function toRestoreSqlValue(key, val, nullifyId) {
         const text = d !== null ? d : val;
         return `'${text.replace(/'/g, "''")}'`;
     }
-    // Array/object bersarang di dalam kolom -> simpan sebagai JSON string
+    // Nested array/object inside a column -> store as a JSON string
     return `'${JSON.stringify(val).replace(/'/g, "''")}'`;
 }
 
-// Ambil key head: field root yang bukan array, bukan object, dan bukan key detail
+// Get head keys: root fields that are not arrays, not objects, and not detail keys
 function getRestoreHeadKeys(obj, detailKeys) {
     return Object.keys(obj).filter(k => {
         if (detailKeys.includes(k)) return false;
@@ -134,9 +134,9 @@ function getRestoreHeadKeys(obj, detailKeys) {
     });
 }
 
-// Bangun satu blok insert.
-// - Pakai nama kolom  -> INSERT INTO t (cols) VALUES (..), (..);
-// - Tanpa nama kolom  -> INSERT INTO t SELECT .. UNION ALL SELECT ..;
+// Build a single insert block.
+// - With column names    -> INSERT INTO t (cols) VALUES (..), (..);
+// - Without column names  -> INSERT INTO t SELECT .. UNION ALL SELECT ..;
 function buildRestoreInsert(table, colKeys, rows, inclCols, nullifyId) {
     const rowLiterals = rows.map(obj =>
         colKeys.map(k => toRestoreSqlValue(k, obj[k], nullifyId)).join(', ')
@@ -168,7 +168,7 @@ restoreGenerateBtn.addEventListener('click', function () {
         return;
     }
 
-    // Normalkan ke daftar record object
+    // Normalize into a list of record objects
     let records = Array.isArray(parsed) ? parsed : [parsed];
     records = records.filter(r => r && typeof r === 'object' && !Array.isArray(r));
     if (records.length === 0) {
@@ -187,7 +187,7 @@ restoreGenerateBtn.addEventListener('click', function () {
     const inclCols = restoreInclCols.checked;
     const nullifyId = restoreNullifyId.checked;
 
-    // Validasi: tiap key detail harus ada di JSON
+    // Validation: each detail key must exist in the JSON
     for (const d of details) {
         const exists = records.some(rec => Object.prototype.hasOwnProperty.call(rec, d.key));
         if (!exists) {
@@ -206,7 +206,7 @@ restoreGenerateBtn.addEventListener('click', function () {
     }
     statements.push(buildRestoreInsert(headTable, headKeys, records, inclCols, nullifyId));
 
-    // Detail (gabungkan elemen array dari semua record)
+    // Detail (merge array elements from all records)
     const skipped = [];
     for (const d of details) {
         const detailRows = [];
@@ -247,7 +247,7 @@ restoreDownloadBtn.addEventListener('click', function () {
     downloadTextFile(restoreGeneratedSql, `${table}_restore.sql`);
 });
 
-// --- Helper: status & download ---
+// --- Helpers: status & download ---
 function showRestoreStatus(message, type) {
     restoreStatus.textContent = message;
     restoreStatus.className = 'text-sm font-semibold px-4 py-3 rounded-md flex items-center gap-2 ' + (
