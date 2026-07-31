@@ -13,6 +13,7 @@ const tabSplitBtn = document.getElementById('tabSplitBtn');
 const tabWhereInBtn = document.getElementById('tabWhereInBtn');
 const tabCharCountBtn = document.getElementById('tabCharCountBtn');
 const tabRestoreBtn = document.getElementById('tabRestoreBtn');
+const tabSortBtn = document.getElementById('tabSortBtn');
 
 const calcView = document.getElementById('calcView');
 const dupView = document.getElementById('dupView');
@@ -23,6 +24,7 @@ const splitView = document.getElementById('splitView');
 const whereInView = document.getElementById('whereInView');
 const charCountView = document.getElementById('charCountView');
 const restoreView = document.getElementById('restoreView');
+const sortView = document.getElementById('sortView');
 
 tabCalcBtn.addEventListener('click', () => switchTab('calc'));
 tabDupBtn.addEventListener('click', () => switchTab('dup'));
@@ -33,6 +35,7 @@ tabSplitBtn.addEventListener('click', () => switchTab('split'));
 tabWhereInBtn.addEventListener('click', () => switchTab('wherein'));
 tabCharCountBtn.addEventListener('click', () => switchTab('charcount'));
 tabRestoreBtn.addEventListener('click', () => switchTab('restore'));
+tabSortBtn.addEventListener('click', () => switchTab('sort'));
 
 // Base tab class (consistent with the terminal-style tab grid in index.html)
 const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
@@ -50,6 +53,7 @@ function switchTab(tab) {
     tabWhereInBtn.className = TAB_INACTIVE;
     tabCharCountBtn.className = TAB_INACTIVE;
     tabRestoreBtn.className = TAB_INACTIVE;
+    tabSortBtn.className = TAB_INACTIVE;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
@@ -60,6 +64,7 @@ function switchTab(tab) {
     whereInView.classList.add('hidden');
     charCountView.classList.add('hidden');
     restoreView.classList.add('hidden');
+    sortView.classList.add('hidden');
 
     if (tab === 'calc') {
         tabCalcBtn.className = TAB_ACTIVE;
@@ -88,6 +93,9 @@ function switchTab(tab) {
     } else if (tab === 'restore') {
         tabRestoreBtn.className = TAB_ACTIVE;
         restoreView.classList.remove('hidden');
+    } else if (tab === 'sort') {
+        tabSortBtn.className = TAB_ACTIVE;
+        sortView.classList.remove('hidden');
     }
     lucide.createIcons();
 }

@@ -44,6 +44,7 @@ The app is organized into tabs, each a self-contained tool:
   * Dates are normalized (`...T00:00:00...` → `YYYY-MM-DD`, otherwise `YYYY-MM-DD HH:MM:SS`); `null` stays `null`; single quotes are escaped (`'` → `''`).
   * Two output styles: with column names it emits `INSERT INTO t (cols) VALUES (...), (...)` (columns camelCase, any `...ID` stays capital, e.g. `branchID`); without, it emits `INSERT INTO t SELECT ... UNION ALL SELECT ...`. Optionally null-out the identity `ID` column for a clean restore.
   * Output can be copied or downloaded as a `.sql` file.
+* **`sort`** (Sort) — Paste a list or sentence (e.g. `52,91,4,5,11`) and instantly get it sorted **ascending** and **descending**, both copyable. The separator is configurable (default `,`) and newlines are always accepted. Sorting is natural / numeric-aware, so `1,10,2,5` becomes `1,2,5,10` (not lexicographic).
 
 ## Run Locally
 

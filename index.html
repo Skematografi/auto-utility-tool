@@ -107,7 +107,7 @@
             </div>
 
             <!-- Tab Navigation: grid so ALL tabs stay visible -->
-            <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
+            <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
@@ -152,6 +152,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="database-backup" class="w-4 h-4 shrink-0"></i>
                     restore
+                </button>
+                <button id="tabSortBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="arrow-down-up" class="w-4 h-4 shrink-0"></i>
+                    sort
                 </button>
             </div>
 
@@ -881,6 +886,63 @@ where a.product_name = {product_name};"></textarea>
                 </div>
             </div>
 
+            <!-- TAB 10: SORT VIEW -->
+            <div id="sortView" class="space-y-6 hidden">
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center gap-3 flex-wrap">
+                        <label for="sortInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> list_data</label>
+                        <div class="flex items-center gap-2">
+                            <label for="sortSeparator" class="text-xs font-semibold text-zinc-500"><span
+                                    class="text-emerald-500">#</span> separator</label>
+                            <input id="sortSeparator" type="text" value="," placeholder=","
+                                class="w-16 p-1.5 text-center bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                        </div>
+                    </div>
+                    <textarea id="sortInput"
+                        class="w-full min-h-[160px] md:min-h-[200px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-base sm:text-lg text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste your list here (e.g. 52,91,4,5,11) — newlines are accepted too"></textarea>
+                    <div class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full self-start">
+                        <span class="text-xs font-semibold text-emerald-500">items:</span>
+                        <span id="sortCount" class="font-extrabold text-emerald-300 text-sm">0</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <!-- Ascending -->
+                    <div class="bg-black/40 p-4 sm:p-5 rounded-md border border-zinc-800 space-y-2">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                                ascending</span>
+                            <button id="copySortAscBtn" title="Copy ascending result"
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600"
+                                disabled>
+                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>copy</span>
+                            </button>
+                        </div>
+                        <textarea id="sortAscResult" readonly
+                            class="w-full min-h-[120px] max-h-[280px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                    </div>
+
+                    <!-- Descending -->
+                    <div class="bg-black/40 p-4 sm:p-5 rounded-md border border-zinc-800 space-y-2">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                                descending</span>
+                            <button id="copySortDescBtn" title="Copy descending result"
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-sky-500 hover:bg-sky-400 text-zinc-950 rounded-md shadow-md shadow-sky-900/40 transition-all font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-sky-500"
+                                disabled>
+                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>copy</span>
+                            </button>
+                        </div>
+                        <textarea id="sortDescResult" readonly
+                            class="w-full min-h-[120px] max-h-[280px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Footer status bar -->
@@ -925,6 +987,7 @@ where a.product_name = {product_name};"></textarea>
     <script src="assets/js/whereIn.js?v=1.0.0"></script>
     <script src="assets/js/charCount.js?v=1.0.0"></script>
     <script src="assets/js/jsonToSql.js?v=1.0.0"></script>
+    <script src="assets/js/sort.js?v=1.0.0"></script>
 </body>
 
 </html>
