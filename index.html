@@ -81,15 +81,15 @@
 
     <!-- Terminal window -->
     <div
-        class="relative z-10 w-full max-w-4xl rounded-xl overflow-hidden ring-1 ring-zinc-700/60 bg-zinc-900 shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85),0_0_40px_-12px_rgba(16,185,129,0.12)]">
+        class="relative z-10 w-full max-w-4xl rounded-xl overflow-hidden ring-1 ring-zinc-700/60 bg-zinc-900/30 backdrop-blur-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85),0_0_40px_-12px_rgba(16,185,129,0.12)]">
 
         <!-- Title bar -->
-        <div class="flex items-center justify-center px-4 py-3 bg-zinc-800/80 border-b border-zinc-700/60">
+        <div class="flex items-center justify-center px-4 py-3 bg-zinc-800/50 border-b border-zinc-700/60">
             <h1 class="text-xs sm:text-sm font-semibold text-zinc-400 truncate px-2">DataDev Utilities</h1>
         </div>
 
         <!-- Body -->
-        <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8">
+        <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-zinc-950/70">
 
             <!-- Hero + privacy line -->
             <div class="text-sm space-y-1.5">
@@ -106,57 +106,57 @@
                 </p>
             </div>
 
-            <!-- Tab Navigation: grid so ALL tabs stay visible -->
-            <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-10 bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1">
+            <!-- Tab Navigation: max 5 per row, ordered from simple data tools to SQL -->
+            <div class="grid grid-cols-3 sm:grid-cols-5 gap-1.5 bg-black/40 border border-zinc-800 p-2 rounded-lg">
                 <button id="tabCalcBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
                     calc
                 </button>
+                <button id="tabSortBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="arrow-down-up" class="w-4 h-4 shrink-0"></i>
+                    sort
+                </button>
                 <button id="tabDupBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="copy-check" class="w-4 h-4 shrink-0"></i>
                     dupes
                 </button>
+                <button id="tabCharCountBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="ruler" class="w-4 h-4 shrink-0"></i>
+                    chars
+                </button>
                 <button id="tabAsciiBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="file-warning" class="w-4 h-4 shrink-0"></i>
                     ascii
                 </button>
                 <button id="tabCompareBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="arrow-left-right" class="w-4 h-4 shrink-0"></i>
                     diff
                 </button>
-                <button id="tabSqlBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
-                    <i data-lucide="database" class="w-4 h-4 shrink-0"></i>
-                    sql
-                </button>
                 <button id="tabSplitBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="scissors" class="w-4 h-4 shrink-0"></i>
                     split
                 </button>
                 <button id="tabWhereInBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="brackets" class="w-4 h-4 shrink-0"></i>
                     in()
                 </button>
-                <button id="tabCharCountBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
-                    <i data-lucide="ruler" class="w-4 h-4 shrink-0"></i>
-                    chars
+                <button id="tabSqlBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="database" class="w-4 h-4 shrink-0"></i>
+                    sql
                 </button>
                 <button id="tabRestoreBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="database-backup" class="w-4 h-4 shrink-0"></i>
                     restore
-                </button>
-                <button id="tabSortBtn"
-                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
-                    <i data-lucide="arrow-down-up" class="w-4 h-4 shrink-0"></i>
-                    sort
                 </button>
             </div>
 
@@ -947,7 +947,7 @@ where a.product_name = {product_name};"></textarea>
 
         <!-- Footer status bar -->
         <div
-            class="flex items-center justify-between gap-2 px-4 py-2.5 bg-zinc-800/60 border-t border-zinc-700/60 text-xs text-zinc-500 flex-wrap">
+            class="flex items-center justify-between gap-2 px-4 py-2.5 bg-zinc-800/50 border-t border-zinc-700/60 text-xs text-zinc-500 flex-wrap">
             <span class="flex items-center gap-1.5">
                 <i data-lucide="git-branch" class="w-3.5 h-3.5"></i>
                 <span id="appVersion">…</span>
