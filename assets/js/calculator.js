@@ -5,6 +5,9 @@ const calcInput = document.getElementById('numberInput');
 const calcResultDisplay = document.getElementById('resultValue');
 const calcCopyBtn = document.getElementById('copyBtn');
 const calcCountDisplay = document.getElementById('dataCount');
+const calcMinDisplay = document.getElementById('minValue');
+const calcMaxDisplay = document.getElementById('maxValue');
+const calcAvgDisplay = document.getElementById('avgValue');
 
 // State variable holding the raw value
 let rawSumValue = 0;
@@ -93,10 +96,14 @@ function evaluateFormula(expr) {
     return output.length === 1 ? output[0] : NaN;
 }
 
+// Round to 6 decimals to avoid floating-point noise
+function roundValue(num) {
+    return Math.round(num * 1000000) / 1000000;
+}
+
 function calculateSum() {
     const lines = calcInput.value.split('\n');
-    let sum = 0;
-    let count = 0;
+    const values = [];
 
     for (let line of lines) {
         const trimmed = line.trim();
@@ -107,16 +114,27 @@ function calculateSum() {
             ? evaluateFormula(trimmed)
             : parseFloat(normalizeNumberToken(trimmed));
 
-        if (!isNaN(value)) {
-            sum += value;
-            count++;
-        }
+        if (!isNaN(value)) values.push(value);
     }
 
-    sum = Math.round(sum * 1000000) / 1000000;
+    const count = values.length;
+    const sum = roundValue(values.reduce((acc, v) => acc + v, 0));
     rawSumValue = sum;
+
     calcResultDisplay.textContent = formatToIndonesian(sum);
     calcCountDisplay.textContent = count;
+
+    if (count === 0) {
+        // No data yet: show a dash for the per-value stats
+        calcMinDisplay.textContent = '-';
+        calcMaxDisplay.textContent = '-';
+        calcAvgDisplay.textContent = '-';
+        return;
+    }
+
+    calcMinDisplay.textContent = formatToIndonesian(roundValue(Math.min(...values)));
+    calcMaxDisplay.textContent = formatToIndonesian(roundValue(Math.max(...values)));
+    calcAvgDisplay.textContent = formatToIndonesian(roundValue(sum / count));
 }
 
 calcCopyBtn.addEventListener('click', function () {

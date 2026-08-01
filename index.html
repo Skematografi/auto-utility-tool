@@ -175,7 +175,14 @@
                     </div>
                     <textarea id="numberInput"
                         class="w-full min-h-[200px] md:min-h-[250px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-lg sm:text-xl text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
-                        placeholder="# only numbers accepted"></textarea>
+                        placeholder="# sum a list of numbers — one value per line (updates live)
+# also supports formulas (1*5, 10-5) and 1.000,50 format
+#
+# example:
+120
+1.250,75
+10*3
+-45"></textarea>
                 </div>
 
                 <div
@@ -193,6 +200,22 @@
                             <div class="break-all">
                                 <span id="resultValue"
                                     class="text-3xl md:text-4xl font-black text-emerald-400 tracking-tight leading-none">0</span>
+                            </div>
+                        </div>
+
+                        <!-- min / max / avg -->
+                        <div class="grid grid-cols-3 gap-2 sm:gap-3">
+                            <div class="bg-black/30 border border-zinc-800 rounded-md px-3 py-2">
+                                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">min</span>
+                                <span id="minValue" class="text-sm sm:text-base font-bold text-emerald-300 break-all">-</span>
+                            </div>
+                            <div class="bg-black/30 border border-zinc-800 rounded-md px-3 py-2">
+                                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">max</span>
+                                <span id="maxValue" class="text-sm sm:text-base font-bold text-emerald-300 break-all">-</span>
+                            </div>
+                            <div class="bg-black/30 border border-zinc-800 rounded-md px-3 py-2">
+                                <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider block">avg</span>
+                                <span id="avgValue" class="text-sm sm:text-base font-bold text-emerald-300 break-all">-</span>
                             </div>
                         </div>
                     </div>
