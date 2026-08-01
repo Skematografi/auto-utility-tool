@@ -45,6 +45,9 @@ The app is organized into tabs, each a self-contained tool:
   * Two output styles: with column names it emits `INSERT INTO t (cols) VALUES (...), (...)` (columns camelCase, any `...ID` stays capital, e.g. `branchID`); without, it emits `INSERT INTO t SELECT ... UNION ALL SELECT ...`. Optionally null-out the identity `ID` column for a clean restore.
   * Output can be copied or downloaded as a `.sql` file.
 * **`sort`** (Sort) — Paste a list or sentence (e.g. `52,91,4,5,11`) and instantly get it sorted **ascending** and **descending**, both copyable. The separator is configurable (default `,`) and newlines are always accepted. Sorting is natural / numeric-aware, so `1,10,2,5` becomes `1,2,5,10` (not lexicographic).
+* **`merge`** (Merge SQL) — Upload multiple `.sql` files and combine them into a single `.sql` (downloaded, merged in the order selected):
+  * Optional **clear SQL comments** — strips `--`, `#`, and `/* */` comments while preserving string literals.
+  * A **boundary comment** is inserted before each file (default: the filename); use `{filename}` as a placeholder to customize it.
 
 ## Run Locally
 
