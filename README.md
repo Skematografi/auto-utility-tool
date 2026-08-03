@@ -25,6 +25,12 @@ The app is organized into tabs, each a self-contained tool:
   * Set the max rows per file — the number of output files is calculated automatically.
   * Optionally pick a column so rows sharing the same value stay in the same file; leave it empty to split purely by row count.
   * Each output file keeps the header row and matches the uploaded format (`.csv` → CSV, Excel → `.xlsx`).
+* **`dummy`** (Dummy File) — Generate a blank file of a given type and size, for testing uploads and size limits (max 100 MB):
+  * Supported formats: `xlsx`, `docx`, `pdf`, `csv`, `txt`, `json`, `xml`, `jpg`, `png`, `gif` — or enter any custom extension.
+  * Set the target size in KB or MB, and optionally a file name.
+  * Each file stays valid for its format: padding is placed where the format allows ignorable data (a PNG text chunk, JPEG/GIF comment blocks, a PDF content stream, or a spreadsheet cell / document paragraph) instead of being blindly appended — so images, PDFs, and Office documents all still open.
+  * A custom extension that matches a supported format (e.g. `pdf`, `jpeg`, `docx`) produces a real file of that format; anything else produces a blank text file, and the status line says so.
+  * Sizes are byte-exact, except where a format has a larger minimum structure (e.g. an `.xlsx` cannot go below ~16 KB).
 * **`in()`** (WHERE IN Generator) — Paste a list (one item per line) and get values ready to drop into a SQL `WHERE col IN (...)` clause:
   * Auto-detects the list type: if every line is numeric (integer or decimal, e.g. `500.0000`) you get **two** outputs (unquoted numbers and quoted strings); otherwise only the quoted string output is shown.
   * Decimal values are tidied without changing their value (`500.0000` → `500`, `3.5000` → `3.5`) so the unquoted output matches integer columns for faster queries.

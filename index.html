@@ -16,8 +16,8 @@
     <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
 
     <!-- Favicon (terminal-themed SVG) -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.2.5" />
-    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.2.5" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.4.0" />
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.4.0" />
 
     <!-- Open Graph (Facebook, LinkedIn, Product Hunt, etc.) -->
     <meta property="og:type" content="website" />
@@ -26,7 +26,7 @@
     <meta property="og:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more. Everything runs in your browser — no backend, no data upload." />
     <meta property="og:url" content="https://skematografi.github.io/auto-utility-tool/" />
-    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.2.5" />
+    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.4.0" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="DataDev Utilities — terminal-styled developer &amp; data toolkit" />
@@ -37,7 +37,7 @@
     <meta name="twitter:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
     <meta name="twitter:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
-    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.2.5" />
+    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.4.0" />
 
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,7 @@
         rel="stylesheet">
         
     <!-- Google Analytics -->
-    <script src="assets/js/analytics.js?v=1.2.5"></script>
+    <script src="assets/js/analytics.js?v=1.4.0"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,10 +70,10 @@
     <!-- JSZip for packaging split output into a ZIP file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    <link rel="stylesheet" href="assets/css/styles.css?v=1.2.5">
+    <link rel="stylesheet" href="assets/css/styles.css?v=1.4.0">
 
     <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
-    <script src="assets/js/theme.js?v=1.2.5"></script>
+    <script src="assets/js/theme.js?v=1.4.0"></script>
 </head>
 
 <body
@@ -153,6 +153,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="scissors" class="w-4 h-4 shrink-0"></i>
                     split
+                </button>
+                <button id="tabDummyBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="file-plus" class="w-4 h-4 shrink-0"></i>
+                    dummy
                 </button>
                 <button id="tabWhereInBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
@@ -1056,6 +1061,76 @@ where a.product_name = {product_name};"></textarea>
                 </div>
             </div>
 
+            <!-- TAB 12: DUMMY FILE VIEW -->
+            <div id="dummyView" class="space-y-6 hidden">
+                <div class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800">
+
+                    <!-- File type -->
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="dummyType" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> file_type</label>
+                        <select id="dummyType"
+                            class="w-full p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 transition-all cursor-pointer">
+                            <option value="xlsx">excel (.xlsx)</option>
+                            <option value="docx">word (.docx)</option>
+                            <option value="pdf">pdf (.pdf)</option>
+                            <option value="csv">csv (.csv)</option>
+                            <option value="txt">text (.txt)</option>
+                            <option value="json">json (.json)</option>
+                            <option value="xml">xml (.xml)</option>
+                            <option value="jpg">jpg (.jpg)</option>
+                            <option value="png">png (.png)</option>
+                            <option value="gif">gif (.gif)</option>
+                            <option value="custom">custom extension…</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom extension (only for the custom type) -->
+                    <div id="dummyCustomWrap" class="hidden flex flex-col space-y-1.5">
+                        <label for="dummyExtension" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">#</span> extension</label>
+                        <input id="dummyExtension" type="text" placeholder="e.g. txt, pdf, log"
+                            class="w-full p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                        <span class="text-xs text-zinc-600">Known formats (xlsx, docx, pdf, csv, txt, json, xml, jpg,
+                            png, gif) are generated as real, openable files. Any other extension produces a blank text
+                            file.</span>
+                    </div>
+
+                    <!-- File name -->
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="dummyName" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">#</span> file_name (optional)</label>
+                        <input id="dummyName" type="text" placeholder="dummy"
+                            class="w-full p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                    </div>
+
+                    <!-- Target size -->
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="dummySize" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> file_size</label>
+                        <div class="flex gap-2">
+                            <input id="dummySize" type="number" min="1" step="1" value="1"
+                                class="flex-grow min-w-0 p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                            <select id="dummyUnit"
+                                class="w-24 shrink-0 p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 transition-all cursor-pointer">
+                                <option value="1024">KB</option>
+                                <option value="1048576" selected>MB</option>
+                            </select>
+                        </div>
+                        <span class="text-xs text-zinc-600">The file is blank — padded to the target size. Max 100
+                            MB.</span>
+                    </div>
+
+                    <button id="generateDummyBtn"
+                        class="w-full flex items-center justify-center gap-2.5 py-3.5 px-8 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-lg shadow-emerald-900/40 transition-all font-bold text-base sm:text-lg cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600">
+                        <i data-lucide="download" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        <span>generate &amp; download</span>
+                    </button>
+                </div>
+
+                <div id="dummyStatus" class="hidden text-sm font-semibold px-4 py-3 rounded-md"></div>
+            </div>
+
         </div>
 
         <!-- Footer status bar -->
@@ -1086,22 +1161,23 @@ where a.product_name = {product_name};"></textarea>
 
     <!-- Shared helper & navigation -->
     <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
-    <script src="assets/js/clipboard.js?v=1.2.5"></script>
-    <script src="assets/js/version.js?v=1.2.5"></script>
-    <script src="assets/js/parallax.js?v=1.2.5"></script>
-    <script src="assets/js/tabs.js?v=1.2.5"></script>
+    <script src="assets/js/clipboard.js?v=1.4.0"></script>
+    <script src="assets/js/version.js?v=1.4.0"></script>
+    <script src="assets/js/parallax.js?v=1.4.0"></script>
+    <script src="assets/js/tabs.js?v=1.4.0"></script>
     <!-- Per-tab logic (split by function) -->
-    <script src="assets/js/calculator.js?v=1.2.5"></script>
-    <script src="assets/js/duplicates.js?v=1.2.5"></script>
-    <script src="assets/js/nonAscii.js?v=1.2.5"></script>
-    <script src="assets/js/compare.js?v=1.2.5"></script>
-    <script src="assets/js/sqlGenerator.js?v=1.2.5"></script>
-    <script src="assets/js/splitFile.js?v=1.2.5"></script>
-    <script src="assets/js/whereIn.js?v=1.2.5"></script>
-    <script src="assets/js/charCount.js?v=1.2.5"></script>
-    <script src="assets/js/jsonToSql.js?v=1.2.5"></script>
-    <script src="assets/js/sort.js?v=1.2.5"></script>
-    <script src="assets/js/mergeSql.js?v=1.2.5"></script>
+    <script src="assets/js/calculator.js?v=1.4.0"></script>
+    <script src="assets/js/duplicates.js?v=1.4.0"></script>
+    <script src="assets/js/nonAscii.js?v=1.4.0"></script>
+    <script src="assets/js/compare.js?v=1.4.0"></script>
+    <script src="assets/js/sqlGenerator.js?v=1.4.0"></script>
+    <script src="assets/js/splitFile.js?v=1.4.0"></script>
+    <script src="assets/js/whereIn.js?v=1.4.0"></script>
+    <script src="assets/js/charCount.js?v=1.4.0"></script>
+    <script src="assets/js/jsonToSql.js?v=1.4.0"></script>
+    <script src="assets/js/sort.js?v=1.4.0"></script>
+    <script src="assets/js/mergeSql.js?v=1.4.0"></script>
+    <script src="assets/js/dummyFile.js?v=1.4.0"></script>
 </body>
 
 </html>
