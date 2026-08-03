@@ -16,8 +16,8 @@
     <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
 
     <!-- Favicon (terminal-themed SVG) -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.1.0" />
-    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.1.0" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.2.5" />
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.2.5" />
 
     <!-- Open Graph (Facebook, LinkedIn, Product Hunt, etc.) -->
     <meta property="og:type" content="website" />
@@ -26,7 +26,7 @@
     <meta property="og:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more. Everything runs in your browser — no backend, no data upload." />
     <meta property="og:url" content="https://skematografi.github.io/auto-utility-tool/" />
-    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.1.0" />
+    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.2.5" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="DataDev Utilities — terminal-styled developer &amp; data toolkit" />
@@ -37,7 +37,7 @@
     <meta name="twitter:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
     <meta name="twitter:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
-    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.1.0" />
+    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.2.5" />
 
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,7 @@
         rel="stylesheet">
         
     <!-- Google Analytics -->
-    <script src="assets/js/analytics.js?v=1.1.0"></script>
+    <script src="assets/js/analytics.js?v=1.2.5"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,7 +70,10 @@
     <!-- JSZip for packaging split output into a ZIP file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    <link rel="stylesheet" href="assets/css/styles.css?v=1.1.0">
+    <link rel="stylesheet" href="assets/css/styles.css?v=1.2.5">
+
+    <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
+    <script src="assets/js/theme.js?v=1.2.5"></script>
 </head>
 
 <body
@@ -84,8 +87,16 @@
         class="relative z-10 w-full max-w-4xl rounded-xl overflow-hidden ring-1 ring-zinc-700/60 bg-zinc-900/30 backdrop-blur-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85),0_0_40px_-12px_rgba(16,185,129,0.12)]">
 
         <!-- Title bar -->
-        <div class="flex items-center justify-center px-4 py-3 bg-zinc-800/50 border-b border-zinc-700/60">
-            <h1 class="text-xs sm:text-sm font-semibold text-zinc-400 truncate px-2">DataDev Utilities</h1>
+        <div class="relative flex items-center justify-center px-4 py-3 bg-zinc-800/50 border-b border-zinc-700/60">
+            <h1 class="text-sm sm:text-base md:text-lg font-bold tracking-tight text-zinc-300 truncate px-8">DataDev
+                Utilities</h1>
+            <!-- Theme switch: slides left (dark, default) / right (light) -->
+            <button id="themeToggle" type="button" role="switch" aria-checked="false" aria-label="Switch theme"
+                title="Switch to light mode" class="theme-switch absolute right-3 cursor-pointer">
+                <span id="themeToggleKnob" class="theme-switch-knob">
+                    <i data-lucide="moon" class="w-3 h-3"></i>
+                </span>
+            </button>
         </div>
 
         <!-- Body -->
@@ -1075,22 +1086,22 @@ where a.product_name = {product_name};"></textarea>
 
     <!-- Shared helper & navigation -->
     <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
-    <script src="assets/js/clipboard.js?v=1.1.0"></script>
-    <script src="assets/js/version.js?v=1.1.0"></script>
-    <script src="assets/js/parallax.js?v=1.1.0"></script>
-    <script src="assets/js/tabs.js?v=1.1.0"></script>
+    <script src="assets/js/clipboard.js?v=1.2.5"></script>
+    <script src="assets/js/version.js?v=1.2.5"></script>
+    <script src="assets/js/parallax.js?v=1.2.5"></script>
+    <script src="assets/js/tabs.js?v=1.2.5"></script>
     <!-- Per-tab logic (split by function) -->
-    <script src="assets/js/calculator.js?v=1.1.0"></script>
-    <script src="assets/js/duplicates.js?v=1.1.0"></script>
-    <script src="assets/js/nonAscii.js?v=1.1.0"></script>
-    <script src="assets/js/compare.js?v=1.1.0"></script>
-    <script src="assets/js/sqlGenerator.js?v=1.1.0"></script>
-    <script src="assets/js/splitFile.js?v=1.1.0"></script>
-    <script src="assets/js/whereIn.js?v=1.1.0"></script>
-    <script src="assets/js/charCount.js?v=1.1.0"></script>
-    <script src="assets/js/jsonToSql.js?v=1.1.0"></script>
-    <script src="assets/js/sort.js?v=1.1.0"></script>
-    <script src="assets/js/mergeSql.js?v=1.1.0"></script>
+    <script src="assets/js/calculator.js?v=1.2.5"></script>
+    <script src="assets/js/duplicates.js?v=1.2.5"></script>
+    <script src="assets/js/nonAscii.js?v=1.2.5"></script>
+    <script src="assets/js/compare.js?v=1.2.5"></script>
+    <script src="assets/js/sqlGenerator.js?v=1.2.5"></script>
+    <script src="assets/js/splitFile.js?v=1.2.5"></script>
+    <script src="assets/js/whereIn.js?v=1.2.5"></script>
+    <script src="assets/js/charCount.js?v=1.2.5"></script>
+    <script src="assets/js/jsonToSql.js?v=1.2.5"></script>
+    <script src="assets/js/sort.js?v=1.2.5"></script>
+    <script src="assets/js/mergeSql.js?v=1.2.5"></script>
 </body>
 
 </html>
