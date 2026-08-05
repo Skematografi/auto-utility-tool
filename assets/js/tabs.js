@@ -16,6 +16,7 @@ const tabRestoreBtn = document.getElementById('tabRestoreBtn');
 const tabSortBtn = document.getElementById('tabSortBtn');
 const tabMergeSqlBtn = document.getElementById('tabMergeSqlBtn');
 const tabDummyBtn = document.getElementById('tabDummyBtn');
+const tabLogBtn = document.getElementById('tabLogBtn');
 
 const calcView = document.getElementById('calcView');
 const dupView = document.getElementById('dupView');
@@ -29,6 +30,7 @@ const restoreView = document.getElementById('restoreView');
 const sortView = document.getElementById('sortView');
 const mergeSqlView = document.getElementById('mergeSqlView');
 const dummyView = document.getElementById('dummyView');
+const logView = document.getElementById('logView');
 
 tabCalcBtn.addEventListener('click', () => switchTab('calc'));
 tabDupBtn.addEventListener('click', () => switchTab('dup'));
@@ -42,6 +44,7 @@ tabRestoreBtn.addEventListener('click', () => switchTab('restore'));
 tabSortBtn.addEventListener('click', () => switchTab('sort'));
 tabMergeSqlBtn.addEventListener('click', () => switchTab('mergesql'));
 tabDummyBtn.addEventListener('click', () => switchTab('dummy'));
+tabLogBtn.addEventListener('click', () => switchTab('log'));
 
 // Base tab class (consistent with the terminal-style tab grid in index.html)
 const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
@@ -62,6 +65,7 @@ function switchTab(tab) {
     tabSortBtn.className = TAB_INACTIVE;
     tabMergeSqlBtn.className = TAB_INACTIVE;
     tabDummyBtn.className = TAB_INACTIVE;
+    tabLogBtn.className = TAB_INACTIVE;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
@@ -75,6 +79,7 @@ function switchTab(tab) {
     sortView.classList.add('hidden');
     mergeSqlView.classList.add('hidden');
     dummyView.classList.add('hidden');
+    logView.classList.add('hidden');
 
     if (tab === 'calc') {
         tabCalcBtn.className = TAB_ACTIVE;
@@ -112,6 +117,9 @@ function switchTab(tab) {
     } else if (tab === 'dummy') {
         tabDummyBtn.className = TAB_ACTIVE;
         dummyView.classList.remove('hidden');
+    } else if (tab === 'log') {
+        tabLogBtn.className = TAB_ACTIVE;
+        logView.classList.remove('hidden');
     }
     lucide.createIcons();
 }

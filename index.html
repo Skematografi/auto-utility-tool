@@ -16,8 +16,8 @@
     <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
 
     <!-- Favicon (terminal-themed SVG) -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.4.0" />
-    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.4.0" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.5.2" />
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.5.2" />
 
     <!-- Open Graph (Facebook, LinkedIn, Product Hunt, etc.) -->
     <meta property="og:type" content="website" />
@@ -26,7 +26,7 @@
     <meta property="og:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more. Everything runs in your browser — no backend, no data upload." />
     <meta property="og:url" content="https://skematografi.github.io/auto-utility-tool/" />
-    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.4.0" />
+    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.5.2" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="DataDev Utilities — terminal-styled developer &amp; data toolkit" />
@@ -37,7 +37,7 @@
     <meta name="twitter:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
     <meta name="twitter:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
-    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.4.0" />
+    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.5.2" />
 
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,7 @@
         rel="stylesheet">
         
     <!-- Google Analytics -->
-    <script src="assets/js/analytics.js?v=1.4.0"></script>
+    <script src="assets/js/analytics.js?v=1.5.2"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,10 +70,10 @@
     <!-- JSZip for packaging split output into a ZIP file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    <link rel="stylesheet" href="assets/css/styles.css?v=1.4.0">
+    <link rel="stylesheet" href="assets/css/styles.css?v=1.5.2">
 
     <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
-    <script src="assets/js/theme.js?v=1.4.0"></script>
+    <script src="assets/js/theme.js?v=1.5.2"></script>
 </head>
 
 <body
@@ -148,6 +148,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="arrow-left-right" class="w-4 h-4 shrink-0"></i>
                     diff
+                </button>
+                <button id="tabLogBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="scroll-text" class="w-4 h-4 shrink-0"></i>
+                    log
                 </button>
                 <button id="tabSplitBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
@@ -1131,6 +1136,99 @@ where a.product_name = {product_name};"></textarea>
                 <div id="dummyStatus" class="hidden text-sm font-semibold px-4 py-3 rounded-md"></div>
             </div>
 
+            <!-- TAB 13: LOG VIEWER -->
+            <div id="logView" class="space-y-6 hidden">
+
+                <!-- 1. Input: upload or paste -->
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-semibold text-zinc-500"><span class="text-emerald-500">$</span>
+                            log_source</label>
+                        <span class="text-xs text-zinc-600 italic">upload or paste</span>
+                    </div>
+                    <label for="logFileInput"
+                        class="flex items-center justify-center gap-2 w-full py-3 px-4 border-2 border-dashed border-zinc-700 rounded-md bg-black/40 hover:bg-black/60 hover:border-emerald-500/60 cursor-pointer transition-all text-center">
+                        <i data-lucide="upload-cloud" class="w-4 h-4 text-emerald-400"></i>
+                        <span class="text-xs font-semibold text-emerald-400">click to upload a .log / .txt file</span>
+                        <input id="logFileInput" type="file" accept=".log,.txt,text/plain" class="hidden">
+                    </label>
+                    <textarea id="logInput"
+                        class="w-full min-h-[110px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste log lines here — e.g.
+2026-07-25 11:06:39 [::1][USER01][-][warning][application] message"></textarea>
+                </div>
+
+                <!-- 2. Toolbar: stats, search, level filter -->
+                <div class="bg-black/40 p-4 sm:p-5 rounded-md border border-zinc-800 space-y-4">
+                    <div id="logStats" class="flex items-center gap-2 flex-wrap">
+                        <div class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                            <span class="text-xs font-semibold text-emerald-500">entries:</span>
+                            <span id="logTotal" class="font-extrabold text-emerald-300 text-sm">0</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-sky-500/10 border border-sky-500/20 px-3 py-1.5 rounded-full">
+                            <span class="text-xs font-semibold text-sky-500">shown:</span>
+                            <span id="logShown" class="font-extrabold text-sky-300 text-sm">0</span>
+                        </div>
+                        <div id="logLevelCounts" class="flex items-center gap-2 flex-wrap"></div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <div class="relative flex-grow">
+                            <input id="logSearch" type="text" placeholder="search all columns…"
+                                class="w-full p-3 pl-9 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all">
+                            <i data-lucide="search"
+                                class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        </div>
+                        <select id="logLevel"
+                            class="w-full sm:w-40 shrink-0 p-3 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-sm text-emerald-300 transition-all cursor-pointer">
+                            <option value="">all levels</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 3. Table -->
+                <div class="bg-black/40 rounded-md border border-zinc-800 overflow-hidden">
+                    <div class="overflow-x-auto thin-scroll">
+                        <table class="w-full text-xs sm:text-sm text-left">
+                            <thead class="bg-zinc-800/60 text-zinc-400">
+                                <tr>
+                                    <th class="px-3 py-2.5 font-semibold whitespace-nowrap">time</th>
+                                    <th class="px-3 py-2.5 font-semibold whitespace-nowrap">level</th>
+                                    <th class="px-3 py-2.5 font-semibold whitespace-nowrap">user</th>
+                                    <th class="px-3 py-2.5 font-semibold whitespace-nowrap">ip</th>
+                                    <th class="px-3 py-2.5 font-semibold whitespace-nowrap">category</th>
+                                    <th class="px-3 py-2.5 font-semibold">message</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logTableBody" class="divide-y divide-zinc-800/70"></tbody>
+                        </table>
+                    </div>
+                    <p id="logEmpty" class="text-sm text-zinc-600 italic text-center py-8">Upload or paste a log to
+                        begin.</p>
+                </div>
+
+                <!-- 4. Pagination -->
+                <div id="logPager" class="hidden flex items-center justify-between gap-2 flex-wrap">
+                    <span id="logPageInfo" class="text-xs text-zinc-500"></span>
+                    <div class="flex items-center gap-2">
+                        <select id="logPerPage"
+                            class="p-2 bg-black/50 border border-zinc-700 rounded-md outline-none text-xs text-emerald-300 cursor-pointer">
+                            <option value="50">50 / page</option>
+                            <option value="100" selected>100 / page</option>
+                            <option value="250">250 / page</option>
+                        </select>
+                        <button id="logPrevBtn"
+                            class="flex items-center gap-1 py-2 px-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                            <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> prev
+                        </button>
+                        <button id="logNextBtn"
+                            class="flex items-center gap-1 py-2 px-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md text-xs font-semibold transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+                            next <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <!-- Footer status bar -->
@@ -1161,23 +1259,24 @@ where a.product_name = {product_name};"></textarea>
 
     <!-- Shared helper & navigation -->
     <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
-    <script src="assets/js/clipboard.js?v=1.4.0"></script>
-    <script src="assets/js/version.js?v=1.4.0"></script>
-    <script src="assets/js/parallax.js?v=1.4.0"></script>
-    <script src="assets/js/tabs.js?v=1.4.0"></script>
+    <script src="assets/js/clipboard.js?v=1.5.2"></script>
+    <script src="assets/js/version.js?v=1.5.2"></script>
+    <script src="assets/js/parallax.js?v=1.5.2"></script>
+    <script src="assets/js/tabs.js?v=1.5.2"></script>
     <!-- Per-tab logic (split by function) -->
-    <script src="assets/js/calculator.js?v=1.4.0"></script>
-    <script src="assets/js/duplicates.js?v=1.4.0"></script>
-    <script src="assets/js/nonAscii.js?v=1.4.0"></script>
-    <script src="assets/js/compare.js?v=1.4.0"></script>
-    <script src="assets/js/sqlGenerator.js?v=1.4.0"></script>
-    <script src="assets/js/splitFile.js?v=1.4.0"></script>
-    <script src="assets/js/whereIn.js?v=1.4.0"></script>
-    <script src="assets/js/charCount.js?v=1.4.0"></script>
-    <script src="assets/js/jsonToSql.js?v=1.4.0"></script>
-    <script src="assets/js/sort.js?v=1.4.0"></script>
-    <script src="assets/js/mergeSql.js?v=1.4.0"></script>
-    <script src="assets/js/dummyFile.js?v=1.4.0"></script>
+    <script src="assets/js/calculator.js?v=1.5.2"></script>
+    <script src="assets/js/duplicates.js?v=1.5.2"></script>
+    <script src="assets/js/nonAscii.js?v=1.5.2"></script>
+    <script src="assets/js/compare.js?v=1.5.2"></script>
+    <script src="assets/js/sqlGenerator.js?v=1.5.2"></script>
+    <script src="assets/js/splitFile.js?v=1.5.2"></script>
+    <script src="assets/js/whereIn.js?v=1.5.2"></script>
+    <script src="assets/js/charCount.js?v=1.5.2"></script>
+    <script src="assets/js/jsonToSql.js?v=1.5.2"></script>
+    <script src="assets/js/sort.js?v=1.5.2"></script>
+    <script src="assets/js/mergeSql.js?v=1.5.2"></script>
+    <script src="assets/js/dummyFile.js?v=1.5.2"></script>
+    <script src="assets/js/logViewer.js?v=1.5.2"></script>
 </body>
 
 </html>

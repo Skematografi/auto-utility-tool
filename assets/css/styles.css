@@ -432,3 +432,74 @@ html.light .text-amber-200 {
 html.light .bg-emerald-500\/10.border-emerald-500\/30 {
     border-color: rgba(37, 99, 235, 0.30);
 }
+
+/* --- Data table (log viewer) --- */
+
+/* Header row: a light slate band instead of the dark one */
+html.light .bg-zinc-800\/60 {
+    background-color: rgba(226, 232, 240, 0.85);
+}
+
+html.light thead.bg-zinc-800\/60 {
+    color: #334155;
+}
+
+/* Row separators and hover */
+html.light .divide-zinc-800\/70>:not([hidden])~:not([hidden]) {
+    border-color: rgba(148, 163, 184, 0.35);
+}
+
+html.light .hover\:bg-zinc-800\/40:hover {
+    background-color: rgba(255, 255, 255, 0.55);
+}
+
+/* Pagination buttons (scoped by id so the active tab, which also uses
+   .bg-zinc-800, keeps its own accent colour) */
+html.light #logPrevBtn,
+html.light #logNextBtn {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #334155;
+}
+
+html.light #logPrevBtn:hover,
+html.light #logNextBtn:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* Level badges: darker text so they stay readable over the sky background */
+html.light .bg-red-500\/15 {
+    background-color: rgba(220, 38, 38, 0.12);
+}
+
+html.light .border-red-500\/30 {
+    border-color: rgba(220, 38, 38, 0.35);
+}
+
+html.light .bg-amber-500\/15 {
+    background-color: rgba(217, 119, 6, 0.14);
+}
+
+html.light .border-amber-500\/30 {
+    border-color: rgba(217, 119, 6, 0.35);
+}
+
+html.light .bg-sky-500\/15 {
+    background-color: rgba(2, 132, 199, 0.12);
+}
+
+html.light .border-sky-500\/30 {
+    border-color: rgba(2, 132, 199, 0.35);
+}
+
+html.light .bg-zinc-500\/15 {
+    background-color: rgba(100, 116, 139, 0.12);
+}
+
+html.light .border-zinc-500\/30 {
+    border-color: rgba(100, 116, 139, 0.35);
+}
+
+/* Search match highlight */
+html.light .bg-amber-400\/30 {
+    background-color: rgba(250, 204, 21, 0.45);
+}
