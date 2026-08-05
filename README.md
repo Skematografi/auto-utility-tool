@@ -59,6 +59,12 @@ The app is organized into tabs, each a self-contained tool:
   * Optional **clear SQL comments** — strips `--`, `#`, and `/* */` comments while preserving string literals.
   * A **boundary comment** is inserted before each file (default: the filename); use `{filename}` as a placeholder to customize it.
 
+### Sticky note
+
+Alongside the tabs there is a **sticky note** panel — a scratchpad for parking values while you move between tools (a total from `calc` into `in()`, a column spotted in `log` into `sql`), since the clipboard only holds one item at a time.
+
+It is hidden by default and opens from the floating button in the bottom-right corner. The content is saved automatically in your browser (`localStorage`), so it survives tab switches and reloads, and never leaves your device. On wide screens the panel slides in beside the card without covering it; on narrower screens it overlays the page.
+
 ## Run Locally
 
 Clone this repository:

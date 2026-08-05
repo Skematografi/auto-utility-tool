@@ -120,6 +120,107 @@ html.light .theme-switch-knob {
     }
 }
 
+/* ===== Sticky note panel =====
+   Fixed to the viewport and kept outside the card: the card's overflow-hidden
+   plus backdrop-blur would clip a fixed child and re-anchor it to the card. */
+:root {
+    --note-w: 320px;
+}
+
+.note-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: var(--note-w);
+    max-width: 85vw;
+    z-index: 20;
+    /* above #bg (0) and the card (10) */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    visibility: hidden;
+    /* also drops it out of the tab order while closed */
+    transform: translateX(100%);
+    transition: transform .22s ease, visibility 0s linear .22s;
+}
+
+html.note-open .note-panel {
+    visibility: visible;
+    transform: translateX(0);
+    transition: transform .22s ease, visibility 0s linear 0s;
+}
+
+/* Floating toggle, hidden while the panel is open (the panel has its own close button) */
+.note-fab {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
+}
+
+.note-fab:hover {
+    transform: scale(1.08);
+}
+
+html.note-open .note-fab {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.note-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease;
+    display: none;
+    /* wide screens shift the card instead of dimming it */
+}
+
+/* Wide screens: shift the page so the panel never covers the card.
+   The body padding ladder is p-3 / sm:p-6 / md:p-10, so the gutter here is 2.5rem. */
+@media (min-width: 1024px) {
+    html.note-open body {
+        padding-right: calc(var(--note-w) + 2.5rem);
+    }
+}
+
+/* Below 1024px there is no room to shift: overlay the panel and dim the page. */
+@media (max-width: 1023.98px) {
+    .note-backdrop {
+        display: block;
+    }
+
+    html.note-open .note-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    html.note-open body {
+        overflow: hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .note-panel,
+    .note-fab,
+    .note-backdrop {
+        transition: none;
+    }
+}
+
 /* ============================================================
    LIGHT MODE
    Dark is the default; adding the .light class on <html> repaints
@@ -502,4 +603,9 @@ html.light .border-zinc-500\/30 {
 /* Search match highlight */
 html.light .bg-amber-400\/30 {
     background-color: rgba(250, 204, 21, 0.45);
+}
+
+/* --- Sticky note --- */
+html.light .note-backdrop {
+    background: rgba(15, 23, 42, .35);
 }
