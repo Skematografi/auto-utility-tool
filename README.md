@@ -65,6 +65,10 @@ Alongside the tabs there is a **sticky note** panel — a scratchpad for parking
 
 It is hidden by default and opens from the floating button in the bottom-right corner. The content is saved automatically in your browser (`localStorage`), so it survives tab switches and reloads, and never leaves your device. On wide screens the panel slides in beside the card without covering it; on narrower screens it overlays the page.
 
+### Command palette
+
+Press **Ctrl+K** (or **Cmd+K** on macOS), or click the `⌘` icon in the title bar, to open a searchable command palette: type to fuzzy-filter and jump straight to any of the tabs above, or run a quick action (toggle theme, toggle the background animation, open the sticky note) without touching the mouse. Navigate with the arrow keys, confirm with **Enter**, dismiss with **Esc** or a click outside.
+
 ## Run Locally
 
 Clone this repository:
