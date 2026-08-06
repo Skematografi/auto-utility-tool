@@ -8,7 +8,7 @@ JS, open `index.html` directly or serve it statically. Deployed via GitHub Pages
 
 - Plain HTML + vanilla JavaScript (ES6), no bundler/transpiler
 - Tailwind CSS via CDN (`cdn.tailwindcss.com`) — utility classes inline in markup
-- Small custom CSS in `assets/css/styles.css` (terminal cursor, thin scrollbar, deep-space background)
+- Small custom CSS split by concern under `assets/css/` (base, components, light theme)
 - Lucide icons (CDN) — call `lucide.createIcons()` after injecting new `data-lucide` elements
 - SheetJS (`xlsx`) for reading/writing Excel & CSV; JSZip for zipping split output
 - JetBrains Mono (Google Fonts) for the terminal look
@@ -16,13 +16,19 @@ JS, open `index.html` directly or serve it statically. Deployed via GitHub Pages
 ## Structure
 
 ```
-index.html                 # ALL markup + <head> (meta/OG/Twitter, favicon, stylesheet & script links)
-assets/css/styles.css      # Custom CSS: blinking cursor, thin scrollbar, deep-space body bg, #bg canvas
+index.html                    # ALL markup + <head> (meta/OG/Twitter, favicon, stylesheet & script links)
+assets/css/
+  base.css           # Global resets: deep-space body bg, #bg canvas, blinking cursor, thin scrollbar
+  components.css      # Reusable widget styles: theme switch, sticky note panel, command palette
+  theme-light.css      # All html.light overrides (single source of truth for light mode)
 assets/images/             # favicon.svg, og-image.png, editor.webp
 assets/js/
   clipboard.js     # Shared handleClipboardCopy() helper (used by every copy button)
   tabs.js          # Tab navigation (switchTab) — every tab must be registered here
+  theme.js         # Light/dark theme switch (applied pre-paint) + persistence
   parallax.js      # Animated deep-space starfield background + footer on/off toggle (localStorage)
+  stickyNote.js    # Sticky note scratchpad panel (floating toggle, auto-save)
+  commandPalette.js # Ctrl+K command palette — fuzzy-jump to a tab or run a quick action
   version.js       # Footer version — fetches latest GitHub release tag (cached in localStorage)
   analytics.js     # Google Analytics (GA4) loader; skipped on localhost / file://
   calculator.js    # calc    — sum a list of numbers (accepts ID/EU number formats)
@@ -34,10 +40,16 @@ assets/js/
   whereIn.js       # in()    — turn a pasted list into WHERE IN (...) values (+ template, chunking)
   charCount.js     # chars   — character/byte counts & DB storage estimates
   jsonToSql.js     # restore — JSON → INSERT statements
+  sort.js          # sort    — sort a pasted list ascending/descending
+  mergeSql.js      # merge   — combine multiple .sql files into one
+  dummyFile.js     # dummy   — generate a blank file of a given type & size
+  logViewer.js     # log     — view/search a log file as a paginated table
 ```
 
 One JS file per tab; each file only touches its own tab's DOM ids. Shared/non-tab scripts
-(`clipboard`, `tabs`, `parallax`, `version`, `analytics`) are the exceptions.
+(`clipboard`, `tabs`, `theme`, `parallax`, `stickyNote`, `commandPalette`, `version`, `analytics`)
+are the exceptions. Custom CSS is likewise split by concern rather than kept in one file —
+add new component styles to `components.css`, and any `html.light` override to `theme-light.css`.
 
 Assets are referenced with a `?v=1.0.0` cache-busting query — bump it when an asset changes
 so returning users get the new version instead of a cached one.

@@ -21,7 +21,7 @@
     // Run immediately (script sits in <head>) so the page paints in the right theme
     applyTheme(currentTheme());
 
-    // Update the switch: the knob slides via CSS (see .theme-switch in styles.css),
+    // Update the switch: the knob slides via CSS (see .theme-switch in components.css),
     // here we only set the state and the icon of the active theme.
     function updateToggle(theme) {
         const btn = document.getElementById('themeToggle');

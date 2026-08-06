@@ -28,7 +28,7 @@ or serve statically; production runs on GitHub Pages.
 | Layer | Where | What it is |
 |-------|-------|------------|
 | Markup | `index.html` | ALL markup — tab grid + one `<div id="<name>View">` per tab |
-| Custom CSS | `assets/css/styles.css` | Blinking cursor, thin scrollbar, deep-space body bg, `#bg` canvas |
+| Custom CSS | `assets/css/{base,components,theme-light}.css` | Split by concern: resets/bg/canvas, reusable widgets, `html.light` overrides |
 | Navigation | `assets/js/tabs.js` | `switchTab()` — every tab registered here (consts, listener, reset, branch) |
 | Shared helper | `assets/js/clipboard.js` | `handleClipboardCopy()` — the ONLY clipboard implementation |
 | Tab logic | `assets/js/<feature>.js` | One file per tab; touches only its own tab's DOM ids |
@@ -36,7 +36,8 @@ or serve statically; production runs on GitHub Pages.
 
 Current tabs → files: `calc`→calculator.js, `dupes`→duplicates.js, `ascii`→nonAscii.js,
 `diff`→compare.js, `sql`→sqlGenerator.js, `split`→splitFile.js, `in()`→whereIn.js,
-`chars`→charCount.js, `restore`→jsonToSql.js.
+`chars`→charCount.js, `restore`→jsonToSql.js, `sort`→sort.js, `merge`→mergeSql.js,
+`dummy`→dummyFile.js, `log`→logViewer.js.
 
 CDN deps (script tags in `index.html`, the only allowed way to add libs):
 Tailwind CDN, Lucide icons, SheetJS (`XLSX`), JSZip. Font: JetBrains Mono.

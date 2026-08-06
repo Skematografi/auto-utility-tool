@@ -10,8 +10,10 @@ A1. This is a STATIC, CLIENT-SIDE app: plain HTML + vanilla JS. NEVER add a buil
 
 A2. ALL markup lives in index.html — one `<div id="<name>View" class="... hidden">` per tab.
     ALL logic lives in assets/js/ — exactly one file per tab, plus shared/non-tab helpers
-    (clipboard.js, tabs.js, parallax.js, version.js, analytics.js). Custom CSS lives in
-    assets/css/styles.css; images in assets/images/. A tab's JS only touches its own DOM ids.
+    (clipboard.js, tabs.js, theme.js, parallax.js, stickyNote.js, commandPalette.js, version.js,
+    analytics.js). Custom CSS is split by concern under assets/css/ (base.css, components.css,
+    theme-light.css — see CLAUDE.md); images in assets/images/. A tab's JS only touches its own
+    DOM ids.
 
 A3. Third-party libraries ONLY via CDN `<script>` tags in index.html, and only when
     genuinely needed. Current deps: Tailwind CDN, Lucide, SheetJS (xlsx), JSZip.
