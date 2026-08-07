@@ -29,7 +29,7 @@ assets/js/
   parallax.js      # Animated deep-space starfield background + footer on/off toggle (localStorage)
   stickyNote.js    # Sticky note scratchpad panel (floating toggle, auto-save)
   commandPalette.js # Ctrl+K command palette — fuzzy-jump to a tab or run a quick action
-  version.js       # Footer version — fetches latest GitHub release tag (cached in localStorage)
+  version.js       # Footer version — static "beta" label linking to the repo
   analytics.js     # Google Analytics (GA4) loader; skipped on localhost / file://
   calculator.js    # calc    — sum a list of numbers (accepts ID/EU number formats)
   duplicates.js    # dupes   — find duplicates (copy dupes / unique / non-dupes)
@@ -82,8 +82,8 @@ so returning users get the new version instead of a cached one.
 - New third-party libs only via CDN `<script>` in `index.html`, and only when necessary.
 - Generated SQL must be valid & safe to run: escape `'` by doubling (`''`); numbers unquoted.
 - Everything must keep working when opened as a static page (GitHub Pages / `file://`).
-- The only external network calls are non-core: Google Analytics and the footer version
-  fetch (GitHub Releases API) — the tools themselves must work fully offline.
+- The only external network call is non-core: Google Analytics — the tools themselves
+  must work fully offline.
 - Update `README.md` whenever features change.
 
 ## Run / verify

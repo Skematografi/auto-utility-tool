@@ -63,8 +63,8 @@ S3. Trim lines and drop empties when parsing pasted lists — but never dedupe o
 C1. Reference local assets with a `?v=<version>` query (scripts, stylesheet, favicon).
     Bump the version when an asset changes so users don't get a stale cached copy.
 
-C2. The only external network calls are non-core: Google Analytics (analytics.js) and
-    the footer version fetch (version.js, GitHub Releases API). Core tools must work offline.
+C2. The only external network call is non-core: Google Analytics (analytics.js).
+    Core tools must work offline. The footer shows a static "beta" label (version.js).
 
 ## Forbidden Anti-patterns
 
