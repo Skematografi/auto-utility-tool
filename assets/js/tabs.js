@@ -84,15 +84,19 @@ function switchTab(tab) {
     if (tab === 'calc') {
         tabCalcBtn.className = TAB_ACTIVE;
         calcView.classList.remove('hidden');
+        numberInput.focus();
     } else if (tab === 'dup') {
         tabDupBtn.className = TAB_ACTIVE;
         dupView.classList.remove('hidden');
+        dupInput.focus();
     } else if (tab === 'ascii') {
         tabAsciiBtn.className = TAB_ACTIVE;
         asciiView.classList.remove('hidden');
+        asciiInput.focus();
     } else if (tab === 'compare') {
         tabCompareBtn.className = TAB_ACTIVE;
         compareView.classList.remove('hidden');
+        compareLeft.focus();
     } else if (tab === 'sql') {
         tabSqlBtn.className = TAB_ACTIVE;
         sqlView.classList.remove('hidden');
@@ -102,15 +106,19 @@ function switchTab(tab) {
     } else if (tab === 'wherein') {
         tabWhereInBtn.className = TAB_ACTIVE;
         whereInView.classList.remove('hidden');
+        whereInInput.focus();
     } else if (tab === 'charcount') {
         tabCharCountBtn.className = TAB_ACTIVE;
         charCountView.classList.remove('hidden');
+        charCountInput.focus();
     } else if (tab === 'restore') {
         tabRestoreBtn.className = TAB_ACTIVE;
         restoreView.classList.remove('hidden');
+        restoreJsonInput.focus();
     } else if (tab === 'sort') {
         tabSortBtn.className = TAB_ACTIVE;
         sortView.classList.remove('hidden');
+        sortInput.focus();
     } else if (tab === 'mergesql') {
         tabMergeSqlBtn.className = TAB_ACTIVE;
         mergeSqlView.classList.remove('hidden');
@@ -120,6 +128,7 @@ function switchTab(tab) {
     } else if (tab === 'log') {
         tabLogBtn.className = TAB_ACTIVE;
         logView.classList.remove('hidden');
+        logInput.focus();
     }
     lucide.createIcons();
 }
