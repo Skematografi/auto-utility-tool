@@ -16,8 +16,8 @@
     <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
 
     <!-- Favicon (terminal-themed SVG) -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.7.0" />
-    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.7.0" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=1.9.0" />
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=1.9.0" />
 
     <!-- Open Graph (Facebook, LinkedIn, Product Hunt, etc.) -->
     <meta property="og:type" content="website" />
@@ -26,7 +26,7 @@
     <meta property="og:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more. Everything runs in your browser — no backend, no data upload." />
     <meta property="og:url" content="https://skematografi.github.io/auto-utility-tool/" />
-    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.7.0" />
+    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.9.0" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="DataDev Utilities — terminal-styled developer &amp; data toolkit" />
@@ -37,7 +37,7 @@
     <meta name="twitter:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
     <meta name="twitter:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
-    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.7.0" />
+    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=1.9.0" />
 
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,7 @@
         rel="stylesheet">
         
     <!-- Google Analytics -->
-    <script src="assets/js/analytics.js?v=1.7.0"></script>
+    <script src="assets/js/analytics.js?v=1.9.0"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,12 +70,12 @@
     <!-- JSZip for packaging split output into a ZIP file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    <link rel="stylesheet" href="assets/css/base.css?v=1.7.0">
-    <link rel="stylesheet" href="assets/css/components.css?v=1.7.0">
-    <link rel="stylesheet" href="assets/css/theme-light.css?v=1.7.0">
+    <link rel="stylesheet" href="assets/css/base.css?v=1.9.0">
+    <link rel="stylesheet" href="assets/css/components.css?v=1.9.0">
+    <link rel="stylesheet" href="assets/css/theme-light.css?v=1.9.0">
 
     <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
-    <script src="assets/js/theme.js?v=1.7.0"></script>
+    <script src="assets/js/theme.js?v=1.9.0"></script>
 </head>
 
 <body
@@ -110,8 +110,8 @@
         <!-- Body -->
         <div class="p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-zinc-950/70">
 
-            <!-- Hero + privacy line -->
-            <div class="text-sm space-y-1.5">
+            <!-- Hero + privacy line: hidden in focus mode (see focusMode.js) -->
+            <div id="heroBlock" class="text-sm space-y-1.5">
                 <p class="text-zinc-300 pl-5 text-base sm:text-lg font-semibold">
                     A fast toolkit for developers &amp; data analysts
                     <!-- <span class="cursor text-emerald-400">▊</span> -->
@@ -125,8 +125,9 @@
                 </p>
             </div>
 
-            <!-- Tab Navigation: max 5 per row, ordered from simple data tools to SQL -->
-            <div class="grid grid-cols-3 sm:grid-cols-5 gap-1.5 bg-black/40 border border-zinc-800 p-2 rounded-lg">
+            <!-- Tab Navigation: max 5 per row, ordered from simple data tools to SQL.
+                 Hidden in focus mode too — Ctrl+K still switches tabs without it. -->
+            <div id="tabGrid" class="grid grid-cols-3 sm:grid-cols-5 gap-1.5 bg-black/40 border border-zinc-800 p-2 rounded-lg">
                 <button id="tabCalcBtn"
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
                     <i data-lucide="calculator" class="w-4 h-4 shrink-0"></i>
@@ -1254,6 +1255,11 @@ where a.product_name = {product_name};"></textarea>
                     class="flex items-center hover:text-emerald-400 transition-colors">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
                 </button>
+                <button id="focusToggle" type="button" title="Focus mode: off (click to turn on)"
+                    aria-label="Toggle focus mode" aria-pressed="false"
+                    class="flex items-center text-zinc-600 hover:text-emerald-400 transition-colors">
+                    <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i>
+                </button>
                 <a href="https://github.com/Skematografi/auto-utility-tool" target="_blank" rel="noopener"
                     title="View source on GitHub" aria-label="View source on GitHub"
                     class="flex items-center hover:text-emerald-400 transition-colors">
@@ -1325,26 +1331,27 @@ where a.product_name = {product_name};"></textarea>
 
     <!-- Shared helper & navigation -->
     <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
-    <script src="assets/js/clipboard.js?v=1.7.0"></script>
-    <script src="assets/js/version.js?v=1.7.0"></script>
-    <script src="assets/js/parallax.js?v=1.7.0"></script>
-    <script src="assets/js/tabs.js?v=1.7.0"></script>
-    <script src="assets/js/stickyNote.js?v=1.7.0"></script>
-    <script src="assets/js/commandPalette.js?v=1.7.0"></script>
+    <script src="assets/js/clipboard.js?v=1.9.0"></script>
+    <script src="assets/js/version.js?v=1.9.0"></script>
+    <script src="assets/js/parallax.js?v=1.9.0"></script>
+    <script src="assets/js/focusMode.js?v=1.9.0"></script>
+    <script src="assets/js/tabs.js?v=1.9.0"></script>
+    <script src="assets/js/stickyNote.js?v=1.9.0"></script>
+    <script src="assets/js/commandPalette.js?v=1.9.0"></script>
     <!-- Per-tab logic (split by function) -->
-    <script src="assets/js/calculator.js?v=1.7.0"></script>
-    <script src="assets/js/duplicates.js?v=1.7.0"></script>
-    <script src="assets/js/nonAscii.js?v=1.7.0"></script>
-    <script src="assets/js/compare.js?v=1.7.0"></script>
-    <script src="assets/js/sqlGenerator.js?v=1.7.0"></script>
-    <script src="assets/js/splitFile.js?v=1.7.0"></script>
-    <script src="assets/js/whereIn.js?v=1.7.0"></script>
-    <script src="assets/js/charCount.js?v=1.7.0"></script>
-    <script src="assets/js/jsonToSql.js?v=1.7.0"></script>
-    <script src="assets/js/sort.js?v=1.7.0"></script>
-    <script src="assets/js/mergeSql.js?v=1.7.0"></script>
-    <script src="assets/js/dummyFile.js?v=1.7.0"></script>
-    <script src="assets/js/logViewer.js?v=1.7.0"></script>
+    <script src="assets/js/calculator.js?v=1.9.0"></script>
+    <script src="assets/js/duplicates.js?v=1.9.0"></script>
+    <script src="assets/js/nonAscii.js?v=1.9.0"></script>
+    <script src="assets/js/compare.js?v=1.9.0"></script>
+    <script src="assets/js/sqlGenerator.js?v=1.9.0"></script>
+    <script src="assets/js/splitFile.js?v=1.9.0"></script>
+    <script src="assets/js/whereIn.js?v=1.9.0"></script>
+    <script src="assets/js/charCount.js?v=1.9.0"></script>
+    <script src="assets/js/jsonToSql.js?v=1.9.0"></script>
+    <script src="assets/js/sort.js?v=1.9.0"></script>
+    <script src="assets/js/mergeSql.js?v=1.9.0"></script>
+    <script src="assets/js/dummyFile.js?v=1.9.0"></script>
+    <script src="assets/js/logViewer.js?v=1.9.0"></script>
 </body>
 
 </html>

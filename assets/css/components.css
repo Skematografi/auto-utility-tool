@@ -258,3 +258,15 @@ html.palette-open .palette-box {
         transition: none;
     }
 }
+
+/* ===== Focus mode =====
+   For screen-sharing/demos: hides the marketing hero text and the floating
+   sticky-note/command-palette triggers, leaving just the title bar, tab grid
+   and active tool. The toggle itself (#focusToggle, in the footer) is never
+   part of this hidden set, so it always stays reachable to turn back off. */
+html.focus-mode #heroBlock,
+html.focus-mode #tabGrid,
+html.focus-mode #noteFab,
+html.focus-mode #paletteBtn {
+    display: none;
+}
