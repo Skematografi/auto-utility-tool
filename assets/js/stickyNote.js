@@ -86,4 +86,12 @@
         if (!input.value) return;
         handleClipboardCopy(input.value, copyBtn, 'copy');
     });
+
+    // Exposed for the command palette: the FAB itself only ever opens (it's
+    // hidden via pointer-events once open, so a real click can't reach it
+    // again), but a synthetic .click() ignores that — this checks the actual
+    // state instead of blindly opening every time.
+    window.toggleNote = function () {
+        setOpen(!document.documentElement.classList.contains('note-open'));
+    };
 })();
