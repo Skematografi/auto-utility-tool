@@ -63,6 +63,12 @@ The app is organized into tabs, each a self-contained tool:
   * **tree** — an expandable/collapsible tree (native `<details>`, no extra JS needed to toggle), with string/number/boolean/null values color-coded.
   * Shows a `valid` / `invalid` status badge and the total key count, and surfaces the parser's exact error message on invalid input.
   * `copy` grabs the pretty-printed JSON regardless of which view is active.
+* **`csv`** (CSV Viewer) — Paste delimited text or upload a `.csv` file and browse it as a spreadsheet-style table, processed live:
+  * The first row is always treated as the header; RFC4180-style quoted fields (embedded delimiter, quotes, newlines) always work.
+  * **Delimiter** is configurable — comma, semicolon, pipe, tab, or any single custom character.
+  * **Filter** — a search box matches across every column, plus a per-column filter box in the header row (Excel-style, all active filters combine); results are paginated (50/100/250 per page) so large files stay responsive.
+  * Bordered cells, row numbers, and a sticky header keep it readable like a spreadsheet.
+  * `copy filtered` copies the currently filtered rows (with header) back out as delimited text.
 
 ### Sticky note
 
