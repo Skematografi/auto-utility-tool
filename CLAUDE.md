@@ -44,6 +44,7 @@ assets/js/
   mergeSql.js      # merge   — combine multiple .sql files into one
   dummyFile.js     # dummy   — generate a blank file of a given type & size
   logViewer.js     # log     — view/search a log file as a paginated table
+  jsonFormat.js    # json    — live JSON formatter (code view / tree view)
 ```
 
 One JS file per tab; each file only touches its own tab's DOM ids. Shared/non-tab scripts

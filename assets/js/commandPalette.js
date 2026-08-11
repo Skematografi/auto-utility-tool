@@ -27,6 +27,7 @@
         { label: 'sql — generate SQL from Excel/CSV', icon: 'database', run: () => switchTab('sql') },
         { label: 'restore — JSON to SQL INSERT', icon: 'database-backup', run: () => switchTab('restore') },
         { label: 'merge — combine SQL files', icon: 'git-merge', run: () => switchTab('mergesql') },
+        { label: 'json — format JSON as code or tree', icon: 'braces', run: () => switchTab('json') },
         { label: 'toggle theme (light / dark)', icon: 'sun-moon', run: () => document.getElementById('themeToggle')?.click() },
         { label: 'toggle background animation', icon: 'sparkles', run: () => document.getElementById('bgToggle')?.click() },
         { label: 'toggle sticky note', icon: 'sticky-note', run: () => toggleNote() },

@@ -16,8 +16,8 @@
     <link rel="canonical" href="https://skematografi.github.io/auto-utility-tool/" />
 
     <!-- Favicon (terminal-themed SVG) -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=2.2.0" />
-    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=2.2.0" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg?v=2.3.0" />
+    <link rel="apple-touch-icon" href="assets/images/favicon.svg?v=2.3.0" />
 
     <!-- Open Graph (Facebook, LinkedIn, Product Hunt, etc.) -->
     <meta property="og:type" content="website" />
@@ -26,7 +26,7 @@
     <meta property="og:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more. Everything runs in your browser — no backend, no data upload." />
     <meta property="og:url" content="https://skematografi.github.io/auto-utility-tool/" />
-    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=2.2.0" />
+    <meta property="og:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=2.3.0" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="DataDev Utilities — terminal-styled developer &amp; data toolkit" />
@@ -37,7 +37,7 @@
     <meta name="twitter:title" content="DataDev Utilities — Client-side toolkit for developers &amp; data analysts" />
     <meta name="twitter:description"
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
-    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=2.2.0" />
+    <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=2.3.0" />
 
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,7 +46,7 @@
         rel="stylesheet">
         
     <!-- Google Analytics -->
-    <script src="assets/js/analytics.js?v=2.2.0"></script>
+    <script src="assets/js/analytics.js?v=2.3.0"></script>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -70,12 +70,12 @@
     <!-- JSZip for packaging split output into a ZIP file -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-    <link rel="stylesheet" href="assets/css/base.css?v=2.2.0">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.2.0">
-    <link rel="stylesheet" href="assets/css/theme-light.css?v=2.2.0">
+    <link rel="stylesheet" href="assets/css/base.css?v=2.3.0">
+    <link rel="stylesheet" href="assets/css/components.css?v=2.3.0">
+    <link rel="stylesheet" href="assets/css/theme-light.css?v=2.3.0">
 
     <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
-    <script src="assets/js/theme.js?v=2.2.0"></script>
+    <script src="assets/js/theme.js?v=2.3.0"></script>
 </head>
 
 <body
@@ -192,6 +192,11 @@
                     class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                     <i data-lucide="git-merge" class="w-4 h-4 shrink-0"></i>
                     merge
+                </button>
+                <button id="tabJsonBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="braces" class="w-4 h-4 shrink-0"></i>
+                    json
                 </button>
             </div>
 
@@ -1238,6 +1243,67 @@ where a.product_name = {product_name};"></textarea>
                 </div>
             </div>
 
+            <!-- TAB: JSON FORMATTER VIEW -->
+            <div id="jsonView" class="space-y-6 hidden">
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="jsonInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> json_input</label>
+                        <span class="text-xs text-zinc-600 italic">resizeable</span>
+                    </div>
+                    <textarea id="jsonInput"
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste json here — formats live
+#
+# example:
+{&quot;id&quot;:1,&quot;name&quot;:&quot;alice&quot;,&quot;tags&quot;:[&quot;a&quot;,&quot;b&quot;]}"></textarea>
+                </div>
+
+                <!-- Mode Toggle: Code / Tree -->
+                <div class="flex bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1 w-full sm:w-fit">
+                    <button id="jsonModeCodeBtn"
+                        class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
+                        <i data-lucide="code-2" class="w-4 h-4"></i>
+                        code
+                    </button>
+                    <button id="jsonModeTreeBtn"
+                        class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                        <i data-lucide="list-tree" class="w-4 h-4"></i>
+                        tree
+                    </button>
+                </div>
+
+                <div class="bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800 space-y-4">
+                    <div class="flex items-center justify-between gap-2 flex-wrap">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <div
+                                class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-emerald-500">status:</span>
+                                <span id="jsonStatus" class="font-extrabold text-zinc-400 text-sm">waiting</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1.5 bg-sky-500/10 border border-sky-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-sky-500">keys:</span>
+                                <span id="jsonKeyCount" class="font-extrabold text-sky-300 text-sm">0</span>
+                            </div>
+                        </div>
+                        <button id="jsonCopyBtn" disabled
+                            class="flex items-center justify-center gap-2 py-2 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed">
+                            <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                            <span>copy</span>
+                        </button>
+                    </div>
+
+                    <pre id="jsonCodeOutput"
+                        class="w-full min-h-[200px] max-h-[500px] overflow-auto p-4 bg-black/60 border border-zinc-800 rounded-md text-sm text-emerald-300 thin-scroll whitespace-pre"></pre>
+
+                    <div id="jsonTreeOutput"
+                        class="hidden w-full min-h-[200px] max-h-[500px] overflow-auto p-4 bg-black/60 border border-zinc-800 rounded-md text-sm thin-scroll"></div>
+
+                    <p id="jsonError" class="hidden text-sm text-red-400"></p>
+                </div>
+            </div>
+
         </div>
 
         <!-- Footer status bar -->
@@ -1331,27 +1397,28 @@ where a.product_name = {product_name};"></textarea>
 
     <!-- Shared helper & navigation -->
     <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
-    <script src="assets/js/clipboard.js?v=2.2.0"></script>
-    <script src="assets/js/version.js?v=2.2.0"></script>
-    <script src="assets/js/parallax.js?v=2.2.0"></script>
-    <script src="assets/js/focusMode.js?v=2.2.0"></script>
-    <script src="assets/js/tabs.js?v=2.2.0"></script>
-    <script src="assets/js/stickyNote.js?v=2.2.0"></script>
-    <script src="assets/js/commandPalette.js?v=2.2.0"></script>
+    <script src="assets/js/clipboard.js?v=2.3.0"></script>
+    <script src="assets/js/version.js?v=2.3.0"></script>
+    <script src="assets/js/parallax.js?v=2.3.0"></script>
+    <script src="assets/js/focusMode.js?v=2.3.0"></script>
+    <script src="assets/js/tabs.js?v=2.3.0"></script>
+    <script src="assets/js/stickyNote.js?v=2.3.0"></script>
+    <script src="assets/js/commandPalette.js?v=2.3.0"></script>
     <!-- Per-tab logic (split by function) -->
-    <script src="assets/js/calculator.js?v=2.2.0"></script>
-    <script src="assets/js/duplicates.js?v=2.2.0"></script>
-    <script src="assets/js/nonAscii.js?v=2.2.0"></script>
-    <script src="assets/js/compare.js?v=2.2.0"></script>
-    <script src="assets/js/sqlGenerator.js?v=2.2.0"></script>
-    <script src="assets/js/splitFile.js?v=2.2.0"></script>
-    <script src="assets/js/whereIn.js?v=2.2.0"></script>
-    <script src="assets/js/charCount.js?v=2.2.0"></script>
-    <script src="assets/js/jsonToSql.js?v=2.2.0"></script>
-    <script src="assets/js/sort.js?v=2.2.0"></script>
-    <script src="assets/js/mergeSql.js?v=2.2.0"></script>
-    <script src="assets/js/dummyFile.js?v=2.2.0"></script>
-    <script src="assets/js/logViewer.js?v=2.2.0"></script>
+    <script src="assets/js/calculator.js?v=2.3.0"></script>
+    <script src="assets/js/duplicates.js?v=2.3.0"></script>
+    <script src="assets/js/nonAscii.js?v=2.3.0"></script>
+    <script src="assets/js/compare.js?v=2.3.0"></script>
+    <script src="assets/js/sqlGenerator.js?v=2.3.0"></script>
+    <script src="assets/js/splitFile.js?v=2.3.0"></script>
+    <script src="assets/js/whereIn.js?v=2.3.0"></script>
+    <script src="assets/js/charCount.js?v=2.3.0"></script>
+    <script src="assets/js/jsonToSql.js?v=2.3.0"></script>
+    <script src="assets/js/sort.js?v=2.3.0"></script>
+    <script src="assets/js/mergeSql.js?v=2.3.0"></script>
+    <script src="assets/js/dummyFile.js?v=2.3.0"></script>
+    <script src="assets/js/logViewer.js?v=2.3.0"></script>
+    <script src="assets/js/jsonFormat.js?v=2.3.0"></script>
 </body>
 
 </html>

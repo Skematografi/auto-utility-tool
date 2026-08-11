@@ -58,6 +58,11 @@ The app is organized into tabs, each a self-contained tool:
 * **`merge`** (Merge SQL) — Upload multiple `.sql` files and combine them into a single `.sql` (downloaded, merged in the order selected):
   * Optional **clear SQL comments** — strips `--`, `#`, and `/* */` comments while preserving string literals.
   * A **boundary comment** is inserted before each file (default: the filename); use `{filename}` as a placeholder to customize it.
+* **`json`** (JSON Formatter) — Paste any JSON and it formats live, no button required:
+  * **code** — pretty-printed, 2-space-indented JSON.
+  * **tree** — an expandable/collapsible tree (native `<details>`, no extra JS needed to toggle), with string/number/boolean/null values color-coded.
+  * Shows a `valid` / `invalid` status badge and the total key count, and surfaces the parser's exact error message on invalid input.
+  * `copy` grabs the pretty-printed JSON regardless of which view is active.
 
 ### Sticky note
 

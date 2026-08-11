@@ -37,7 +37,7 @@ or serve statically; production runs on GitHub Pages.
 Current tabs → files: `calc`→calculator.js, `dupes`→duplicates.js, `ascii`→nonAscii.js,
 `diff`→compare.js, `sql`→sqlGenerator.js, `split`→splitFile.js, `in()`→whereIn.js,
 `chars`→charCount.js, `restore`→jsonToSql.js, `sort`→sort.js, `merge`→mergeSql.js,
-`dummy`→dummyFile.js, `log`→logViewer.js.
+`dummy`→dummyFile.js, `log`→logViewer.js, `json`→jsonFormat.js.
 
 CDN deps (script tags in `index.html`, the only allowed way to add libs):
 Tailwind CDN, Lucide icons, SheetJS (`XLSX`), JSZip. Font: JetBrains Mono.
