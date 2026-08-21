@@ -39,6 +39,40 @@
         content="Generate SQL from Excel/CSV, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side." />
     <meta name="twitter:image" content="https://skematografi.github.io/auto-utility-tool/assets/images/og-image.png?v=2.5.0" />
 
+    <!-- Structured data: helps search engines show a rich result (free app, category, features) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "DataDev Utilities",
+        "url": "https://skematografi.github.io/auto-utility-tool/",
+        "description": "Browser-based toolkit for developers & data analysts: generate SQL from Excel/CSV, view/filter CSV and JSON, find duplicates, detect non-ASCII, compare text, split files, and more — 100% client-side, no data leaves your browser.",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (runs in any modern web browser)",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "SQL generator from Excel/CSV (delete, update, template)",
+            "CSV viewer with configurable delimiter and per-column filters",
+            "JSON formatter with code and tree view",
+            "Duplicate finder",
+            "Non-ASCII character detector",
+            "Text diff comparison",
+            "Excel/CSV file splitter",
+            "SQL WHERE IN generator",
+            "Application log viewer"
+        ]
+    }
+    </script>
+
+    <!-- Preconnect: shaves DNS/TLS off the runtime CDN scripts below (Tailwind, Lucide, SheetJS, JSZip) -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
     <!-- Font monospace: JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -207,6 +241,7 @@
 
             <!-- TAB 1: AUTO CALCULATOR VIEW -->
             <div id="calcView" class="space-y-6">
+                <h2 class="sr-only">Sum a list of numbers online — calculator with formula support and Indonesian/European number formats</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="numberInput" class="text-xs font-semibold text-zinc-500"><span
@@ -273,6 +308,7 @@
 
             <!-- TAB 2: FIND DUPLICATES VIEW -->
             <div id="dupView" class="space-y-6 hidden">
+                <h2 class="sr-only">Find duplicate values in a list — detect duplicates, unique, and non-duplicate entries</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="dupInput" class="text-xs font-semibold text-zinc-500"><span
@@ -339,6 +375,7 @@
 
             <!-- TAB 3: AUTO DETECT NON-ASCII VIEW -->
             <div id="asciiView" class="space-y-6 hidden">
+                <h2 class="sr-only">Detect non-ASCII and hidden Unicode characters in text or an Excel/CSV file</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="asciiInput" class="text-xs font-semibold text-zinc-500"><span
@@ -427,6 +464,7 @@
 
             <!-- TAB 4: AUTO COMPARE VIEW -->
             <div id="compareView" class="space-y-6 hidden">
+                <h2 class="sr-only">Compare two texts line by line — free online text diff tool</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     <div class="flex flex-col space-y-2">
                         <div class="flex justify-between items-center">
@@ -462,6 +500,7 @@
 
             <!-- TAB 5: SQL GENERATOR VIEW -->
             <div id="sqlView" class="space-y-6 hidden">
+                <h2 class="sr-only">Generate SQL DELETE, UPDATE, and template statements from an Excel or CSV file</h2>
 
                 <!-- 1. Excel / CSV file upload area -->
                 <div class="flex flex-col space-y-2">
@@ -623,6 +662,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 6: SPLIT FILE VIEW -->
             <div id="splitView" class="space-y-6 hidden">
+                <h2 class="sr-only">Split a large Excel or CSV file into multiple files by row count</h2>
 
                 <!-- 1. Excel / CSV file upload area -->
                 <div class="flex flex-col space-y-2">
@@ -691,6 +731,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 7: WHERE IN GENERATOR VIEW -->
             <div id="whereInView" class="space-y-6 hidden">
+                <h2 class="sr-only">Build a SQL WHERE IN (...) clause from a pasted list</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="whereInInput" class="text-xs font-semibold text-zinc-500"><span
@@ -784,6 +825,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 8: CHARACTER COUNT VIEW -->
             <div id="charCountView" class="space-y-6 hidden">
+                <h2 class="sr-only">Count characters, bytes, and database storage size of text</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="charCountInput" class="text-xs font-semibold text-zinc-500"><span
@@ -862,6 +904,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 9: JSON → SQL RESTORE VIEW -->
             <div id="restoreView" class="space-y-6 hidden">
+                <h2 class="sr-only">Convert JSON to SQL INSERT statements to restore data</h2>
 
                 <!-- 1. JSON input (upload a file or paste) -->
                 <div class="flex flex-col space-y-2">
@@ -956,6 +999,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 10: SORT VIEW -->
             <div id="sortView" class="space-y-6 hidden">
+                <h2 class="sr-only">Sort a list of numbers or text ascending or descending</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center gap-3 flex-wrap">
                         <label for="sortInput" class="text-xs font-semibold text-zinc-500"><span
@@ -1013,6 +1057,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 11: MERGE SQL VIEW -->
             <div id="mergeSqlView" class="space-y-6 hidden">
+                <h2 class="sr-only">Merge multiple SQL files into one</h2>
 
                 <!-- 1. Upload multiple .sql -->
                 <div class="flex flex-col space-y-2">
@@ -1087,6 +1132,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 12: DUMMY FILE VIEW -->
             <div id="dummyView" class="space-y-6 hidden">
+                <h2 class="sr-only">Generate a blank dummy file of any size and format for upload testing</h2>
                 <div class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800">
 
                     <!-- File type -->
@@ -1157,6 +1203,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB 13: LOG VIEWER -->
             <div id="logView" class="space-y-6 hidden">
+                <h2 class="sr-only">View and search an application log file as a table</h2>
 
                 <!-- 1. Input: upload or paste -->
                 <div class="flex flex-col space-y-2">
@@ -1250,6 +1297,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB: JSON FORMATTER VIEW -->
             <div id="jsonView" class="space-y-6 hidden">
+                <h2 class="sr-only">Format JSON online — code view and tree view, validate JSON live</h2>
                 <div class="flex flex-col space-y-2">
                     <div class="flex justify-between items-center">
                         <label for="jsonInput" class="text-xs font-semibold text-zinc-500"><span
@@ -1311,6 +1359,7 @@ where a.product_name = {product_name};"></textarea>
 
             <!-- TAB: CSV VIEWER -->
             <div id="csvView" class="space-y-6 hidden">
+                <h2 class="sr-only">View and filter CSV data as a table — paste or upload, client-side CSV viewer</h2>
 
                 <!-- 1. Input: upload or paste -->
                 <div class="flex flex-col space-y-2">

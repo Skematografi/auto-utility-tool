@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://skematografi.github.io/auto-utility-tool/sitemap.xml

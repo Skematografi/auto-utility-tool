@@ -2,6 +2,8 @@
 
 A lightweight, browser-based toolkit that bundles several everyday utilities for developers and data analysts into one **terminal-inspired**, fully responsive interface — no installation, no backend, everything runs client-side.
 
+🔗 **Live demo:** [skematografi.github.io/auto-utility-tool](https://skematografi.github.io/auto-utility-tool/)
+
 ## About the Project
 
 <img width="100%" alt="DataDev Utilities editor" src="./assets/images/editor.webp">
