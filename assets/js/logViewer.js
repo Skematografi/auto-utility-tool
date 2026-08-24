@@ -20,10 +20,16 @@ const logPageInfo = document.getElementById('logPageInfo');
 const logPerPage = document.getElementById('logPerPage');
 const logPrevBtn = document.getElementById('logPrevBtn');
 const logNextBtn = document.getElementById('logNextBtn');
+const logModalBackdrop = document.getElementById('logModalBackdrop');
+const logModalBox = document.getElementById('logModalBox');
+const logModalBody = logModalBox.querySelector('.log-modal-body');
+const logModalContent = document.getElementById('logModalContent');
+const logModalMeta = document.getElementById('logModalMeta');
+const logModalCopyBtn = document.getElementById('logModalCopyBtn');
+const logModalCloseBtn = document.getElementById('logModalCloseBtn');
 
 // Entry start: timestamp followed by bracketed fields
 const LOG_ENTRY_RE = /^(\d{4}-\d{2}-\d{2}[ T]\d{2}:\d{2}:\d{2})\s*((?:\[[^\]]*\])+)\s?([\s\S]*)$/;
-const LOG_PREVIEW_CHARS = 160;
 
 let logEntries = [];      // every parsed entry
 let logFiltered = [];     // entries matching the current search/level
@@ -124,11 +130,6 @@ function renderTable() {
         logPager.classList.remove('hidden');
 
         logTableBody.innerHTML = pageRows.map(function (e, i) {
-            const full = e.message;
-            const isLong = full.length > LOG_PREVIEW_CHARS || full.indexOf('\n') !== -1;
-            const preview = isLong
-                ? full.slice(0, LOG_PREVIEW_CHARS).replace(/\n/g, ' ') + '…'
-                : full;
             const index = start + i;
             return `<tr class="align-top hover:bg-zinc-800/40 transition-colors">
                 <td class="px-3 py-2 whitespace-nowrap text-zinc-400">${highlight(escapeHtml(e.time), term)}</td>
@@ -136,10 +137,12 @@ function renderTable() {
                 <td class="px-3 py-2 whitespace-nowrap text-zinc-300">${highlight(escapeHtml(e.user || '—'), term)}</td>
                 <td class="px-3 py-2 whitespace-nowrap text-zinc-500">${highlight(escapeHtml(e.ip || '—'), term)}</td>
                 <td class="px-3 py-2 whitespace-nowrap text-zinc-400">${highlight(escapeHtml(e.category || '—'), term)}</td>
-                <td class="px-3 py-2 text-zinc-300 break-all">
-                    <span class="log-preview">${highlight(escapeHtml(preview), term)}</span>
-                    ${isLong ? `<button type="button" data-log-index="${index}"
-                        class="log-toggle ml-2 text-emerald-400 hover:text-emerald-300 text-xs font-bold cursor-pointer">show more</button>` : ''}
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <button type="button" data-log-index="${index}" title="view full message"
+                        class="log-open inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-zinc-700/70 bg-black/40 hover:bg-black/60 hover:border-emerald-500/60 text-zinc-300 text-xs font-semibold transition-all cursor-pointer">
+                        <i data-lucide="maximize-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        show detail
+                    </button>
                 </td>
             </tr>`;
         }).join('');
@@ -154,28 +157,58 @@ function renderTable() {
     lucide.createIcons();
 }
 
-// Expand or collapse the full message of a row
+// --- Message modal -------------------------------------------
+// The table only shows a one-line preview; the full message (including
+// multi-line stack traces) is shown in a centered, scrollable dialog.
+
+let logModalMessage = '';   // full message of the entry currently open
+
+function openLogModal(entry) {
+    const term = logSearch.value.trim();
+    logModalMessage = entry.message;
+    logModalContent.innerHTML = highlight(escapeHtml(entry.message), term) ||
+        '<span class="italic text-zinc-500">(empty message)</span>';
+    logModalMeta.textContent = [entry.time, entry.level, entry.user, entry.category]
+        .filter(function (part) { return part; }).join(' · ');
+    logModalCopyBtn.disabled = entry.message === '';
+
+    document.documentElement.classList.add('log-modal-open');
+    logModalBox.setAttribute('aria-hidden', 'false');
+    logModalBackdrop.setAttribute('aria-hidden', 'false');
+    logModalBody.scrollTop = 0;
+    logModalCloseBtn.focus();
+    lucide.createIcons();
+}
+
+function closeLogModal() {
+    document.documentElement.classList.remove('log-modal-open');
+    logModalBox.setAttribute('aria-hidden', 'true');
+    logModalBackdrop.setAttribute('aria-hidden', 'true');
+}
+
+// Open the modal for the clicked row
 logTableBody.addEventListener('click', function (event) {
-    const btn = event.target.closest('.log-toggle');
+    const btn = event.target.closest('.log-open');
     if (!btn) return;
     const entry = logFiltered[parseInt(btn.dataset.logIndex, 10)];
-    if (!entry) return;
+    if (entry) openLogModal(entry);
+});
 
-    const cell = btn.parentElement;
-    const span = cell.querySelector('.log-preview');
-    const expanded = btn.dataset.expanded === 'true';
-    const term = logSearch.value.trim();
+logModalCloseBtn.addEventListener('click', closeLogModal);
+logModalBackdrop.addEventListener('click', closeLogModal);
+logModalCopyBtn.addEventListener('click', function () {
+    handleClipboardCopy(logModalMessage, logModalCopyBtn, 'copy');
+});
 
-    if (expanded) {
-        const preview = entry.message.slice(0, LOG_PREVIEW_CHARS).replace(/\n/g, ' ') + '…';
-        span.innerHTML = highlight(escapeHtml(preview), term);
-        btn.textContent = 'show more';
-        btn.dataset.expanded = 'false';
-    } else {
-        span.innerHTML = `<pre class="whitespace-pre-wrap break-all text-xs leading-relaxed mt-1">${highlight(escapeHtml(entry.message), term)}</pre>`;
-        btn.textContent = 'show less';
-        btn.dataset.expanded = 'true';
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && document.documentElement.classList.contains('log-modal-open')) {
+        closeLogModal();
     }
+});
+
+// The modal lives outside the tool card, so close it when another tab is opened
+document.addEventListener('click', function (event) {
+    if (event.target.closest('.tab-btn')) closeLogModal();
 });
 
 // --- Filtering -----------------------------------------------

@@ -259,6 +259,61 @@ html.palette-open .palette-box {
     }
 }
 
+/* ===== Log message modal =====
+   Centered dialog used by the log viewer to show one entry's full message.
+   Kept outside the tool card so it is never clipped by the card's overflow. */
+.log-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 42;
+    background: rgba(0, 0, 0, .6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+}
+
+html.log-modal-open .log-modal-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.log-modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: min(820px, 94vw);
+    max-height: 82vh;
+    z-index: 43;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 8px));
+    transition: opacity .15s ease, transform .15s ease, visibility 0s linear .15s;
+}
+
+html.log-modal-open .log-modal-box {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    transition: opacity .15s ease, transform .15s ease, visibility 0s linear 0s;
+}
+
+.log-modal-body {
+    overflow: auto;
+    flex: 1 1 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .log-modal-backdrop,
+    .log-modal-box {
+        transition: none;
+    }
+}
+
 /* ===== Focus mode =====
    For screen-sharing/demos: hides the marketing hero text and the floating
    sticky-note/command-palette triggers, leaving just the title bar, tab grid

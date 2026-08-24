@@ -105,8 +105,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/base.css?v=2.5.0">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.5.0">
-    <link rel="stylesheet" href="assets/css/theme-light.css?v=2.5.0">
+    <link rel="stylesheet" href="assets/css/components.css?v=2.5.1">
+    <link rel="stylesheet" href="assets/css/theme-light.css?v=2.5.1">
 
     <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
     <script src="assets/js/theme.js?v=2.5.0"></script>
@@ -1550,6 +1550,32 @@ id,name,role
         <p id="paletteEmpty" class="hidden px-4 py-6 text-sm text-zinc-500 text-center"># no match</p>
     </div>
 
+    <!-- Log message modal: shows one log entry's full message, scrollable.
+         Kept OUTSIDE the card so it is never clipped by the card's overflow. -->
+    <div id="logModalBackdrop" class="log-modal-backdrop" aria-hidden="true"></div>
+
+    <div id="logModalBox" role="dialog" aria-modal="true" aria-labelledby="logModalTitle" aria-hidden="true"
+        class="log-modal-box ring-1 ring-zinc-700/60 bg-zinc-900/30 backdrop-blur-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85),0_0_40px_-12px_rgba(16,185,129,0.12)]">
+        <div class="flex items-center gap-2 px-4 py-3 bg-zinc-800/50 border-b border-zinc-700/60">
+            <span class="text-emerald-500">#</span>
+            <span id="logModalTitle" class="text-xs font-semibold text-zinc-400">log_message</span>
+            <span id="logModalMeta" class="flex-1 text-xs text-zinc-500 truncate"></span>
+            <button id="logModalCopyBtn" type="button"
+                class="flex items-center justify-center gap-2 py-1.5 px-3 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed">
+                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                <span>copy</span>
+            </button>
+            <button id="logModalCloseBtn" type="button" title="Close" aria-label="Close message"
+                class="flex items-center justify-center p-1.5 text-zinc-400 hover:text-zinc-200 rounded-md hover:bg-zinc-700/60 transition-all cursor-pointer">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        <div class="log-modal-body thin-scroll bg-black/60 p-4">
+            <pre id="logModalContent"
+                class="whitespace-pre-wrap break-all text-xs sm:text-sm text-zinc-300 leading-relaxed"></pre>
+        </div>
+    </div>
+
     <!-- Shared helper & navigation -->
     <!-- Bump ?v= on a new release so the browser fetches the latest version (cache-busting) -->
     <script src="assets/js/clipboard.js?v=2.5.0"></script>
@@ -1572,7 +1598,7 @@ id,name,role
     <script src="assets/js/sort.js?v=2.5.0"></script>
     <script src="assets/js/mergeSql.js?v=2.5.0"></script>
     <script src="assets/js/dummyFile.js?v=2.5.0"></script>
-    <script src="assets/js/logViewer.js?v=2.5.0"></script>
+    <script src="assets/js/logViewer.js?v=2.5.2"></script>
     <script src="assets/js/jsonFormat.js?v=2.5.0"></script>
     <script src="assets/js/csvViewer.js?v=2.5.0"></script>
 </body>

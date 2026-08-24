@@ -26,7 +26,8 @@ The app is organized into tabs, each a self-contained tool:
 * **`log`** (Log Viewer) — Upload or paste an application log and read it as a searchable table (time, level, user, IP, category, message):
   * Understands the common `2026-07-25 11:06:39 [ip][user][session][level][category] message` layout, and keeps multi-line dumps (e.g. `$_POST = [ … ]`) attached to their entry.
   * Full-text search across every column with match highlighting, plus a level filter and per-level counts.
-  * Long messages are collapsed to a preview with **show more**; results are paged (50/100/250 per page) so large files stay responsive.
+  * The message column is a **show detail** button — click it to open the full message in a centered, scrollable dialog (with copy, `Esc` to close), search matches highlighted inside.
+  * Results are paged (50/100/250 per page) so large files stay responsive.
 * **`split`** (Split File) — Split an uploaded Excel / CSV into multiple files, downloaded together as a `.zip`:
   * Set the max rows per file — the number of output files is calculated automatically.
   * Optionally pick a column so rows sharing the same value stay in the same file; leave it empty to split purely by row count.
