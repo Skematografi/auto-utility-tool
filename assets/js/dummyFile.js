@@ -383,7 +383,9 @@ generateDummyBtn.addEventListener('click', async function () {
         }
     }
 
-    const baseName = (dummyName.value.trim() || 'dummy').replace(/[\\/:*?"<>|]+/g, '_');
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+    const baseName = (dummyName.value.trim() || `DataDev-Utilities-dummy-${timestamp}`).replace(/[\\/:*?"<>|]+/g, '_');
 
     generateDummyBtn.disabled = true;
     showDummyStatus('Generating…', 'success');

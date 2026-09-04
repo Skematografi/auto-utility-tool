@@ -243,8 +243,9 @@ restoreCopyBtn.addEventListener('click', function () {
 
 restoreDownloadBtn.addEventListener('click', function () {
     if (!restoreGeneratedSql) return;
-    const table = restoreHeadTable.value.trim() || 'restore';
-    downloadTextFile(restoreGeneratedSql, `${table}_restore.sql`);
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+    downloadTextFile(restoreGeneratedSql, `DataDev-Utilities-restore-${timestamp}.sql`);
 });
 
 // --- Helpers: status & download ---

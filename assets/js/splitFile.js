@@ -146,9 +146,12 @@ generateSplitBtn.addEventListener('click', function () {
         }
     });
 
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+
     generateSplitBtn.disabled = true;
     zip.generateAsync({ type: 'blob' }).then(blob => {
-        downloadBlob(blob, `${splitData.baseName}_split.zip`);
+        downloadBlob(blob, `DataDev-Utilities-split-${timestamp}.zip`);
         showSplitStatus(`Split into ${buckets.length} file(s) and downloaded as ZIP.`, 'success');
         generateSplitBtn.disabled = false;
     }).catch(err => {
