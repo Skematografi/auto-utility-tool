@@ -42,18 +42,62 @@ const sqlPreview = document.getElementById('sqlPreview');
 // Parsed file data state
 let sqlData = { headers: [], rows: [] };
 
+// --- Lenient delimiter fallback for malformed/oddly-quoted CSV ---
+const DELIMITER_CANDIDATES = ['|', ';', '\t', ','];
+
+function detectDelimiter(line) {
+    let best = null;
+    let bestCount = 1;
+    DELIMITER_CANDIDATES.forEach(d => {
+        const count = line.split(d).length;
+        if (count > bestCount) {
+            bestCount = count;
+            best = d;
+        }
+    });
+    return best;
+}
+
+function stripOuterQuotes(field) {
+    return field.replace(/^"+/, '').replace(/"+$/, '');
+}
+
+function parseLenientDelimitedText(text) {
+    const lines = text.split(/\r\n|\r|\n/).filter(line => line.trim() !== '');
+    if (!lines.length) return [];
+    const delimiter = detectDelimiter(lines[0]);
+    if (!delimiter) return lines.map(line => [stripOuterQuotes(line)]);
+    return lines.map(line => line.split(delimiter).map(stripOuterQuotes));
+}
+
 // --- Read Excel / CSV file ---
 sqlFileInput.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
+    const isCsv = /\.csv$/i.test(file.name);
+
     const reader = new FileReader();
     reader.onload = function (evt) {
         try {
-            const workbook = XLSX.read(evt.target.result, { type: 'array' });
+            // raw:true for CSV: SheetJS otherwise "helpfully" auto-detects date-like text
+            // and reformats it through a locale/timezone-dependent guess, corrupting the
+            // original value. Keeping raw text lets our own date parsing below handle it
+            // correctly. Real .xlsx/.xls cells carry an explicit stored format, so leave
+            // those on the default parse (needed for the date-cell detection further down).
+            const workbook = XLSX.read(evt.target.result, isCsv ? { type: 'array', raw: true } : { type: 'array' });
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             // header:1 -> array of arrays; defval keeps empty cells from being skipped
-            const aoa = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '', raw: false });
+            let aoa = XLSX.utils.sheet_to_json(firstSheet, { header: 1, defval: '', raw: false });
+
+            // Some CSV exports wrap the whole delimited line in one outer quote pair
+            // (e.g. `"branchID|""name""|..."`), which is valid-but-unusual CSV quoting
+            // that SheetJS reads literally as a single column. Detect that and re-split
+            // the raw text leniently on the real delimiter instead.
+            if (aoa.length && aoa[0].length === 1 && typeof aoa[0][0] === 'string' && detectDelimiter(aoa[0][0])) {
+                const text = new TextDecoder('utf-8').decode(evt.target.result);
+                aoa = parseLenientDelimitedText(text);
+            }
 
             if (!aoa.length) {
                 showSqlStatus('The uploaded file appears to be empty.', 'error');
@@ -61,6 +105,8 @@ sqlFileInput.addEventListener('change', function (e) {
                 sqlFileInfo.classList.add('hidden');
                 return;
             }
+
+            normalizeDateCells(aoa, firstSheet);
 
             sqlData.headers = aoa[0].map(h => (h === undefined || h === null) ? '' : String(h));
             // Drop rows that are completely empty
@@ -165,6 +211,89 @@ createConditionRow(deleteWhereList, 'db column name (e.g. product_code)');
 createConditionRow(updateSetList, 'db column to SET (e.g. product_code)');
 createConditionRow(updateWhereList, 'db column name (e.g. productId)');
 
+// --- Date/datetime detection & normalization ---
+// Excel cells: detected via the cell's number format (cell.z), converted from the
+// serial value with SSF so precision never round-trips through a JS Date.
+// CSV/plain-text cells: no format metadata, so matched against known date patterns instead.
+function looksLikeDateFormat(fmt) {
+    if (!fmt || fmt === 'General') return false;
+    const stripped = fmt.replace(/\[[^\]]*\]/g, '').replace(/"[^"]*"/g, '');
+    return /[ymdhs]/i.test(stripped) && !/^[0#.,%\s]+$/.test(stripped);
+}
+
+function pad2(n) {
+    return String(n).padStart(2, '0');
+}
+
+function formatDateParts(y, mo, d, H, M, S) {
+    const datePart = `${String(y).padStart(4, '0')}-${pad2(mo)}-${pad2(d)}`;
+    if (H || M || S) {
+        return `${datePart} ${pad2(H)}:${pad2(M)}:${pad2(S)}`;
+    }
+    return datePart;
+}
+
+function buildDateFromParts(y, mo, d, H, M, S) {
+    y = parseInt(y, 10);
+    mo = parseInt(mo, 10);
+    d = parseInt(d, 10);
+    H = H ? parseInt(H, 10) : 0;
+    M = M ? parseInt(M, 10) : 0;
+    S = S ? parseInt(S, 10) : 0;
+    if (mo < 1 || mo > 12 || d < 1 || d > 31 || H > 23 || M > 59 || S > 59) return null;
+    return formatDateParts(y, mo, d, H, M, S);
+}
+
+// No format metadata on plain text, so ambiguous d/m vs m/d slashes are read as day-first (ID locale).
+function tryParseDateString(val) {
+    if (val === undefined || val === null) return null;
+    const s = String(val).trim();
+    if (s === '') return null;
+
+    let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+    if (m) return buildDateFromParts(m[1], m[2], m[3], m[4], m[5], m[6]);
+
+    m = s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})(?:[ T](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+    if (m) return buildDateFromParts(m[3], m[2], m[1], m[4], m[5], m[6]);
+
+    return null;
+}
+
+function formatExcelSerialDate(serial) {
+    const dc = XLSX.SSF.parse_date_code(Number(serial));
+    if (!dc) return null;
+    return formatDateParts(dc.y, dc.m, dc.d, dc.H, dc.M, Math.round(dc.S || 0));
+}
+
+function formatJsDateUtc(date) {
+    return formatDateParts(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate(),
+        date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+}
+
+function normalizeDateCell(val, cell) {
+    if (cell && cell.t === 'n' && looksLikeDateFormat(cell.z)) {
+        return formatExcelSerialDate(cell.v);
+    }
+    if (cell && cell.t === 'd' && cell.v instanceof Date) {
+        return formatJsDateUtc(cell.v);
+    }
+    return tryParseDateString(val);
+}
+
+// Mutates the array-of-arrays in place, skipping the header row (index 0).
+function normalizeDateCells(aoa, sheet) {
+    aoa.forEach((row, r) => {
+        if (r === 0) return;
+        row.forEach((val, c) => {
+            const cell = sheet[XLSX.utils.encode_cell({ r, c })];
+            const normalized = normalizeDateCell(val, cell);
+            if (normalized !== null) {
+                row[c] = normalized;
+            }
+        });
+    });
+}
+
 // --- SQL value formatting helper ---
 function isNumericValue(val) {
     const s = String(val).trim();
@@ -248,7 +377,7 @@ generateDeleteBtn.addEventListener('click', function () {
     const sql = `Delete from ${table} where ${clauses.join(' and ')};`;
     sqlPreview.value = sql;
     sqlPreviewWrap.classList.remove('hidden');
-    downloadSqlFile(sql, `delete_${table}.sql`);
+    downloadSqlFile(sql, buildSqlFilename('delete'));
     showSqlStatus('SQL Delete generated and downloaded successfully.', 'success');
 });
 
@@ -318,7 +447,7 @@ generateUpdateBtn.addEventListener('click', function () {
     const sql = statements.join('\n');
     sqlPreview.value = sql;
     sqlPreviewWrap.classList.remove('hidden');
-    downloadSqlFile(sql, `update_${table}.sql`);
+    downloadSqlFile(sql, buildSqlFilename('update'));
     showSqlStatus(`SQL Update generated (${statements.length} statement(s)) and downloaded successfully.`, 'success');
 });
 
@@ -382,10 +511,13 @@ generateTemplateBtn.addEventListener('click', function () {
         return;
     }
 
-    const sql = statements.join('\n');
+    // A ";" in the template usually means multi-statement/multi-line output per row,
+    // so add a blank line between rows to keep the generated SQL readable.
+    const rowSeparator = template.includes(';') ? '\n\n' : '\n';
+    const sql = statements.join(rowSeparator);
     sqlPreview.value = sql;
     sqlPreviewWrap.classList.remove('hidden');
-    downloadSqlFile(sql, 'template.sql');
+    downloadSqlFile(sql, buildSqlFilename('template'));
     showSqlStatus(`SQL Template generated (${statements.length} statement(s)) and downloaded successfully.`, 'success');
 });
 
@@ -406,6 +538,12 @@ function showSqlStatus(message, type) {
             : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
     );
     sqlStatus.classList.remove('hidden');
+}
+
+function buildSqlFilename(mode) {
+    const now = new Date();
+    const ts = `${now.getFullYear()}${pad2(now.getMonth() + 1)}${pad2(now.getDate())}${pad2(now.getHours())}${pad2(now.getMinutes())}${pad2(now.getSeconds())}`;
+    return `DataDev-Utilities-${mode}-${ts}.sql`;
 }
 
 function downloadSqlFile(content, filename) {

@@ -22,6 +22,8 @@ The app is organized into tabs, each a self-contained tool:
   * **Update** — build `UPDATE ... SET ... WHERE ...`, grouping rows with identical `SET` values into a single `IN (...)` statement where possible.
   * **Template** — write any SQL with `{ColumnName}` / `{1}` placeholders and it is filled once per row — for complex cases the structured modes can't express (e.g. updating a detail table via a join).
   * Smart quoting: numbers stay unquoted; strings containing a single quote are wrapped in double quotes (and vice versa).
+  * Date / datetime columns are auto-detected (Excel date-formatted cells, or plain-text values in common formats) and normalized to `Y-m-d` / `Y-m-d H:i:s` in the output.
+  * CSV falls back to a lenient delimiter split when a whole line is wrapped in one outer quote pair (e.g. `"col1|col2|..."`), a pattern some exports produce that would otherwise read as a single column.
   * The result is previewed and downloaded directly as a `.sql` file.
 * **`log`** (Log Viewer) — Upload or paste an application log and read it as a searchable table (time, level, user, IP, category, message):
   * Understands the common `2026-07-25 11:06:39 [ip][user][session][level][category] message` layout, and keeps multi-line dumps (e.g. `$_POST = [ … ]`) attached to their entry.
