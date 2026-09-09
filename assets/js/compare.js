@@ -4,9 +4,16 @@
 const compareLeft = document.getElementById('compareLeft');
 const compareRight = document.getElementById('compareRight');
 const compareResultContainer = document.getElementById('compareResultContainer');
+const exportCompareBtn = document.getElementById('exportCompareBtn');
+const exportCompareSelect = document.getElementById('exportCompareSelect');
+const compareExportStatus = document.getElementById('compareExportStatus');
+
+// Last computed compare result, kept for the export button
+let compareLastResult = null;
 
 compareLeft.addEventListener('input', handleCompare);
 compareRight.addEventListener('input', handleCompare);
+exportCompareBtn.addEventListener('click', handleCompareExport);
 
 function handleCompare() {
     const text1 = compareLeft.value;
@@ -15,6 +22,8 @@ function handleCompare() {
     // Process ONLY IF both sides have text
     if (!text1 || !text2) {
         compareResultContainer.innerHTML = '<p class="text-sm text-zinc-600 italic text-center py-6">Waiting for input on both sides...</p>';
+        compareLastResult = null;
+        exportCompareBtn.disabled = true;
         return;
     }
 
@@ -31,6 +40,12 @@ function handleCompare() {
     let rightHtml = '';
     let hasMismatch = false;
 
+    // Raw values kept for the export button, split by match/no-match
+    const matchLeft = [];
+    const nomatchLeft = [];
+    const matchRight = [];
+    const nomatchRight = [];
+
     // Build a frequency map to check data "presence" regardless of line order
     const freq2 = {};
     lines2.forEach(l => freq2[l] = (freq2[l] || 0) + 1);
@@ -40,10 +55,12 @@ function handleCompare() {
         if (freq2[val] > 0) {
             freq2[val]--;
             leftHtml += escapeHtml(val) + '\n';
+            matchLeft.push(val);
         } else {
             const content = val !== undefined ? (escapeHtml(val) || ' ') : ' ';
             leftHtml += `<span class="bg-amber-500/25 text-amber-200 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
             hasMismatch = true;
+            nomatchLeft.push(val);
         }
     }
 
@@ -56,12 +73,26 @@ function handleCompare() {
         if (freq1[val] > 0) {
             freq1[val]--;
             rightHtml += escapeHtml(val) + '\n';
+            matchRight.push(val);
         } else {
             const content = val !== undefined ? (escapeHtml(val) || ' ') : ' ';
             rightHtml += `<span class="bg-amber-500/25 text-amber-200 font-bold px-1.5 rounded inline-block">${content}</span>\n`;
             hasMismatch = true;
+            nomatchRight.push(val);
         }
     }
+
+    // Persist for export: "match/nomatch between left vs right" = the combined
+    // set from both sides (left's matched/unmatched plus right's matched/unmatched)
+    compareLastResult = {
+        matchLeft,
+        nomatchLeft,
+        matchRight,
+        nomatchRight,
+        matchBoth: matchLeft.concat(matchRight),
+        nomatchBoth: nomatchLeft.concat(nomatchRight)
+    };
+    exportCompareBtn.disabled = false;
 
     // If the data matches 100%
     if (!hasMismatch) {
@@ -94,4 +125,75 @@ function handleCompare() {
                     </div>
                 </div>
             `;
+}
+
+// ----------------------------------------
+// EXPORT COMPARE RESULT
+// "all" -> one .xlsx with a sheet per category; a single category -> plain .txt
+// ----------------------------------------
+const COMPARE_EXPORT_SHEETS = [
+    ['matchLeft', 'match_left'],
+    ['nomatchLeft', 'nomatch_left'],
+    ['matchRight', 'match_right'],
+    ['nomatchRight', 'nomatch_right'],
+    ['matchBoth', 'match_both'],
+    ['nomatchBoth', 'nomatch_both']
+];
+
+function handleCompareExport() {
+    if (!compareLastResult) {
+        showCompareExportStatus('Nothing to export yet — compare data first.', 'error');
+        return;
+    }
+
+    const selected = exportCompareSelect.value;
+    const timestamp = compareTimestamp();
+
+    try {
+        if (selected === 'all') {
+            const wb = XLSX.utils.book_new();
+            COMPARE_EXPORT_SHEETS.forEach(([key, sheetName]) => {
+                const aoa = [['value'], ...compareLastResult[key].map(v => [v])];
+                const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+                XLSX.utils.book_append_sheet(wb, worksheet, sheetName);
+            });
+            XLSX.writeFile(wb, `DataDev-Utilities-diff-${timestamp}.xlsx`);
+            showCompareExportStatus('Exported 6 sheets (match/no-match for left, right, and both).', 'success');
+        } else {
+            const sheetName = COMPARE_EXPORT_SHEETS.find(([key]) => key === selected)[1];
+            const values = compareLastResult[selected];
+            const blob = new Blob([values.join('\n')], { type: 'text/plain;charset=utf-8' });
+            compareDownloadBlob(blob, `DataDev-Utilities-diff-${sheetName}-${timestamp}.txt`);
+            showCompareExportStatus(`Exported "${sheetName}" (${values.length} row(s)) as .txt.`, 'success');
+        }
+    } catch (err) {
+        console.error(err);
+        showCompareExportStatus('Failed to build the export file.', 'error');
+    }
+}
+
+function compareTimestamp() {
+    const now = new Date();
+    return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+}
+
+function compareDownloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function showCompareExportStatus(message, type) {
+    compareExportStatus.textContent = message;
+    compareExportStatus.className = 'mt-4 text-sm font-semibold px-4 py-3 rounded-md ' + (
+        type === 'error'
+            ? 'bg-red-500/10 text-red-400 border border-red-500/30'
+            : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+    );
+    compareExportStatus.classList.remove('hidden');
 }

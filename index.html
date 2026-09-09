@@ -490,11 +490,32 @@
                 </div>
 
                 <div class="bg-black/40 p-5 sm:p-6 rounded-md border border-zinc-800">
-                    <span class="text-xs font-bold text-zinc-500 block mb-4"><span class="text-emerald-500">#</span>
-                        comparison_result</span>
+                    <div class="flex justify-between items-center mb-4 gap-3">
+                        <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                            comparison_result</span>
+                        <div class="flex items-center gap-2">
+                            <select id="exportCompareSelect"
+                                class="p-2 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none text-xs text-emerald-300 transition-all cursor-pointer">
+                                <option value="all" selected>all (excel)</option>
+                                <option value="matchLeft">match left</option>
+                                <option value="nomatchLeft">no-match left</option>
+                                <option value="matchRight">match right</option>
+                                <option value="nomatchRight">no-match right</option>
+                                <option value="matchBoth">match left vs right</option>
+                                <option value="nomatchBoth">no-match left vs right</option>
+                            </select>
+                            <button id="exportCompareBtn"
+                                class="flex items-center justify-center gap-2 py-2 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600"
+                                title="Export the selected data" disabled>
+                                <i data-lucide="download" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>export</span>
+                            </button>
+                        </div>
+                    </div>
                     <div id="compareResultContainer">
                         <p class="text-sm text-zinc-600 italic text-center py-6">Waiting for input on both sides...</p>
                     </div>
+                    <div id="compareExportStatus" class="hidden mt-4 text-sm font-semibold px-4 py-3 rounded-md"></div>
                 </div>
             </div>
 
@@ -1589,7 +1610,7 @@ id,name,role
     <script src="assets/js/calculator.js?v=2.5.0"></script>
     <script src="assets/js/duplicates.js?v=2.5.0"></script>
     <script src="assets/js/nonAscii.js?v=2.5.0"></script>
-    <script src="assets/js/compare.js?v=2.5.0"></script>
+    <script src="assets/js/compare.js?v=2.7.0"></script>
     <script src="assets/js/sqlGenerator.js?v=3.0.0"></script>
     <script src="assets/js/splitFile.js?v=2.6.0"></script>
     <script src="assets/js/whereIn.js?v=2.5.0"></script>
