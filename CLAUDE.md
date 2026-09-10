@@ -31,6 +31,7 @@ assets/js/
   commandPalette.js # Ctrl+K command palette — fuzzy-jump to a tab or run a quick action
   version.js       # Footer version — static "beta" label linking to the repo
   analytics.js     # Google Analytics (GA4) loader; skipped on localhost / file://
+  changelog.js     # Fetches CHANGELOG.md, drives the title-bar bell + update popup
   calculator.js    # calc    — sum a list of numbers (accepts ID/EU number formats)
   duplicates.js    # dupes   — find duplicates (copy dupes / unique / non-dupes)
   nonAscii.js      # ascii   — detect non-ASCII in text, or scan an Excel/CSV by row
@@ -49,8 +50,8 @@ assets/js/
 ```
 
 One JS file per tab; each file only touches its own tab's DOM ids. Shared/non-tab scripts
-(`clipboard`, `tabs`, `theme`, `parallax`, `stickyNote`, `commandPalette`, `version`, `analytics`)
-are the exceptions. Custom CSS is likewise split by concern rather than kept in one file —
+(`clipboard`, `tabs`, `theme`, `parallax`, `stickyNote`, `commandPalette`, `version`, `analytics`,
+`changelog`) are the exceptions. Custom CSS is likewise split by concern rather than kept in one file —
 add new component styles to `components.css`, and any `html.light` override to `theme-light.css`.
 
 Assets are referenced with a `?v=1.0.0` cache-busting query — bump it when an asset changes
@@ -87,6 +88,11 @@ so returning users get the new version instead of a cached one.
 - The only external network call is non-core: Google Analytics — the tools themselves
   must work fully offline.
 - Update `README.md` whenever features change.
+- Update `CHANGELOG.md` (a same-day `## YYYY-MM-DD` heading, one bullet per change, plain
+  professional English) whenever a user-facing feature or fix ships — the footer bell
+  (`assets/js/changelog.js`) reads this file directly, so a missed entry never surfaces there.
+- Keep `CHANGELOG.md` to at most 20 `## YYYY-MM-DD` date headings — after adding a new
+  entry, delete the oldest ones if the count goes over 20.
 
 ## Run / verify
 

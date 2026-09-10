@@ -58,6 +58,17 @@ S2. Never lose precision on numeric data: normalize numbers with string manipula
 S3. Trim lines and drop empties when parsing pasted lists — but never dedupe or
     reorder user data unless the feature explicitly says so.
 
+## Changelog
+
+L1. Every user-facing feature or fix MUST get an entry in CHANGELOG.md the same day:
+    a `## YYYY-MM-DD` heading (reuse today's if it already exists) with one bullet per
+    change, in plain professional English (not the lowercase terminal-label style).
+    The footer bell reads this file directly — a missed entry means the update never
+    shows up there.
+
+L2. CHANGELOG.md keeps at most 20 `## YYYY-MM-DD` date headings. After adding a new
+    entry, if the file has more than 20, delete the oldest (bottom-most) ones first.
+
 ## Assets & caching
 
 C1. Reference local assets with a `?v=<version>` query (scripts, stylesheet, favicon).
@@ -77,3 +88,4 @@ C2. The only external network call is non-core: Google Analytics (analytics.js).
 - Forgetting lucide.createIcons() after DOM injection
 - Writing code comments in a language other than English
 - Shipping a feature change without updating README.md
+- Shipping a feature change without adding a CHANGELOG.md entry

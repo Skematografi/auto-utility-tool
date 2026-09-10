@@ -95,6 +95,10 @@ Press **Ctrl+K** (or **Cmd+K** on macOS), or click the `⌘` icon in the title b
 
 For screen-sharing or demos, click the maximize icon in the footer (or run `toggle focus mode` from the command palette) to hide the hero text, the tab grid, and the floating sticky-note / command-palette buttons — leaving just the title bar and the active tool. Switching tabs still works via **Ctrl+K**. Off by default; the toggle itself always stays visible so you can turn it back off.
 
+### What's new
+
+A bell icon next to the theme switch in the title bar shows a red dot whenever `CHANGELOG.md` has an entry from the last 7 days. Click it to open a popup listing the 10 most recent updates, each with its date, a "days ago" hint, and a plain-English description of what changed. If the app is opened straight from disk (`file://`) rather than a server, the popup explains that updates can't be loaded from there instead of failing silently.
+
 ## Run Locally
 
 Clone this repository:
