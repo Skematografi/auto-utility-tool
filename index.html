@@ -237,6 +237,11 @@
                     <i data-lucide="table" class="w-4 h-4 shrink-0"></i>
                     csv
                 </button>
+                <button id="tabCleanBtn"
+                    class="tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                    <i data-lucide="eraser" class="w-4 h-4 shrink-0"></i>
+                    clean
+                </button>
             </div>
 
             <!-- TAB 1: AUTO CALCULATOR VIEW -->
@@ -1480,6 +1485,72 @@ id,name,role
                 </div>
             </div>
 
+            <!-- TAB: CLEAN TEXT VIEW -->
+            <div id="cleanView" class="space-y-6 hidden">
+                <h2 class="sr-only">Clean pasted text or SQL — remove blank lines, trim trailing whitespace, collapse spaces</h2>
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="cleanInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> source_text</label>
+                        <span class="text-xs text-zinc-600 italic">resizeable</span>
+                    </div>
+                    <textarea id="cleanInput"
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                        placeholder="# paste text, SQL, or any list here..."></textarea>
+                </div>
+
+                <!-- Options -->
+                <div class="flex flex-wrap gap-x-6 gap-y-3 bg-black/30 p-5 rounded-md border border-zinc-800">
+                    <label for="cleanRemoveBlank" class="flex items-center gap-2.5 cursor-pointer select-none">
+                        <input id="cleanRemoveBlank" type="checkbox" checked
+                            class="w-4 h-4 accent-emerald-500 cursor-pointer">
+                        <span class="text-sm text-zinc-300">remove blank lines</span>
+                    </label>
+                    <label for="cleanTrimTrailing" class="flex items-center gap-2.5 cursor-pointer select-none">
+                        <input id="cleanTrimTrailing" type="checkbox" checked
+                            class="w-4 h-4 accent-emerald-500 cursor-pointer">
+                        <span class="text-sm text-zinc-300">trim trailing whitespace</span>
+                    </label>
+                    <label for="cleanTrimLeading" class="flex items-center gap-2.5 cursor-pointer select-none">
+                        <input id="cleanTrimLeading" type="checkbox"
+                            class="w-4 h-4 accent-emerald-500 cursor-pointer">
+                        <span class="text-sm text-zinc-300">trim leading whitespace / indentation</span>
+                    </label>
+                    <label for="cleanCollapseSpaces" class="flex items-center gap-2.5 cursor-pointer select-none">
+                        <input id="cleanCollapseSpaces" type="checkbox"
+                            class="w-4 h-4 accent-emerald-500 cursor-pointer">
+                        <span class="text-sm text-zinc-300">collapse repeated spaces</span>
+                    </label>
+                </div>
+
+                <!-- Result -->
+                <div class="flex flex-col space-y-2">
+                    <div class="flex justify-between items-center gap-2 flex-wrap">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <div
+                                class="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-emerald-500">lines:</span>
+                                <span id="cleanLineBefore" class="font-extrabold text-emerald-300 text-sm">0</span>
+                                <span class="text-xs text-zinc-600">&rarr;</span>
+                                <span id="cleanLineAfter" class="font-extrabold text-emerald-300 text-sm">0</span>
+                            </div>
+                            <div
+                                class="flex items-center gap-1.5 bg-sky-500/10 border border-sky-500/20 px-3 py-1.5 rounded-full">
+                                <span class="text-xs font-semibold text-sky-500">removed:</span>
+                                <span id="cleanRemovedCount" class="font-extrabold text-sky-300 text-sm">0</span>
+                            </div>
+                        </div>
+                        <button id="cleanCopyBtn" disabled
+                            class="flex items-center justify-center gap-2 py-2 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600">
+                            <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                            <span>copy cleaned</span>
+                        </button>
+                    </div>
+                    <textarea id="cleanOutput" readonly
+                        class="w-full min-h-[200px] md:min-h-[250px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                </div>
+            </div>
+
         </div>
 
         <!-- Footer status bar -->
@@ -1603,7 +1674,7 @@ id,name,role
     <script src="assets/js/version.js?v=2.5.0"></script>
     <script src="assets/js/parallax.js?v=2.5.0"></script>
     <script src="assets/js/focusMode.js?v=2.5.0"></script>
-    <script src="assets/js/tabs.js?v=2.5.0"></script>
+    <script src="assets/js/tabs.js?v=2.6.0"></script>
     <script src="assets/js/stickyNote.js?v=2.5.0"></script>
     <script src="assets/js/commandPalette.js?v=2.5.0"></script>
     <!-- Per-tab logic (split by function) -->
@@ -1622,6 +1693,7 @@ id,name,role
     <script src="assets/js/logViewer.js?v=2.5.2"></script>
     <script src="assets/js/jsonFormat.js?v=2.5.0"></script>
     <script src="assets/js/csvViewer.js?v=2.5.0"></script>
+    <script src="assets/js/cleanText.js?v=1.0.1"></script>
 </body>
 
 </html>

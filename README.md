@@ -74,6 +74,12 @@ The app is organized into tabs, each a self-contained tool:
   * **Filter** — a search box matches across every column, plus a per-column filter box in the header row (Excel-style, all active filters combine); results are paginated (50/100/250 per page) so large files stay responsive.
   * Bordered cells, row numbers, and a sticky header keep it readable like a spreadsheet.
   * `copy filtered` copies the currently filtered rows (with header) back out as delimited text.
+* **`clean`** (Clean Text) — Paste any text, SQL, or list and tidy its whitespace live, no button required:
+  * **remove blank lines** — drops any line that is empty or whitespace-only (on by default).
+  * **trim trailing whitespace** — strips trailing spaces/tabs from every line (on by default).
+  * **trim leading whitespace / indentation** — strips leading spaces/tabs (off by default, so intentional code/SQL indentation is preserved unless you ask for it).
+  * **collapse repeated spaces** — squashes runs of 2+ spaces down to one (off by default).
+  * A `lines: X → Y` badge and a `removed:` count show the effect at a glance; not tied to any single format — works for SQL, plain text, or pasted lists alike.
 
 ### Sticky note
 

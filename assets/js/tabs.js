@@ -19,6 +19,7 @@ const tabDummyBtn = document.getElementById('tabDummyBtn');
 const tabLogBtn = document.getElementById('tabLogBtn');
 const tabJsonBtn = document.getElementById('tabJsonBtn');
 const tabCsvBtn = document.getElementById('tabCsvBtn');
+const tabCleanBtn = document.getElementById('tabCleanBtn');
 
 const calcView = document.getElementById('calcView');
 const dupView = document.getElementById('dupView');
@@ -35,6 +36,7 @@ const dummyView = document.getElementById('dummyView');
 const logView = document.getElementById('logView');
 const jsonView = document.getElementById('jsonView');
 const csvView = document.getElementById('csvView');
+const cleanView = document.getElementById('cleanView');
 
 tabCalcBtn.addEventListener('click', () => switchTab('calc'));
 tabDupBtn.addEventListener('click', () => switchTab('dup'));
@@ -51,6 +53,7 @@ tabDummyBtn.addEventListener('click', () => switchTab('dummy'));
 tabLogBtn.addEventListener('click', () => switchTab('log'));
 tabJsonBtn.addEventListener('click', () => switchTab('json'));
 tabCsvBtn.addEventListener('click', () => switchTab('csv'));
+tabCleanBtn.addEventListener('click', () => switchTab('clean'));
 
 // Base tab class (consistent with the terminal-style tab grid in index.html)
 const TAB_BASE = "tab-btn flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap";
@@ -74,6 +77,7 @@ function switchTab(tab) {
     tabLogBtn.className = TAB_INACTIVE;
     tabJsonBtn.className = TAB_INACTIVE;
     tabCsvBtn.className = TAB_INACTIVE;
+    tabCleanBtn.className = TAB_INACTIVE;
 
     calcView.classList.add('hidden');
     dupView.classList.add('hidden');
@@ -90,6 +94,7 @@ function switchTab(tab) {
     logView.classList.add('hidden');
     jsonView.classList.add('hidden');
     csvView.classList.add('hidden');
+    cleanView.classList.add('hidden');
 
     if (tab === 'calc') {
         tabCalcBtn.className = TAB_ACTIVE;
@@ -147,6 +152,10 @@ function switchTab(tab) {
         tabCsvBtn.className = TAB_ACTIVE;
         csvView.classList.remove('hidden');
         csvInput.focus();
+    } else if (tab === 'clean') {
+        tabCleanBtn.className = TAB_ACTIVE;
+        cleanView.classList.remove('hidden');
+        cleanInput.focus();
     }
     lucide.createIcons();
 }
