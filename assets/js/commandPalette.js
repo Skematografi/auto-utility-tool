@@ -29,6 +29,7 @@
         { label: 'merge — combine SQL files', icon: 'git-merge', run: () => switchTab('mergesql') },
         { label: 'json — format JSON as code or tree', icon: 'braces', run: () => switchTab('json') },
         { label: 'csv — browse & filter CSV data as a table', icon: 'table', run: () => switchTab('csv') },
+        { label: 'clean — remove blank lines & tidy whitespace', icon: 'eraser', run: () => switchTab('clean') },
         { label: 'toggle theme (light / dark)', icon: 'sun-moon', run: () => document.getElementById('themeToggle')?.click() },
         { label: 'toggle background animation', icon: 'sparkles', run: () => document.getElementById('bgToggle')?.click() },
         { label: 'toggle sticky note', icon: 'sticky-note', run: () => toggleNote() },

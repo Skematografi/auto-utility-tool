@@ -6,6 +6,7 @@ Each entry is a `## YYYY-MM-DD` heading with one bullet per change made that day
 ## 2026-09-10
 - Added an update-notification bell next to the theme toggle: it shows a red dot when there has been an update in the last 7 days, and opens a popup listing the 10 most recent changelog entries.
 - Added a **Clean Text** tab for tidying pasted text or SQL: remove blank lines, trim leading/trailing whitespace, and collapse repeated spaces, with live line-count and removed-line stats.
+- Added the **clean** tab to the command palette (Ctrl+K) so it can be jumped to like every other tool.
 
 ## 2026-09-09
 - Added export options to the **Compare** tab, letting you download comparison results as a selectable subset instead of the full report.
