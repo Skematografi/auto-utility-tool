@@ -407,6 +407,11 @@ html.light .log-modal-backdrop {
     background: rgba(15, 23, 42, .35);
 }
 
+/* --- Usage time modal --- */
+html.light .usage-modal-backdrop {
+    background: rgba(15, 23, 42, .35);
+}
+
 /* --- Photo reference panel ---
    The empty-state icon/text and the always-visible overlay buttons
    (close/add/delete) are white-on-translucent-dark by default, which

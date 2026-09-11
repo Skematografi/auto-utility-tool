@@ -95,6 +95,8 @@ A matching panel on the **left** side — opened from the floating button in the
 
 Press **Ctrl+K** (or **Cmd+K** on macOS), or click the `⌘` icon in the title bar, to open a searchable command palette: type to fuzzy-filter and jump straight to any of the tabs above, or run a quick action (toggle theme, toggle the background animation, toggle the sticky note) without touching the mouse. Navigate with the arrow keys, confirm with **Enter**, dismiss with **Esc** or a click outside.
 
+One palette-only action, **usage time**, has no button anywhere else: it opens a popup listing how long you've actively used each tab today (`5 m 12 s`, `1 H 5 m 12 s`, …). Time only counts while this browser tab is visible, focused, and you're not idle for 60 seconds; it resets automatically at midnight on your device.
+
 ### Focus mode
 
 For screen-sharing or demos, click the maximize icon in the footer (or run `toggle focus mode` from the command palette) to hide the hero text, the tab grid, and the floating sticky-note / command-palette buttons — leaving just the title bar and the active tool. Switching tabs still works via **Ctrl+K**. Off by default; the toggle itself always stays visible so you can turn it back off.

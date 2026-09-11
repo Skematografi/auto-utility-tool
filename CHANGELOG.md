@@ -7,6 +7,7 @@ Each entry is a `## YYYY-MM-DD` heading with one bullet per change made that day
 - Made the **Photo reference** panel's background transparent instead of solid black, so the page's starfield and animation show through behind the photo (empty state and Polaroid frame alike).
 - Fixed the **Photo reference** panel's close/add/delete icons and empty-state text being invisible in light theme (they were white-on-white); repainted them in the theme's accent blue, including the count label and "clear all" text, and kept the delete icon blue on hover instead of switching to white.
 - Fixed the update-notification bell's red dot in light theme: its border was a dark zinc ring left over from dark mode, now made transparent so it's a plain red dot.
+- Added a **usage time** command (Ctrl+K only, no button elsewhere) showing how long each tab has been actively used today. Counts only while the browser tab is visible, focused, and not idle for 60 seconds; resets automatically at midnight on the device's own clock.
 
 ## 2026-09-10
 - Added an update-notification bell next to the theme toggle: it shows a red dot when there has been an update in the last 7 days, and opens a popup listing the 10 most recent changelog entries.

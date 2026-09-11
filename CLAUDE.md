@@ -32,6 +32,7 @@ assets/js/
   version.js       # Footer version — static "beta" label linking to the repo
   analytics.js     # Google Analytics (GA4) loader; skipped on localhost / file://
   changelog.js     # Fetches CHANGELOG.md, drives the title-bar bell + update popup
+  usageTime.js     # Per-tab active-time tracker; command-palette-only popup, resets daily
   calculator.js    # calc    — sum a list of numbers (accepts ID/EU number formats)
   duplicates.js    # dupes   — find duplicates (copy dupes / unique / non-dupes)
   nonAscii.js      # ascii   — detect non-ASCII in text, or scan an Excel/CSV by row
@@ -51,7 +52,7 @@ assets/js/
 
 One JS file per tab; each file only touches its own tab's DOM ids. Shared/non-tab scripts
 (`clipboard`, `tabs`, `theme`, `parallax`, `stickyNote`, `commandPalette`, `version`, `analytics`,
-`changelog`) are the exceptions. Custom CSS is likewise split by concern rather than kept in one file —
+`changelog`, `usageTime`) are the exceptions. Custom CSS is likewise split by concern rather than kept in one file —
 add new component styles to `components.css`, and any `html.light` override to `theme-light.css`.
 
 Assets are referenced with a `?v=1.0.0` cache-busting query — bump it when an asset changes

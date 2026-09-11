@@ -158,4 +158,9 @@ function switchTab(tab) {
         cleanInput.focus();
     }
     lucide.createIcons();
+
+    // Optional hook for non-tab features that care which tab is active
+    // (e.g. usage time tracking) — kept as a global so this file doesn't
+    // need to know about them.
+    if (window.onTabSwitch) window.onTabSwitch(tab);
 }

@@ -34,6 +34,7 @@
         { label: 'toggle background animation', icon: 'sparkles', run: () => document.getElementById('bgToggle')?.click() },
         { label: 'toggle sticky note', icon: 'sticky-note', run: () => toggleNote() },
         { label: 'toggle photo reference', icon: 'image', run: () => togglePhotoFrame() },
+        { label: 'usage time', icon: 'clock', run: () => showUsageTime() },
         { label: 'toggle focus mode (hide hero & floating buttons)', icon: 'maximize-2', run: () => toggleFocusMode() },
     ];
 
