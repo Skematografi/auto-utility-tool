@@ -430,3 +430,8 @@ html.light #photoCountLabel,
 html.light #photoClearAllBtn {
     color: #2563eb;
 }
+
+/* --- Changelog bell dot --- */
+html.light #changelogDot {
+    --tw-ring-color: transparent;
+}
