@@ -3,10 +3,15 @@
 All notable changes to DataDev Utilities are documented here, newest first.
 Each entry is a `## YYYY-MM-DD` heading with one bullet per change made that day.
 
+## 2026-09-11
+- Made the **Photo reference** panel's background transparent instead of solid black, so the page's starfield and animation show through behind the photo (empty state and Polaroid frame alike).
+- Fixed the **Photo reference** panel's close/add/delete icons and empty-state text being invisible in light theme (they were white-on-white); repainted them in the theme's accent blue.
+
 ## 2026-09-10
 - Added an update-notification bell next to the theme toggle: it shows a red dot when there has been an update in the last 7 days, and opens a popup listing the 10 most recent changelog entries.
 - Added a **Clean Text** tab for tidying pasted text or SQL: remove blank lines, trim leading/trailing whitespace, and collapse repeated spaces, with live line-count and removed-line stats.
 - Added the **clean** tab to the command palette (Ctrl+K) so it can be jumped to like every other tool.
+- Added a **Photo reference** panel (left-docked) for pinning up to 10 screenshots or diagrams in view while working, attached via click, drag-and-drop, or clipboard paste. Styled as an Instagram-story-style viewer, with each photo framed Polaroid/instax-print style (white border, thicker at the bottom, original aspect ratio kept — never cropped or stretched). Photos auto-shuffle randomly every 5s (pausing on hover), with a progress bar and left/right tap zones for manual navigation. Nothing is saved — photos live only in memory for the session.
 
 ## 2026-09-09
 - Added export options to the **Compare** tab, letting you download comparison results as a selectable subset instead of the full report.

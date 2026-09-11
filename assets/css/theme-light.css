@@ -406,3 +406,27 @@ html.light .palette-item.is-active {
 html.light .log-modal-backdrop {
     background: rgba(15, 23, 42, .35);
 }
+
+/* --- Photo reference panel ---
+   The empty-state icon/text and the always-visible overlay buttons
+   (close/add/delete) are white-on-translucent-dark by default, which
+   flips to white-on-translucent-white in light mode (via the generic
+   bg-black/50 -> white override above) and disappears. Repaint them
+   with the button blue instead. */
+html.light .photo-backdrop {
+    background: rgba(15, 23, 42, .35);
+}
+
+html.light #photoDropzone i,
+html.light #photoDropzone span {
+    color: #2563eb;
+}
+
+html.light #photoCloseBtn,
+html.light #photoAddBtn,
+html.light #photoDeleteBtn,
+html.light #photoDeleteBtn:hover,
+html.light #photoCountLabel,
+html.light #photoClearAllBtn {
+    color: #2563eb;
+}

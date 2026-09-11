@@ -176,6 +176,100 @@ html.note-open .note-fab {
     }
 }
 
+/* ===== Photo reference panel =====
+   Left-docked mirror of the sticky note above, holding one image in memory
+   only (never persisted). Same fixed-to-viewport / outside-the-card reasoning. */
+:root {
+    --photo-w: 320px;
+}
+
+.photo-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--photo-w);
+    max-width: 85vw;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition: transform .22s ease, visibility 0s linear .22s;
+}
+
+html.photo-open .photo-panel {
+    visibility: visible;
+    transform: translateX(0);
+    transition: transform .22s ease, visibility 0s linear 0s;
+}
+
+.photo-fab {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: transform .15s ease, opacity .15s ease;
+}
+
+.photo-fab:hover {
+    transform: scale(1.08);
+}
+
+html.photo-open .photo-fab {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.photo-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .22s ease;
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    html.photo-open body {
+        padding-left: calc(var(--photo-w) + 2.5rem);
+    }
+}
+
+@media (max-width: 1023.98px) {
+    .photo-backdrop {
+        display: block;
+    }
+
+    html.photo-open .photo-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    html.photo-open body {
+        overflow: hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .photo-panel,
+    .photo-fab,
+    .photo-backdrop {
+        transition: none;
+    }
+}
+
 /* ===== Command palette =====
    Centered overlay, kept outside the card for the same reason as the
    sticky note panel above (overflow-hidden + backdrop-blur would clip it). */
@@ -378,6 +472,7 @@ html.changelog-modal-open .changelog-modal-box {
 html.focus-mode #heroBlock,
 html.focus-mode #tabGrid,
 html.focus-mode #noteFab,
+html.focus-mode #photoFab,
 html.focus-mode #paletteBtn {
     display: none;
 }

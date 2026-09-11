@@ -105,8 +105,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/base.css?v=2.5.0">
-    <link rel="stylesheet" href="assets/css/components.css?v=2.6.0">
-    <link rel="stylesheet" href="assets/css/theme-light.css?v=2.5.1">
+    <link rel="stylesheet" href="assets/css/components.css?v=2.7.0">
+    <link rel="stylesheet" href="assets/css/theme-light.css?v=2.6.1">
 
     <!-- Theme: applied before paint to avoid a flash of the wrong palette -->
     <script src="assets/js/theme.js?v=2.5.0"></script>
@@ -1634,6 +1634,80 @@ id,name,role
         <i data-lucide="sticky-note" class="w-4 h-4"></i>
     </button>
 
+    <!-- Photo reference: scrim, panel, and floating toggle. Left-docked mirror of
+         the sticky note above — kept OUTSIDE the card for the same reason, and holds
+         one image in memory only (never saved, gone on reload). -->
+    <div id="photoBackdrop" class="photo-backdrop"></div>
+
+    <aside id="photoPanel" aria-label="photo reference" aria-hidden="true"
+        class="photo-panel ring-1 ring-zinc-700/60 bg-zinc-900/30 backdrop-blur-md shadow-[0_30px_70px_-25px_rgba(0,0,0,0.85),0_0_40px_-12px_rgba(16,185,129,0.12)]">
+        <div id="photoStage" class="relative flex-1 min-h-0 overflow-hidden select-none">
+            <!-- Always visible, regardless of empty/filled state -->
+            <button id="photoCloseBtn" type="button" title="Close" aria-label="Close photo reference"
+                class="absolute top-4 right-2 z-20 w-7 h-7 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors cursor-pointer">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+
+            <!-- Empty state: full-bleed add-photo prompt -->
+            <label id="photoDropzone" for="photoFileInput"
+                class="absolute inset-0 flex flex-col items-center justify-center gap-2 cursor-pointer text-center p-6 hover:bg-white/5 transition-colors">
+                <i data-lucide="image-plus" class="w-8 h-8 text-zinc-600"></i>
+                <span class="text-xs font-semibold text-zinc-400">click, drop, or paste to add photos</span>
+                <span class="text-xs text-zinc-600">up to 10 — not saved, cleared on reload</span>
+                <input id="photoFileInput" type="file" accept="image/*" multiple class="hidden">
+            </label>
+
+            <!-- Filled state: story-style viewer, photo shown Polaroid/instax-print
+                 style — full aspect ratio kept (no crop/auto-scale), white border,
+                 thicker strip at the bottom. -->
+            <div id="photoPreviewWrap" class="hidden absolute inset-0">
+                <div class="absolute inset-0 flex items-center justify-center p-8 pointer-events-none">
+                    <div class="bg-white p-2.5 pb-9 shadow-2xl max-w-full max-h-full flex">
+                        <img id="photoPreviewImg" class="max-w-full max-h-full object-contain block"
+                            alt="attached reference photo">
+                    </div>
+                </div>
+
+                <!-- Story-style progress segments -->
+                <div id="photoProgress" class="absolute top-2 left-2 right-2 z-10 flex gap-1"></div>
+
+                <!-- Top-right overlay controls (close button lives outside this wrap, always visible) -->
+                <div class="absolute top-4 right-11 z-10 flex items-center gap-1.5">
+                    <button id="photoAddBtn" type="button" title="Add more photos" aria-label="Add more photos"
+                        class="w-7 h-7 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-black/70 transition-colors cursor-pointer">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button id="photoDeleteBtn" type="button" title="Remove this photo" aria-label="Remove this photo"
+                        class="w-7 h-7 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-red-500/70 transition-colors cursor-pointer">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Tap zones for manual prev/next, clear of the top/bottom overlay strips -->
+                <button id="photoPrevZone" type="button" aria-label="Previous photo"
+                    class="absolute left-0 top-10 bottom-8 w-1/3 z-[5] cursor-pointer"></button>
+                <button id="photoNextZone" type="button" aria-label="Next photo"
+                    class="absolute right-0 top-10 bottom-8 w-1/3 z-[5] cursor-pointer"></button>
+
+                <!-- Bottom overlay: count + clear all -->
+                <div class="absolute bottom-2 left-3 right-3 z-10 flex items-center justify-between">
+                    <span id="photoCountLabel" class="text-[11px] font-semibold text-white/80"></span>
+                    <button id="photoClearAllBtn" type="button"
+                        class="text-[11px] font-semibold text-white/60 hover:text-red-300 transition-colors cursor-pointer">clear all</button>
+                </div>
+            </div>
+
+            <div id="photoStatus"
+                class="hidden absolute bottom-2 left-1/2 -translate-x-1/2 z-20 text-xs font-semibold px-3 py-1.5 rounded-md whitespace-nowrap"></div>
+        </div>
+    </aside>
+
+    <button id="photoFab" type="button" title="Photo reference" aria-label="Open photo reference"
+        aria-expanded="false" aria-controls="photoPanel"
+        class="photo-fab bg-zinc-800 ring-1 ring-zinc-700/60 text-emerald-400 shadow-lg">
+        <i data-lucide="image" class="w-4 h-4"></i>
+    </button>
+
     <!-- Command palette: fuzzy-jump to any tab or run a quick action (Ctrl+K).
          Kept OUTSIDE the card for the same reason as the sticky note above. -->
     <div id="paletteBackdrop" class="palette-backdrop" aria-hidden="true"></div>
@@ -1707,7 +1781,8 @@ id,name,role
     <script src="assets/js/focusMode.js?v=2.5.0"></script>
     <script src="assets/js/tabs.js?v=2.6.0"></script>
     <script src="assets/js/stickyNote.js?v=2.5.0"></script>
-    <script src="assets/js/commandPalette.js?v=2.6.0"></script>
+    <script src="assets/js/photoFrame.js?v=1.2.0"></script>
+    <script src="assets/js/commandPalette.js?v=2.7.0"></script>
     <!-- Per-tab logic (split by function) -->
     <script src="assets/js/calculator.js?v=2.5.0"></script>
     <script src="assets/js/duplicates.js?v=2.5.0"></script>

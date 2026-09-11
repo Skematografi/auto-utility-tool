@@ -33,6 +33,7 @@
         { label: 'toggle theme (light / dark)', icon: 'sun-moon', run: () => document.getElementById('themeToggle')?.click() },
         { label: 'toggle background animation', icon: 'sparkles', run: () => document.getElementById('bgToggle')?.click() },
         { label: 'toggle sticky note', icon: 'sticky-note', run: () => toggleNote() },
+        { label: 'toggle photo reference', icon: 'image', run: () => togglePhotoFrame() },
         { label: 'toggle focus mode (hide hero & floating buttons)', icon: 'maximize-2', run: () => toggleFocusMode() },
     ];
 

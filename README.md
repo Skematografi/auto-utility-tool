@@ -87,6 +87,10 @@ Alongside the tabs there is a **sticky note** panel — a scratchpad for parking
 
 It is hidden by default and opens from the floating button in the bottom-right corner. The content is saved automatically in your browser (`localStorage`), so it survives tab switches and reloads, and never leaves your device. On wide screens the panel slides in beside the card without covering it; on narrower screens it overlays the page.
 
+### Photo reference
+
+A matching panel on the **left** side — opened from the floating button in the bottom-left corner — styled as an Instagram-story-style viewer for pinning up to **10** images in view while you work (screenshots, diagrams, an ERD). Each photo keeps its original aspect ratio (never cropped or stretched) and is shown Polaroid/instax-print style: a white border around it, thicker along the bottom. Attach photos by clicking, dragging files onto the panel, or pasting from the clipboard (`Ctrl+V`) — all three accept multiple at once. With more than one photo they auto-shuffle randomly every 5 seconds (pausing while you hover), with a story-style progress bar up top and left/right tap zones for manual navigation; remove the current photo, add more, or clear all from the overlay controls. Unlike the sticky note, none of this is **saved anywhere**: everything lives only in memory for the current page session and disappears on reload.
+
 ### Command palette
 
 Press **Ctrl+K** (or **Cmd+K** on macOS), or click the `⌘` icon in the title bar, to open a searchable command palette: type to fuzzy-filter and jump straight to any of the tabs above, or run a quick action (toggle theme, toggle the background animation, toggle the sticky note) without touching the mouse. Navigate with the arrow keys, confirm with **Enter**, dismiss with **Esc** or a click outside.
