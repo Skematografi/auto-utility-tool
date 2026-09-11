@@ -54,7 +54,7 @@ The app is organized into tabs, each a self-contained tool:
   * **`size_utf16`** — 2 bytes per character, matching SQL Server `NVARCHAR`.
   * Sizes are shown human-readable (B / KB / MB / GB) with the exact byte count below; per-row overhead is not included.
 * **`restore`** (JSON → SQL) — Paste JSON (a single object or an array of records) and generate `INSERT ... SELECT` statements to restore the data:
-  * **Head** — all root fields that are not arrays go into one head table (you provide its name).
+  * **Head** — by default, all root fields that are not arrays go into one head table (you provide its name); optionally set a head source key instead (e.g. `head`) to pull head columns from a named nested object — for JSON shaped like `{ head: {...}, detail: [...] }`.
   * **Detail** — map one or more array keys (e.g. `Details`) to their own tables; each array element becomes a `select ... union all` row.
   * Dates are normalized (`...T00:00:00...` → `YYYY-MM-DD`, otherwise `YYYY-MM-DD HH:MM:SS`); `null` stays `null`; single quotes are escaped (`'` → `''`).
   * Two output styles: with column names it emits `INSERT INTO t (cols) VALUES (...), (...)` (columns camelCase, any `...ID` stays capital, e.g. `branchID`); without, it emits `INSERT INTO t SELECT ... UNION ALL SELECT ...`. Optionally null-out the identity `ID` column for a clean restore.

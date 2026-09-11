@@ -2,7 +2,8 @@
 // TAB 9: JSON -> SQL RESTORE LOGIC
 // Convert JSON (a single object or an array of objects) into
 // `insert into <table> select ... union all select ...;` statements.
-// - Head : all root fields that are NOT arrays.
+// - Head : all root fields that are NOT arrays, OR (if a head source key is set)
+//          the fields of a named nested object, e.g. { head: {...}, detail: [...] }.
 // - Detail: user-specified array/object keys (multiple); each element becomes 1 select.
 // ----------------------------------------
 
@@ -10,6 +11,7 @@
 const restoreJsonInput = document.getElementById('restoreJsonInput');
 const restoreJsonFile = document.getElementById('restoreJsonFile');
 const restoreHeadTable = document.getElementById('restoreHeadTable');
+const restoreHeadKey = document.getElementById('restoreHeadKey');
 const restoreDetailList = document.getElementById('restoreDetailList');
 const restoreAddDetailBtn = document.getElementById('restoreAddDetailBtn');
 const restoreInclCols = document.getElementById('restoreInclCols');
@@ -134,6 +136,20 @@ function getRestoreHeadKeys(obj, detailKeys) {
     });
 }
 
+// Build the head rows: one nested object per record when a head source key is
+// set (e.g. records[i].head), otherwise the records themselves (root fields).
+function getRestoreHeadRows(records, headKey, detailKeys) {
+    if (!headKey) {
+        return { rows: records, keys: getRestoreHeadKeys(records[0], detailKeys) };
+    }
+    const rows = [];
+    records.forEach(rec => {
+        const v = rec[headKey];
+        if (v && typeof v === 'object' && !Array.isArray(v)) rows.push(v);
+    });
+    return { rows, keys: rows.length ? Object.keys(rows[0]) : [] };
+}
+
 // Build a single insert block.
 // - With column names    -> INSERT INTO t (cols) VALUES (..), (..);
 // - Without column names  -> INSERT INTO t SELECT .. UNION ALL SELECT ..;
@@ -182,6 +198,7 @@ restoreGenerateBtn.addEventListener('click', function () {
         return;
     }
 
+    const headKey = restoreHeadKey.value.trim();
     const details = readRestoreDetails();
     const detailKeys = details.map(d => d.key);
     const inclCols = restoreInclCols.checked;
@@ -198,13 +215,17 @@ restoreGenerateBtn.addEventListener('click', function () {
 
     const statements = [];
 
-    // Head
-    const headKeys = getRestoreHeadKeys(records[0], detailKeys);
-    if (headKeys.length === 0) {
+    // Head — from root fields, or from a named nested object if headKey is set
+    const head = getRestoreHeadRows(records, headKey, detailKeys);
+    if (headKey && head.rows.length === 0) {
+        showRestoreStatus(`Head source key "${headKey}" was not found as an object in the JSON.`, 'error');
+        return;
+    }
+    if (head.keys.length === 0) {
         showRestoreStatus('No non-array fields found for the head table.', 'error');
         return;
     }
-    statements.push(buildRestoreInsert(headTable, headKeys, records, inclCols, nullifyId));
+    statements.push(buildRestoreInsert(headTable, head.keys, head.rows, inclCols, nullifyId));
 
     // Detail (merge array elements from all records)
     const skipped = [];
