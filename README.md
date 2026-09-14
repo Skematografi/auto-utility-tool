@@ -60,9 +60,10 @@ The app is organized into tabs, each a self-contained tool:
   * Two output styles: with column names it emits `INSERT INTO t (cols) VALUES (...), (...)` (columns camelCase, any `...ID` stays capital, e.g. `branchID`); without, it emits `INSERT INTO t SELECT ... UNION ALL SELECT ...`. Optionally null-out the identity `ID` column for a clean restore.
   * Output can be copied or downloaded as a `.sql` file.
 * **`sort`** (Sort) — Paste a list or sentence (e.g. `52,91,4,5,11`) and instantly get it sorted **ascending** and **descending**, both copyable. The separator is configurable (default `,`) and newlines are always accepted. Sorting is natural / numeric-aware, so `1,10,2,5` becomes `1,2,5,10` (not lexicographic).
-* **`merge`** (Merge SQL) — Upload multiple `.sql` files and combine them into a single `.sql` (downloaded, merged in the order selected):
-  * Optional **clear SQL comments** — strips `--`, `#`, and `/* */` comments while preserving string literals.
-  * A **boundary comment** is inserted before each file (default: the filename); use `{filename}` as a placeholder to customize it.
+* **`merge`** (Merge Files) — Pick a file type first, then upload and combine into one file (merged in the order selected):
+  * **sql** — upload multiple `.sql` files; optional **clear comments** (strips `--`, `#`, `/* */` while preserving string literals) and a **boundary comment** per file (default: the filename, or use `{filename}` as a placeholder). Downloads a single `.sql`.
+  * **csv / txt** — same as sql (clear comments, boundary comment) plus a **unique rows only** checkbox that drops duplicate lines across all files, keeping the first occurrence. Downloads a single file in the uploaded extension.
+  * **excel** — two sub-modes: **merge sheet** (upload one workbook, combine every sheet) and **merge file** (upload multiple workbooks, combine each one's first sheet). Every sheet/file must share the same column count & header titles (validated before merging, header taken from the first one); an optional **unique rows only** checkbox drops duplicate rows. Downloads a single `.xlsx`.
 * **`json`** (JSON Formatter) — Paste any JSON and it formats live, no button required:
   * **code** — pretty-printed, 2-space-indented JSON.
   * **tree** — an expandable/collapsible tree (native `<details>`, no extra JS needed to toggle), with string/number/boolean/null values color-coded.

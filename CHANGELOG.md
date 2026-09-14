@@ -3,6 +3,9 @@
 All notable changes to DataDev Utilities are documented here, newest first.
 Each entry is a `## YYYY-MM-DD` heading with one bullet per change made that day.
 
+## 2026-09-14
+- Overhauled the **merge** tab (renamed from "Merge SQL" to "Merge Files"): pick a file type first — **sql** (unchanged), **csv/txt** (same options plus a unique-rows-only dedupe checkbox), or **excel** (merge every sheet of one workbook, or the first sheet of multiple workbooks, into a single `.xlsx`, with column/header validation and an optional dedupe checkbox).
+
 ## 2026-09-11
 - Made the **Photo reference** panel's background transparent instead of solid black, so the page's starfield and animation show through behind the photo (empty state and Polaroid frame alike).
 - Fixed the **Photo reference** panel's close/add/delete icons and empty-state text being invisible in light theme (they were white-on-white); repainted them in the theme's accent blue, including the count label and "clear all" text, and kept the delete icon blue on hover instead of switching to white.

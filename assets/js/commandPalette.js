@@ -26,7 +26,7 @@
         { label: 'in() — build a WHERE IN(...) list', icon: 'brackets', run: () => switchTab('wherein') },
         { label: 'sql — generate SQL from Excel/CSV', icon: 'database', run: () => switchTab('sql') },
         { label: 'restore — JSON to SQL INSERT', icon: 'database-backup', run: () => switchTab('restore') },
-        { label: 'merge — combine SQL files', icon: 'git-merge', run: () => switchTab('mergesql') },
+        { label: 'merge — combine sql / csv / excel files', icon: 'git-merge', run: () => switchTab('mergesql') },
         { label: 'json — format JSON as code or tree', icon: 'braces', run: () => switchTab('json') },
         { label: 'csv — browse & filter CSV data as a table', icon: 'table', run: () => switchTab('csv') },
         { label: 'clean — remove blank lines & tidy whitespace', icon: 'eraser', run: () => switchTab('clean') },
