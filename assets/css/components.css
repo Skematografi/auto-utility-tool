@@ -176,8 +176,8 @@ html.note-open .note-fab {
     }
 }
 
-/* ===== Photo reference panel =====
-   Left-docked mirror of the sticky note above, holding one image in memory
+/* ===== Desk Frame panel =====
+   Left-docked mirror of the sticky note above, holding photos in memory
    only (never persisted). Same fixed-to-viewport / outside-the-card reasoning. */
 :root {
     --photo-w: 320px;
@@ -203,6 +203,15 @@ html.photo-open .photo-panel {
     visibility: visible;
     transform: translateX(0);
     transition: transform .22s ease, visibility 0s linear 0s;
+}
+
+/* Fills this browser tab (not the device screen — no Fullscreen API involved),
+   toggled independently of open/closed state. Off by default. */
+.photo-panel.photo-fullscreen {
+    right: 0;
+    width: auto;
+    max-width: 100%;
+    transition: right .22s ease, transform .22s ease, visibility 0s linear 0s;
 }
 
 .photo-fab {
@@ -264,6 +273,7 @@ html.photo-open .photo-fab {
 @media (prefers-reduced-motion: reduce) {
 
     .photo-panel,
+    .photo-panel.photo-fullscreen,
     .photo-fab,
     .photo-backdrop {
         transition: none;

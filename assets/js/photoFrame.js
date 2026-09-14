@@ -1,11 +1,12 @@
 // ----------------------------------------
-// PHOTO REFERENCE
+// DESK FRAME
 // A left-docked, Instagram-story-style panel outside the main card: pin up
-// to 10 images for visual reference while working (screenshots, diagrams,
-// ERDs). They auto-shuffle every 5s (pausing on hover), with left/right tap
-// zones for manual navigation. Unlike the sticky note, nothing here is
-// persisted — photos live only in memory for the current page session and
-// are gone on reload.
+// to 10 images nearby while you work — someone you love, a pet, a diagram,
+// whatever. They auto-shuffle every 5s (pausing on hover), with left/right
+// tap zones for manual navigation, and an optional fullscreen mode that
+// fills this browser tab (not the device screen — no Fullscreen API).
+// Unlike the sticky note, nothing here is persisted — photos live only in
+// memory for the current page session and are gone on reload.
 // Wrapped in an IIFE because every script here shares one global scope.
 // ----------------------------------------
 (function initPhotoFrame() {
@@ -17,6 +18,7 @@
     const backdrop = document.getElementById('photoBackdrop');
     const fab = document.getElementById('photoFab');
     const closeBtn = document.getElementById('photoCloseBtn');
+    const fullscreenBtn = document.getElementById('photoFullscreenBtn');
     const stage = document.getElementById('photoStage');
     const dropzone = document.getElementById('photoDropzone');
     const fileInput = document.getElementById('photoFileInput');
@@ -161,6 +163,18 @@
     fab.addEventListener('click', function () { setOpen(true); });
     closeBtn.addEventListener('click', function () { setOpen(false); });
     backdrop.addEventListener('click', function () { setOpen(false); });
+
+    // Fills this browser tab, not the device screen — plain CSS, no Fullscreen
+    // API. Off by default; independent of open/closed state.
+    fullscreenBtn.addEventListener('click', function () {
+        const isFullscreen = panel.classList.toggle('photo-fullscreen');
+        fullscreenBtn.title = isFullscreen ? 'Exit fullscreen' : 'Fill this tab';
+        fullscreenBtn.setAttribute('aria-label', isFullscreen ? 'Shrink desk frame back to the side panel' : 'Expand desk frame to fill this tab');
+        // lucide.createIcons() already replaced the original <i> with an <svg>
+        // (which keeps the data-lucide attribute) — query for that instead.
+        fullscreenBtn.querySelector('[data-lucide]').setAttribute('data-lucide', isFullscreen ? 'minimize-2' : 'maximize-2');
+        lucide.createIcons();
+    });
 
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && document.documentElement.classList.contains('photo-open')) {

@@ -9,6 +9,7 @@ Each entry is a `## YYYY-MM-DD` heading with one bullet per change made that day
 - Fixed the update-notification bell's red dot in light theme: its border was a dark zinc ring left over from dark mode, now made transparent so it's a plain red dot.
 - Added a **usage time** command (Ctrl+K only, no button elsewhere) showing how long each tab has been actively used today. Counts only while the browser tab is visible, focused, and not idle for 60 seconds; resets automatically at midnight on the device's own clock.
 - Enhanced the **restore** (JSON → SQL) tab's Head table: it can now pull columns from a named nested object (an optional head source key, e.g. `head`) instead of only root fields — for JSON shaped like `{ head: {...}, detail: [...] }`.
+- Renamed the "Photo reference" panel to **Desk Frame**, added a fullscreen toggle that fills this browser tab (not the device screen — off by default), and rounded the corners of both the photo and its Polaroid-style frame.
 
 ## 2026-09-10
 - Added an update-notification bell next to the theme toggle: it shows a red dot when there has been an update in the last 7 days, and opens a popup listing the 10 most recent changelog entries.
