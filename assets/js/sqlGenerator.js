@@ -12,9 +12,12 @@ const sqlColumnList = document.getElementById('sqlColumnList');
 const sqlModeDeleteBtn = document.getElementById('sqlModeDeleteBtn');
 const sqlModeUpdateBtn = document.getElementById('sqlModeUpdateBtn');
 const sqlModeTemplateBtn = document.getElementById('sqlModeTemplateBtn');
+const sqlModeFormatBtn = document.getElementById('sqlModeFormatBtn');
 const sqlDeletePanel = document.getElementById('sqlDeletePanel');
 const sqlUpdatePanel = document.getElementById('sqlUpdatePanel');
 const sqlTemplatePanel = document.getElementById('sqlTemplatePanel');
+const sqlFormatPanel = document.getElementById('sqlFormatPanel');
+const sqlUploadSection = document.getElementById('sqlUploadSection');
 
 // Template panel elements
 const sqlTemplateInput = document.getElementById('sqlTemplateInput');
@@ -135,10 +138,11 @@ function renderColumnPreview() {
     lucide.createIcons();
 }
 
-// --- Mode Toggle Delete / Update / Template ---
+// --- Mode Toggle Delete / Update / Template / Format ---
 sqlModeDeleteBtn.addEventListener('click', () => switchSqlMode('delete'));
 sqlModeUpdateBtn.addEventListener('click', () => switchSqlMode('update'));
 sqlModeTemplateBtn.addEventListener('click', () => switchSqlMode('template'));
+sqlModeFormatBtn.addEventListener('click', () => switchSqlMode('format'));
 
 function switchSqlMode(mode) {
     const activeClass = "flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40";
@@ -148,9 +152,19 @@ function switchSqlMode(mode) {
     sqlModeDeleteBtn.className = inactiveClass;
     sqlModeUpdateBtn.className = inactiveClass;
     sqlModeTemplateBtn.className = inactiveClass;
+    sqlModeFormatBtn.className = inactiveClass;
     sqlDeletePanel.classList.add('hidden');
     sqlUpdatePanel.classList.add('hidden');
     sqlTemplatePanel.classList.add('hidden');
+    sqlFormatPanel.classList.add('hidden');
+
+    // Format mode works on pasted SQL, so the file upload and generator output are not needed
+    const isFormat = mode === 'format';
+    sqlUploadSection.classList.toggle('hidden', isFormat);
+    if (isFormat) {
+        sqlStatus.classList.add('hidden');
+        sqlPreviewWrap.classList.add('hidden');
+    }
 
     if (mode === 'update') {
         sqlModeUpdateBtn.className = activeClass;
@@ -158,6 +172,9 @@ function switchSqlMode(mode) {
     } else if (mode === 'template') {
         sqlModeTemplateBtn.className = activeClass;
         sqlTemplatePanel.classList.remove('hidden');
+    } else if (isFormat) {
+        sqlModeFormatBtn.className = activeClass;
+        sqlFormatPanel.classList.remove('hidden');
     } else {
         sqlModeDeleteBtn.className = activeClass;
         sqlDeletePanel.classList.remove('hidden');

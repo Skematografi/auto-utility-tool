@@ -38,6 +38,7 @@ assets/js/
   nonAscii.js      # ascii   — detect non-ASCII in text, or scan an Excel/CSV by row
   compare.js       # diff    — compare two texts line by line
   sqlGenerator.js  # sql     — generate DELETE / UPDATE / template SQL from Excel/CSV
+  sqlFormat.js     # sql     — "format" mode: upper-case SQL keywords + static SQL error check
   splitFile.js     # split   — split Excel/CSV into a ZIP by max rows per file
   whereIn.js       # in()    — turn a pasted list into WHERE IN (...) values (+ template, chunking)
   charCount.js     # chars   — character/byte counts & DB storage estimates

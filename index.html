@@ -536,10 +536,10 @@
 
             <!-- TAB 5: SQL GENERATOR VIEW -->
             <div id="sqlView" class="space-y-6 hidden">
-                <h2 class="sr-only">Generate SQL DELETE, UPDATE, and template statements from an Excel or CSV file</h2>
+                <h2 class="sr-only">Generate SQL DELETE, UPDATE, and template statements from an Excel or CSV file, or upper-case and check a SQL query</h2>
 
                 <!-- 1. Excel / CSV file upload area -->
-                <div class="flex flex-col space-y-2">
+                <div id="sqlUploadSection" class="flex flex-col space-y-2">
                     <label class="text-xs font-semibold text-zinc-500"><span class="text-emerald-500">$</span>
                         source_file (excel / csv)</label>
                     <label for="sqlFileInput"
@@ -572,7 +572,7 @@
                     </div>
                 </div>
 
-                <!-- 2. Mode Toggle: Delete / Update / Template -->
+                <!-- 2. Mode Toggle: Delete / Update / Template / Format -->
                 <div class="flex bg-black/40 border border-zinc-800 p-1.5 rounded-lg gap-1 w-full sm:w-fit">
                     <button id="sqlModeDeleteBtn"
                         class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer bg-zinc-800 text-emerald-400 ring-1 ring-emerald-500/40">
@@ -588,6 +588,11 @@
                         class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
                         <i data-lucide="code-2" class="w-4 h-4"></i>
                         template
+                    </button>
+                    <button id="sqlModeFormatBtn"
+                        class="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-md text-sm font-semibold transition-all cursor-pointer text-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/50">
+                        <i data-lucide="case-upper" class="w-4 h-4"></i>
+                        format
                     </button>
                 </div>
 
@@ -683,6 +688,48 @@ where a.product_name = {product_name};"></textarea>
                         <i data-lucide="download" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
                         <span>generate &amp; download sql template</span>
                     </button>
+                </div>
+
+                <!-- 2d. PANEL FORMAT -->
+                <div id="sqlFormatPanel"
+                    class="space-y-5 bg-black/30 p-5 md:p-6 rounded-md border border-zinc-800 hidden">
+                    <div class="flex flex-col space-y-1.5">
+                        <label for="sqlFormatInput" class="text-xs font-semibold text-zinc-500"><span
+                                class="text-emerald-500">$</span> sql_input</label>
+                        <textarea id="sqlFormatInput" spellcheck="false"
+                            class="w-full min-h-[200px] p-4 bg-black/50 border border-zinc-700 rounded-md focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 outline-none resize-y text-sm text-emerald-300 caret-emerald-400 placeholder:text-zinc-600 transition-all leading-relaxed thin-scroll"
+                            placeholder="select id, name from products where status = 1 and created_at between '2026-01-01' and '2026-12-31' order by name desc;"></textarea>
+                        <span class="text-xs text-zinc-600">Keywords and functions (<span
+                                class="text-emerald-400">select, from, where, as, count(...)</span> ...) become UPPER
+                            CASE. Spacing, line breaks, strings, comments, table and column names stay untouched.</span>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <div class="flex justify-between items-center gap-2">
+                            <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                                formatted_sql</span>
+                            <button id="copySqlFormatBtn" title="Copy formatted SQL" disabled
+                                class="flex items-center justify-center gap-2 py-1.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-zinc-950 rounded-md shadow-md shadow-emerald-900/40 transition-all font-bold text-xs cursor-pointer group disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-emerald-600">
+                                <i data-lucide="copy" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></i>
+                                <span>copy</span>
+                            </button>
+                        </div>
+                        <textarea id="sqlFormatOutput" readonly spellcheck="false"
+                            class="w-full min-h-[200px] max-h-[400px] p-4 bg-black/60 border border-zinc-800 rounded-md outline-none resize-y text-sm text-emerald-300 leading-relaxed thin-scroll"></textarea>
+                    </div>
+
+                    <div class="flex flex-col space-y-2">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-xs font-bold text-zinc-500"><span class="text-emerald-500">#</span>
+                                sql_check</span>
+                            <span id="sqlCheckBadge" class="flex items-center gap-2 flex-wrap"></span>
+                        </div>
+                        <div id="sqlCheckList" class="space-y-2"></div>
+                        <span class="text-xs text-zinc-600">Quick static check for likely syntax slips (unclosed
+                            quotes/brackets, trailing commas, missing AND/OR, column/value count in INSERT, UPDATE or
+                            DELETE without WHERE ...). It does not validate table or column names, so a clean result is
+                            not a guarantee.</span>
+                    </div>
                 </div>
 
                 <!-- 3. Status message + preview of generated output -->
@@ -1926,7 +1973,8 @@ id,name,role
     <script src="assets/js/duplicates.js?v=2.5.0"></script>
     <script src="assets/js/nonAscii.js?v=2.5.0"></script>
     <script src="assets/js/compare.js?v=2.7.0"></script>
-    <script src="assets/js/sqlGenerator.js?v=3.0.0"></script>
+    <script src="assets/js/sqlGenerator.js?v=3.1.0"></script>
+    <script src="assets/js/sqlFormat.js?v=3.1.0"></script>
     <script src="assets/js/splitFile.js?v=2.6.0"></script>
     <script src="assets/js/whereIn.js?v=2.5.0"></script>
     <script src="assets/js/charCount.js?v=2.5.0"></script>

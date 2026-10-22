@@ -3,6 +3,9 @@
 All notable changes to DataDev Utilities are documented here, newest first.
 Each entry is a `## YYYY-MM-DD` heading with one bullet per change made that day.
 
+## 2026-10-22
+- Added a **format** mode to the **sql** tab (after template): paste a query to get it back with keywords and functions in UPPER CASE without changing its layout, plus a live check that points to the line and column of likely errors such as unclosed quotes or brackets, trailing commas, missing AND/OR, a column/value count mismatch in INSERT, and UPDATE/DELETE without WHERE.
+
 ## 2026-09-14
 - Overhauled the **merge** tab (renamed from "Merge SQL" to "Merge Files"): pick a file type first — **sql** (unchanged), **csv/txt** (same options plus a unique-rows-only dedupe checkbox), or **excel** (merge every sheet of one workbook, or the first sheet of multiple workbooks, into a single `.xlsx`, with column/header validation and an optional dedupe checkbox).
 
